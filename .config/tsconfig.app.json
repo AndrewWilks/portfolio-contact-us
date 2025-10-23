@@ -23,7 +23,12 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "../",
+    "paths": {
+      "@shared/*": ["shared/*"],
+      "@frontend/*": ["frontend/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", "../shared", "../frontend"]
 }
