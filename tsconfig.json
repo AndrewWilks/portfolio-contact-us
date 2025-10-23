@@ -8,5 +8,5 @@
     { "path": "./.config/tsconfig.app.json" },
     { "path": "./.config/tsconfig.node.json" }
   ],
-  "exclude": ["frontend/node_modules/**", "node_modules/**"]
+  "exclude": ["node_modules/**"]
 }
