@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { db } from "../index.ts";
 import { contacts } from "../schema/contacts.ts";
 
@@ -43,6 +43,7 @@ export async function getContactById(id: string) {
     .select()
     .from(contacts)
     .where(eq(contacts.id, id))
+    .orderBy(desc(contacts.created_at))
     .limit(1)
     .get();
   return row;
