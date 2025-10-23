@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { APIHelloSchema } from "@shared/schema";
 import "./App.css";
 
@@ -42,13 +42,11 @@ function App() {
           <p className="text-gray-600">
             Tailwind CSS is integrated and ready for Phase 0.
           </p>
-          {helloData === null ? (
-            <p className="text-blue-600 mt-4">Loading...</p>
-          ) : error ? (
-            <p className="text-red-600 mt-4">Error: {error}</p>
-          ) : (
-            <p className="text-green-600 mt-4">{helloData}</p>
-          )}
+          {helloData === null
+            ? <p className="text-blue-600 mt-4">Loading...</p>
+            : error
+            ? <p className="text-red-600 mt-4">Error: {error}</p>
+            : <p className="text-green-600 mt-4">{helloData}</p>}
         </div>
       </div>
     </div>
