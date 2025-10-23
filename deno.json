@@ -8,6 +8,7 @@
     "@db": "./backend/db/index.ts",
     "@backend/routes": "./backend/routes/index.ts",
     "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
+    "@eslint/js": "npm:@eslint/js@^9.38.0",
 
     // Frontend modules
 
@@ -24,9 +25,14 @@
     "@cspell/dict-en-au": "npm:@cspell/dict-en-au@^1.1.9",
     "drizzle-kit": "npm:drizzle-kit@^0.31.5",
     "drizzle-orm": "npm:drizzle-orm@^0.44.6",
+    "eslint": "npm:eslint@^9.38.0",
+    "eslint-plugin-react-hooks": "npm:eslint-plugin-react-hooks@^7.0.0",
+    "eslint-plugin-react-refresh": "npm:eslint-plugin-react-refresh@^0.4.24",
+    "globals": "npm:globals@^16.4.0",
     "hono": "npm:hono@^4.10.2",
     "react": "npm:react@^19.2.0",
-    "react-dom": "npm:react-dom@^19.2.0",
+    "react-dom": "npm:react-dom@19.2.0",
+    "typescript-eslint": "npm:typescript-eslint@^8.46.2",
     "vite": "npm:vite@^7.1.12",
     "@libsql/client": "npm:@libsql/client@^0.15.15",
     "zod": "npm:zod@^4.1.12",
