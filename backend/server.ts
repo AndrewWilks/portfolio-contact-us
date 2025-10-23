@@ -53,8 +53,10 @@ backend.get("/health", (c) => {
 // API Routes
 backend.get("/hello", routes.api_hello);
 
-const server = Deno.serve(backend.fetch);
+if (import.meta.main) {
+  const server = Deno.serve(backend.fetch);
 
-// Instantiate and hook into SIGINT
-const shutdownManager = new ShutdownManager(server);
-shutdownManager.listenToSignal("SIGINT");
+  // Instantiate and hook into SIGINT
+  const shutdownManager = new ShutdownManager(server);
+  shutdownManager.listenToSignal("SIGINT");
+}
