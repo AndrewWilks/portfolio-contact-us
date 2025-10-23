@@ -30,6 +30,9 @@
     "vite": "npm:vite@^7.1.12",
     "@libsql/client": "npm:@libsql/client@^0.15.15",
     "zod": "npm:zod@^4.1.12",
+    "tailwindcss": "npm:tailwindcss@^4.1.15",
+    "autoprefixer": "npm:autoprefixer@^10.4.21",
+    "postcss": "npm:postcss@^8.5.6"
   },
   "nodeModulesDir": "auto",
   "tasks": {

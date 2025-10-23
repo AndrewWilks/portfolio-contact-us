@@ -17,6 +17,9 @@ export default defineConfig({
     },
   },
   plugins: [react(), deno()],
+  css: {
+    postcss: "../.config/postcss.config.js",
+  },
   optimizeDeps: {
     include: ["react/jsx-runtime"],
   },
