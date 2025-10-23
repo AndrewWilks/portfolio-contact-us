@@ -52,7 +52,7 @@
     "test": "deno test --allow-env --env-file=./.env --no-check backend/__tests__ shared/__tests__ frontend/__tests__",
     "lint": "deno lint",
     "format": "deno fmt",
-  "spell:check": "deno run -A npm:cspell@^9.2.2 \"backend/**/*.{ts,tsx}\" \"shared/**/*.{ts,tsx}\" \"frontend/**/*.{ts,tsx}\" --config ./.config/.cspell.json"
+    "spell:check": "deno run -A npm:cspell@^9.2.2 \"backend/**/*.{ts,tsx}\" \"shared/**/*.{ts,tsx}\" \"frontend/**/*.{ts,tsx}\" --config ./.config/.cspell.json"
   },
   "compilerOptions": {
     "types": [],
