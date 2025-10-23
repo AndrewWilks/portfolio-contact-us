@@ -1,0 +1,63 @@
+{
+  "imports": {
+    // Config modules
+    "@config/backend": "./.config/backend.config.ts",
+    "@config/frontend": "./.config/frontend.config.ts",
+
+    // Backend modules
+    "@db": "./backend/db/index.ts",
+    "@backend/routes": "./backend/routes/index.ts",
+
+    // Frontend modules
+
+    // Shared modules
+
+    // Third-party modules
+    "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
+    "@eslint/js": "npm:@eslint/js@^9.38.0",
+    "@cspell/dict-node": "npm:@cspell/dict-node@^5.0.8",
+    "@cspell/dict-typescript": "npm:@cspell/dict-typescript@^3.2.3",
+    "@std/crypto": "jsr:@std/crypto@^1.0.5",
+    "@std/http": "jsr:@std/http@^1.0.21",
+    "@std/assert": "jsr:@std/assert@^1.0.11",
+    "@stdext/crypto": "jsr:@stdext/crypto@^0.1.0",
+    "@types/node": "npm:@types/node@^24.2.0",
+    "@types/react": "npm:@types/react@^19.2.2",
+    "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^5.0.4",
+    "cspell": "npm:cspell@^9.2.2",
+    "@cspell/dict-en-au": "npm:@cspell/dict-en-au@^1.1.9",
+    "drizzle-kit": "npm:drizzle-kit@^0.31.5",
+    "drizzle-orm": "npm:drizzle-orm@^0.44.6",
+    "eslint": "npm:eslint@^9.38.0",
+    "eslint-plugin-react-hooks": "npm:eslint-plugin-react-hooks@^7.0.0",
+    "eslint-plugin-react-refresh": "npm:eslint-plugin-react-refresh@^0.4.24",
+    "globals": "npm:globals@^16.4.0",
+    "hono": "npm:hono@^4.10.2",
+    "react": "npm:react@^19.2.0",
+    "react-dom": "npm:react-dom@19.2.0",
+    "typescript-eslint": "npm:typescript-eslint@^8.46.2",
+    "vite": "npm:vite@^7.1.12",
+    "@libsql/client": "npm:@libsql/client@^0.15.15",
+    "zod": "npm:zod@^4.1.12",
+    "tailwindcss": "npm:tailwindcss@^4.1.15",
+    "autoprefixer": "npm:autoprefixer@^10.4.21",
+    "postcss": "npm:postcss@^8.5.6"
+  },
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "dev": "deno task dev:api & deno task dev:vite",
+    "dev:api": "deno --allow-env --env-file=./.env --allow-net ./backend/server.ts",
+    "dev:vite": "deno -A --env-file=./.env npm:vite --config ./.config/vite.config.ts",
+    "build": "deno -A --env-file=./.env npm:vite build --config ./.config/vite.config.ts",
+    "test": "deno test --allow-env --env-file=./.env --no-check backend/__tests__ shared/__tests__ frontend/__tests__",
+    "lint": "deno lint",
+    "format": "deno fmt",
+    "spell:check": "deno run -A npm:cspell@^9.2.2 \"backend/**/*.{ts,tsx}\" \"shared/**/*.{ts,tsx}\" \"frontend/**/*.{ts,tsx}\" --config ./.config/.cspell.json"
+  },
+  "compilerOptions": {
+    "types": [],
+    "lib": ["dom", "dom.iterable", "deno.ns"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  }
+}

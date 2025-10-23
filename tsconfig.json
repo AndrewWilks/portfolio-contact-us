@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
+  },
+  "files": [],
+  "references": [
+    { "path": "./.config/tsconfig.app.json" },
+    { "path": "./.config/tsconfig.node.json" }
+  ],
+  "exclude": ["node_modules/**"]
+}
