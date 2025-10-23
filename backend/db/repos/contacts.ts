@@ -51,3 +51,12 @@ export async function getContactById(id: string) {
     .get();
   return row;
 }
+
+export async function verifyContact(id: string) {
+  const result = await db
+    .update(contacts)
+    .set({ verified: true })
+    .where(eq(contacts.id, id))
+    .returning();
+  return result[0];
+}
