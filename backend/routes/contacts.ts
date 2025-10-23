@@ -1,33 +1,43 @@
-import { Hono } from "hono";
 import { zodValidatorWrapper } from "../utils/zodValidatorWrapper.ts";
-import { ContactCreateSchema, ContactSchema } from "@shared/schema";
+import { ContactCreateSchema } from "@shared/schema";
 import type { ContactCreate } from "@shared/schema";
+import type { Context } from "hono";
+import { createContact } from "@backend/repos";
 
-const router = new Hono();
-
-// POST /api/contacts
-router.post(
-  "/",
-  // validate JSON body using the wrapper which uses @hono/zod-validator
-  zodValidatorWrapper("json", ContactCreateSchema),
-  async (c) => {
-    // c.req.valid('json') is provided by zod-validator middleware
-    const data = c.req.valid("json") as ContactCreate;
-
-    // TODO: persist contact using DB/repository (Drizzle + libSQL) — placeholder implementation
-    const contact = {
-      id: crypto.randomUUID(),
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      phone: data.phone ?? null,
-      message: data.message ?? null,
-      verified: false,
-      createdAt: Date.now(),
-    } as const;
-
-    return c.json({ ok: true, data: contact }, 201);
-  }
+export const validateCreateContact = zodValidatorWrapper(
+  "json",
+  ContactCreateSchema
 );
 
-export default router;
+export async function createContactHandler(c: Context) {
+  const reqWithValid = c.req as unknown as { valid: (t: string) => unknown };
+  const data = reqWithValid.valid("json") as ContactCreate;
+
+  // persist contact using DB/repository (Drizzle + libSQL)
+  const dbPayload = {
+    first_name: data.firstName,
+    last_name: data.lastName,
+    email: data.email,
+    phone: data.phone ?? null,
+    message: data.message ?? null,
+    verified: false,
+  };
+
+  const created = await createContact(dbPayload);
+
+  // map DB row to API shape
+  const apiContact = {
+    id: created.id,
+    firstName: created.first_name,
+    lastName: created.last_name,
+    email: created.email,
+    phone: created.phone,
+    message: created.message,
+    verified: created.verified,
+    createdAt: created.created_at,
+  };
+
+  return c.json({ ok: true, data: apiContact }, 201);
+}
+
+export default { validateCreateContact, createContactHandler };

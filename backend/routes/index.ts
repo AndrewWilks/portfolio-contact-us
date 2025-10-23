@@ -1,1 +1,2 @@
-export { api_hello } from "./api_hello.ts";
+export { hello as api_hello } from "./hello.ts";
+export { validateCreateContact, createContactHandler } from "./contacts.ts";

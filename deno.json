@@ -7,7 +7,7 @@
     // Backend modules
     "@db": "./backend/db/index.ts",
     "@backend/routes": "./backend/routes/index.ts",
-    "@hono/zod-validator": "npm:@hono/zod-validator@^0.7.4",
+    "@backend/repos": "./backend/db/repos/index.ts",
 
     // Frontend modules
 
@@ -15,6 +15,7 @@
     "@shared/schema": "./shared/schema/index.ts",
 
     // Third-party modules
+    "@hono/zod-validator": "npm:@hono/zod-validator@^0.7.4",
     "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
     "@eslint/js": "npm:@eslint/js@^9.38.0",
     "@cspell/dict-node": "npm:@cspell/dict-node@^5.0.8",
