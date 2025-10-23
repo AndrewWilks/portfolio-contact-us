@@ -132,3 +132,27 @@ See `.plan/specs/plan.md` for phased work, setup, and issue sequencing.
   `API_PORT` and the Vite proxy target match
 - If CORS appears in logs, verify `API_ORIGINS` includes the Vite dev origin,
   usually `http://localhost:3000`
+
+## Developer notes
+
+- A fast backend unit test was added to validate the `/hello` contract without
+  starting a network server. The test imports the Hono app and calls the handler
+  directly. File: `backend/__tests__/hello.test.ts`.
+
+- The server startup in `backend/server.ts` is guarded so tests can import the
+  app safely without opening network sockets:
+
+```ts
+if (import.meta.main) {
+  // start server here
+}
+```
+
+- Run the new backend unit test locally (CI uses the same command):
+
+```bash
+deno test --allow-env --env-file=./.env backend/__tests__/hello.test.ts --no-check
+```
+
+These notes are part of Phase 0 developer guidance and keep the test workflow
+fast and deterministic for CI.
