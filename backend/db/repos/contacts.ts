@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db } from "../index.ts";
 import { contacts } from "../schema/contacts.ts";
 
@@ -35,4 +36,14 @@ export async function createContact(
 export async function listContacts() {
   const rows = await db.select().from(contacts).orderBy(contacts.created_at);
   return rows;
+}
+
+export async function getContactById(id: string) {
+  const row = await db
+    .select()
+    .from(contacts)
+    .where(eq(contacts.id, id))
+    .limit(1)
+    .get();
+  return row;
 }
