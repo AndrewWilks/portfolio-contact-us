@@ -6,6 +6,7 @@
 
     // Backend modules
     "@db": "./backend/db/index.ts",
+    "@db/schema": "./backend/db/schema/index.ts",
     "@backend/routes": "./backend/routes/index.ts",
 
     // Frontend modules
