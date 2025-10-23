@@ -1,5 +1,9 @@
 {
   "imports": {
+    // Config modules
+    "@config/backend": "./.config/backend.config.ts",
+    "@config/frontend": "./.config/frontend.config.ts",
+
     // Backend modules
     "@db": "./backend/db/index.ts",
     "@backend/routes": "./backend/routes/index.ts",
@@ -24,13 +28,14 @@
     "react": "npm:react@^19.2.0",
     "react-dom": "npm:react-dom@^19.2.0",
     "vite": "npm:vite@^7.1.11",
-    "@libsql/client": "npm:@libsql/client@^0.15.15"
+    "@libsql/client": "npm:@libsql/client@^0.15.15",
+    "zod": "npm:zod@^4.1.12"
   },
   "nodeModulesDir": "auto",
   "tasks": {
     "dev": "deno task dev:api & deno task dev:vite",
-    "dev:api": "deno --allow-env --allow-net ./backend/server.ts",
-    "dev:vite": "deno -A npm:vite --config ./.config/vite.config.ts"
+    "dev:api": "deno --allow-env --env-file=./.env --allow-net ./backend/server.ts",
+    "dev:vite": "deno -A --env-file=./.env npm:vite --config ./.config/vite.config.ts"
   },
   "compilerOptions": {
     "types": ["react", "react-dom", "@types/react"],

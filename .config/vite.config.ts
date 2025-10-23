@@ -1,14 +1,16 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import deno from "@deno/vite-plugin";
+import { config as backend } from "@config/backend";
+import { config as frontend } from "@config/frontend";
 
 // https://vite.dev/config/
 export default defineConfig({
   server: {
-    port: 3000,
+    port: frontend.FRONTEND_PORT,
     proxy: {
       "/api": {
-        target: "http://localhost:8000/",
+        target: `http://localhost:${backend.BACKEND_PORT}/`,
         rewrite: (path) => path.replace(/^\/api/, ""),
         changeOrigin: true,
       },
