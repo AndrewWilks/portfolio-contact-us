@@ -51,7 +51,7 @@
     "format": "deno fmt"
   },
   "compilerOptions": {
-    "types": ["react", "react-dom", "@types/react"],
+    "types": [],
     "lib": ["dom", "dom.iterable", "deno.ns"],
     "jsx": "react-jsx",
     "jsxImportSource": "react"
