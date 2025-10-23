@@ -34,7 +34,10 @@ export async function createContact(
 }
 
 export async function listContacts() {
-  const rows = await db.select().from(contacts).orderBy(contacts.created_at);
+  const rows = await db
+    .select()
+    .from(contacts)
+    .orderBy(desc(contacts.created_at));
   return rows;
 }
 
