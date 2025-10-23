@@ -20,7 +20,7 @@
 ### Example Drizzle schema, TypeScript
 
 ```ts
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const contacts = sqliteTable("contacts", {
   id: text("id").primaryKey(),

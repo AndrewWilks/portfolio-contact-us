@@ -14,12 +14,11 @@ backend.use("*", logger());
 backend.use(
   "*",
   cors({
-    origin:
-      Deno.env.get("NODE_ENV") === "production"
-        ? [Deno.env.get("APP_URL") || ""]
-        : ["http://localhost:3000"],
+    origin: Deno.env.get("NODE_ENV") === "production"
+      ? [Deno.env.get("APP_URL") || ""]
+      : ["http://localhost:3000"],
     credentials: true,
-  })
+  }),
 );
 
 // Rate Limiting Middleware
@@ -30,7 +29,7 @@ backend.onError((err, c) => {
   console.error("Error occurred:", err);
   return c.json(
     { message: "Internal Server Error", details: err.message },
-    500
+    500,
   );
 });
 

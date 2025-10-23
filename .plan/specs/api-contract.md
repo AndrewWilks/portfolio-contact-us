@@ -4,12 +4,12 @@ Base URL, `/api`
 
 ## Health
 
-GET `/health`  
+GET `/health`\
 200, `{ "ok": true }`
 
 ## Hello
 
-GET `/hello`  
+GET `/hello`\
 200, `{ "message": "Hello from Deno + Hono" }`
 
 ## Contacts

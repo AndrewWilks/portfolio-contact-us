@@ -38,8 +38,8 @@ export class ShutdownManager {
           await this.server.shutdown();
         },
         "Shutting down server",
-        "Server shut down complete"
-      )
+        "Server shut down complete",
+      ),
     );
   }
 
@@ -55,7 +55,7 @@ export class ShutdownManager {
     this.spinnerIndex = 0;
     // initial draw
     Deno.stdout.writeSync(
-      this.encoder.encode(`\r ${this.progressSpinner[0]} ${prefix}`)
+      this.encoder.encode(`\r ${this.progressSpinner[0]} ${prefix}`),
     );
     this.spinnerInterval = setInterval(() => {
       const spinner =
@@ -72,7 +72,7 @@ export class ShutdownManager {
     }
     if (clearLine) {
       Deno.stdout.writeSync(
-        this.encoder.encode(`\r${" ".repeat(this.width)}\r`)
+        this.encoder.encode(`\r${" ".repeat(this.width)}\r`),
       );
     }
   }
@@ -131,6 +131,6 @@ export class ShutdownTask {
     public id: string,
     public action: ShutdownAction,
     public startMessage?: string,
-    public endMessage?: string
+    public endMessage?: string,
   ) {}
 }

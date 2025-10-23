@@ -1,6 +1,8 @@
 # Delivery Plan
 
-Scope, a simple contact flow, a public Contact page that submits to an API, a Thank You page, and an internal Contacts list with verify and delete actions. Keep the codebase small, typed, and portable across machines with Deno.
+Scope, a simple contact flow, a public Contact page that submits to an API, a
+Thank You page, and an internal Contacts list with verify and delete actions.
+Keep the codebase small, typed, and portable across machines with Deno.
 
 ## Phases
 
