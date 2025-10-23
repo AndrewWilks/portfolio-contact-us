@@ -48,6 +48,7 @@
   },
   "nodeModulesDir": "auto",
   "tasks": {
+    "db:push": "deno run -A npm:drizzle-kit push --config ./.config/drizzle.config.ts",
     "dev": "deno task dev:api & deno task dev:vite",
     "dev:api": "deno --allow-env --env-file=./.env --allow-net ./backend/server.ts",
     "dev:vite": "deno -A --env-file=./.env npm:vite --config ./.config/vite.config.ts",

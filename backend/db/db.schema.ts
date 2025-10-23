@@ -1,1 +1,1 @@
-export { contacts } from "./schema/contacts.ts";
+export * from "./schema/index.ts";
