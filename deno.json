@@ -7,14 +7,16 @@
     // Backend modules
     "@db": "./backend/db/index.ts",
     "@backend/routes": "./backend/routes/index.ts",
-    "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
-    "@eslint/js": "npm:@eslint/js@^9.38.0",
 
     // Frontend modules
 
     // Shared modules
 
     // Third-party modules
+    "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
+    "@eslint/js": "npm:@eslint/js@^9.38.0",
+    "@cspell/dict-node": "npm:@cspell/dict-node@^5.0.8",
+    "@cspell/dict-typescript": "npm:@cspell/dict-typescript@^3.2.3",
     "@std/crypto": "jsr:@std/crypto@^1.0.5",
     "@std/http": "jsr:@std/http@^1.0.21",
     "@std/assert": "jsr:@std/assert@^1.0.11",
@@ -49,7 +51,8 @@
     "build": "deno -A --env-file=./.env npm:vite build --config ./.config/vite.config.ts",
     "test": "deno test --allow-env --env-file=./.env --no-check backend/__tests__ shared/__tests__ frontend/__tests__",
     "lint": "deno lint",
-    "format": "deno fmt"
+    "format": "deno fmt",
+    "spell:check": "deno run -A npm:cspell@^9.2.2 'backend/**/*.{ts,tsx}' clear'shared/**/*.{ts,tsx}' 'frontend/**/*.{ts,tsx}' --config ./.config/cspell.json"
   },
   "compilerOptions": {
     "types": [],
