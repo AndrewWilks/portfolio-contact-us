@@ -1,6 +1,6 @@
 import { eq, desc } from "drizzle-orm";
-import { db } from "../index.ts";
-import { contacts } from "../schema/contacts.ts";
+import { db } from "@db";
+import { contacts } from "@db/schema";
 
 export type ContactRow = typeof contacts.$inferInsert;
 
