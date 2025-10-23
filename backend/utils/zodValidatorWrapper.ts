@@ -1,6 +1,6 @@
 import { zValidator } from "@hono/zod-validator";
 import { HTTPException } from "hono/http-exception";
-import type { ZodAny } from "zod";
+import type { ZodSchema } from "zod";
 import type { ValidationTargets } from "hono";
 
 /**
@@ -12,7 +12,7 @@ import type { ValidationTargets } from "hono";
  * Callers can catch this and map to the envelope `{ ok: false, error }` where needed.
  */
 export const zodValidatorWrapper = <
-  T extends ZodAny,
+  T extends ZodSchema,
   Target extends keyof ValidationTargets
 >(
   target: Target,
