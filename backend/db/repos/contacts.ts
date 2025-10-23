@@ -60,3 +60,11 @@ export async function verifyContact(id: string) {
     .returning();
   return result[0];
 }
+
+export async function deleteContact(id: string) {
+  const result = await db
+    .delete(contacts)
+    .where(eq(contacts.id, id))
+    .returning();
+  return result[0];
+}
