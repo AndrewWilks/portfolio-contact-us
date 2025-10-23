@@ -4,6 +4,8 @@ import { logger } from "hono/logger";
 // import { db } from "@db";
 import { ShutdownManager } from "./shutdownManager.ts";
 
+import * as routes from "@backend/routes";
+
 const backend = new Hono();
 export { backend };
 
@@ -11,11 +13,18 @@ export { backend };
 backend.use("*", logger());
 
 // // CORS Middleware
+const safeEnv = (key: string) => {
+  try {
+    return Deno.env.get(key);
+  } catch {
+    return undefined;
+  }
+};
 backend.use(
   "*",
   cors({
-    origin: Deno.env.get("NODE_ENV") === "production"
-      ? [Deno.env.get("APP_URL") || ""]
+    origin: safeEnv("NODE_ENV") === "production"
+      ? [safeEnv("APP_URL") || ""]
       : ["http://localhost:3000"],
     credentials: true,
   }),
@@ -47,8 +56,13 @@ backend.get("/health", (c) => {
   });
 });
 
-const server = Deno.serve(backend.fetch);
+// API Routes
+backend.get("/hello", routes.api_hello);
 
-// Instantiate and hook into SIGINT
-const shutdownManager = new ShutdownManager(server);
-shutdownManager.listenToSignal("SIGINT");
+if (import.meta.main) {
+  const server = Deno.serve(backend.fetch);
+
+  // Instantiate and hook into SIGINT
+  const shutdownManager = new ShutdownManager(server);
+  shutdownManager.listenToSignal("SIGINT");
+}
