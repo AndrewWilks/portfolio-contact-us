@@ -7,6 +7,7 @@
     // Backend modules
     "@db": "./backend/db/index.ts",
     "@backend/routes": "./backend/routes/index.ts",
+    "@hono/zod-validator": "npm:@hono/zod-validator@^0.7.4",
 
     // Frontend modules
 
