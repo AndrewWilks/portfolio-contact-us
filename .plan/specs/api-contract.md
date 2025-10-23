@@ -21,12 +21,24 @@ POST `/contacts`
 - Request, `application/json`, `ContactCreate`
 - Response, `201`, `Contact`
 
+Notes:
+
+- Request must be `Content-Type: application/json`.
+- Success response should be wrapped in the standard envelope: `201 { "ok": true, "data": Contact }`.
+- Validation failure should return `400 { "ok": false, "error": { "code": "validation", "message": "..." } }`.
+
 ### List
 
 GET `/contacts`
 
 - Query, `q` optional search, `verified` optional boolean
 - Response, `200`, `Contact[]`
+
+Notes:
+
+- `q` is an optional string used for simple text search (name or email).
+- `verified` is an optional boolean filter; when provided, results are filtered by verification status.
+- Success response: `200 { "ok": true, "data": Contact[] }`.
 
 ### Verify
 
@@ -40,12 +52,18 @@ DELETE `/contacts/:id`
 
 - Response, `204`, empty body
 
+Notes:
+
+- DELETE should return a `204` with an empty body on success. Errors should still follow the envelope.
+
 ## Error shape
 
 Non 2xx responses return
 
 ```json
 { "ok": false, "error": { "code": "string", "message": "string" } }
+
+Validation errors returned by `@hono/zod-validator` should map to `code: "validation"`.
 ```
 
 ## Schemas, Zod first

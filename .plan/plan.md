@@ -21,9 +21,19 @@ Keep the codebase small, typed, and portable across machines with Deno.
 
 ### Phase 1, foundation
 
-- Shared schema via Zod in `backend/db/schema` and `shared` when added
-- Request validation with `@hono/*` utilities
-- Error response envelope, `{ ok, data, error }`
+- Shared schema via Zod in `backend/db/schema` and `shared`.
+- Request validation with Hono's `@hono/zod-validator` middleware (see Phase 1 tasks).
+- Error response envelope, `{ ok, data?, error? }` with consistent error codes.
+- Build out backend API endpoints required by the frontend for contacts: `POST /api/contacts`, `GET /api/contacts`, `PATCH /api/contacts/:id/verify`, `DELETE /api/contacts/:id`.
+
+Acceptance criteria for Phase 1:
+
+- A shared Zod schema for `ContactCreate` and `Contact` is present in `shared/schema` and used by backend handlers.
+- `POST /api/contacts` validates incoming JSON using `@hono/zod-validator` and returns `201` with the created `Contact` in the `{ ok: true, data }` envelope on success.
+- `GET /api/contacts` supports optional `q` (string) and `verified` (boolean) query params and returns `200` with `{ ok: true, data: Contact[] }`.
+- `PATCH /api/contacts/:id/verify` returns `200` with the updated `Contact` object.
+- `DELETE /api/contacts/:id` returns `204` on success.
+- Validation failures return `400` and an envelope `{ ok: false, error: { code: 'validation', message } }`.
 
 ### Phase 2, persistence
 
