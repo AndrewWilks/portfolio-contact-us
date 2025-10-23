@@ -83,9 +83,29 @@ frontend/       Vite + React app
 shared/         shared types, entities, config loader
 ```
 
+## Architecture
+
+```mermaid
+graph TD
+    A[Frontend: Vite + React + Tailwind] --> B[Vite Proxy /api]
+    B --> C[Backend: Hono Server]
+    C --> D[Routes: Health, Hello, Contacts]
+    D --> E[DB: Drizzle ORM + libSQL]
+    F[Shared: Zod Schemas] --> C
+    F --> A
+```
+
 ## Development plan
 
 See `.plan/specs/plan.md` for phased work, setup, and issue sequencing.
+
+### Phase 0 Goals (Bootstrap)
+
+- Implement API hello routes (`/api/health`, `/api/hello`)
+- Create basic Vite app home page that fetches `/api/hello`
+- Set up basic tests (Deno for API, Vitest for UI)
+- Ensure central configs (lint, format, build) work
+- Demonstrate Tailwind CSS integration in UI
 
 ## Conventions
 
