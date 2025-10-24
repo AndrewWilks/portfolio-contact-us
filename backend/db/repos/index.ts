@@ -8,5 +8,6 @@ export {
   type ContactInsertRow,
 } from "./contacts.ts";
 
-export { dbRowToDto, dtoToDbInsert } from "../mappers/contact.ts";
-export type { Contact as ContactDto, ContactCreate } from "@shared/schema";
+// Keep the repos layer focused on persistence shapes (snake_case).
+// Mapping to/from API DTOs (camelCase) can be handled at the handler layer
+// if/when needed. For simplicity in Sprint 1 we don't expose mappers here.
