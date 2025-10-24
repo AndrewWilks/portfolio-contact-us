@@ -22,12 +22,14 @@
     "npm:@cspell/dict-typescript@^3.2.3": "3.2.3",
     "npm:@deno/vite-plugin@^1.0.5": "1.0.5_vite@7.1.12__picomatch@4.0.3_@types+node@24.2.0",
     "npm:@eslint/js@^9.38.0": "9.38.0",
+    "npm:@hono/zod-validator@~0.7.4": "0.7.4_hono@4.10.2_zod@4.1.12",
     "npm:@libsql/client@~0.15.15": "0.15.15",
     "npm:@types/node@^24.2.0": "24.2.0",
     "npm:@types/react@^19.2.2": "19.2.2",
     "npm:@vitejs/plugin-react@^5.0.4": "5.0.4_vite@7.1.12__picomatch@4.0.3_@babel+core@7.28.4_@types+node@24.2.0",
     "npm:autoprefixer@^10.4.21": "10.4.21_postcss@8.5.6",
     "npm:cspell@^9.2.2": "9.2.2",
+    "npm:drizzle-kit@*": "0.31.5_esbuild@0.25.11",
     "npm:drizzle-kit@~0.31.5": "0.31.5_esbuild@0.25.11",
     "npm:drizzle-orm@~0.44.6": "0.44.6_@libsql+client@0.15.15",
     "npm:eslint-plugin-react-hooks@7": "7.0.0_eslint@9.38.0_zod@4.1.12",
@@ -861,6 +863,13 @@
       "dependencies": [
         "@eslint/core",
         "levn"
+      ]
+    },
+    "@hono/zod-validator@0.7.4_hono@4.10.2_zod@4.1.12": {
+      "integrity": "sha512-biKGn3BRJVaftZlIPMyK+HCe/UHAjJ6sH0UyXe3+v0OcgVr9xfImDROTJFLtn9e3XEEAHGZIM9U6evu85abm8Q==",
+      "dependencies": [
+        "hono",
+        "zod"
       ]
     },
     "@humanfs/core@0.19.1": {
@@ -2413,6 +2422,7 @@
       "npm:@cspell/dict-typescript@^3.2.3",
       "npm:@deno/vite-plugin@^1.0.5",
       "npm:@eslint/js@^9.38.0",
+      "npm:@hono/zod-validator@~0.7.4",
       "npm:@libsql/client@~0.15.15",
       "npm:@types/node@^24.2.0",
       "npm:@types/react@^19.2.2",
