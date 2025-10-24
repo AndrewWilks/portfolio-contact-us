@@ -13,10 +13,10 @@ import type { ValidationTargets } from "hono";
  */
 export const zodValidatorWrapper = <
   T extends ZodSchema,
-  Target extends keyof ValidationTargets
+  Target extends keyof ValidationTargets,
 >(
   target: Target,
-  schema: T
+  schema: T,
 ) =>
   zValidator(target, schema, (result) => {
     if (!result.success) {

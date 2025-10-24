@@ -19,7 +19,7 @@ const contacts = [
   },
 ];
 
-async function seed() {
+export async function seed() {
   for (const contact of contacts) {
     await createContact({ payload: contact });
   }

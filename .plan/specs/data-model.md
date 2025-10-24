@@ -14,16 +14,22 @@
 ### Notes
 
 - Use Drizzle ORM for schema and queries
-- Columns are defined in snake_case in the DB layer (persistence shape). The shared Zod schemas live in `shared/schema` and currently use camelCase for DTOs. For Sprint 1 we keep the repo and tests working with the DB snake_case shape.
+- Columns are defined in snake_case in the DB layer (persistence shape). The
+  shared Zod schemas live in `shared/schema` and currently use camelCase for
+  DTOs. For Sprint 1 we keep the repo and tests working with the DB snake_case
+  shape.
 - Use libSQL driver for local development and Turso option later
-- Keep repository functions small: `createContact`, `listContacts`, `getContactById`, `verifyContact`, `deleteContact`
+- Keep repository functions small: `createContact`, `listContacts`,
+  `getContactById`, `verifyContact`, `deleteContact`
 
 ### Exported types
 
-- `ContactInsert` — Drizzle-inferred insert shape (exported from `backend/db/schema/contacts.ts` as `ContactInsert`)
+- `ContactInsert` — Drizzle-inferred insert shape (exported from
+  `backend/db/schema/contacts.ts` as `ContactInsert`)
 - `ContactSelect` — Drizzle-inferred select shape (exported as `ContactSelect`)
 
-These help typing repo methods and tests. Mapping between persistence (snake_case) and API DTOs (camelCase) can be done in handlers if/when needed.
+These help typing repo methods and tests. Mapping between persistence
+(snake_case) and API DTOs (camelCase) can be done in handlers if/when needed.
 
 ### Example Drizzle schema, TypeScript
 

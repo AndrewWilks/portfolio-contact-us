@@ -1,6 +1,6 @@
-import { eq, desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db } from "@db";
-import { contacts, type ContactInsert, type ContactSelect } from "@db/schema";
+import { type ContactInsert, contacts, type ContactSelect } from "@db/schema";
 
 // Export typed aliases for repository consumers
 export type ContactInsertRow = ContactInsert;

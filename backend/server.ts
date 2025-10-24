@@ -1,10 +1,13 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-// import { db } from "@db";
 import { ShutdownManager } from "./shutdownManager.ts";
+import onErrorHandler from "./middleware/errorHandler.ts";
 
 import * as routes from "@backend/routes";
+import zodValidatorWrapper from "./utils/zodValidatorWrapper.ts";
+import * as schema from "@shared/schema";
+import type { ValidationTargets as _ValidationTargets } from "hono";
 
 const backend = new Hono();
 export { backend };
@@ -33,14 +36,8 @@ backend.use(
 // Rate Limiting Middleware
 // TODO: add rate limiting middleware here
 
-// // Error Handling Middleware
-backend.onError((err, c) => {
-  console.error("Error occurred:", err);
-  return c.json(
-    { message: "Internal Server Error", details: err.message },
-    500,
-  );
-});
+// Error handling moved to middleware file
+backend.onError(onErrorHandler);
 
 backend.get("/", (c) => {
   return c.json({ message: "Welcome to the Portfolio Contact Us API" });
@@ -58,6 +55,21 @@ backend.get("/health", (c) => {
 
 // API Routes
 backend.get("/hello", routes.api_hello);
+
+// Contacts API
+// Use zod-validator wrapper middleware to validate the JSON body for create
+backend.post(
+  "/api/contacts",
+  zodValidatorWrapper("json", schema.ContactCreateSchema),
+  routes.createContactHandler,
+);
+backend.get(
+  "/api/contacts",
+  zodValidatorWrapper("query", schema.ContactsQuerySchema),
+  routes.listContactsHandler,
+);
+backend.patch("/api/contacts/:id/verify", routes.verifyContactHandler);
+backend.delete("/api/contacts/:id", routes.deleteContactHandler);
 
 if (import.meta.main) {
   const server = Deno.serve(backend.fetch);

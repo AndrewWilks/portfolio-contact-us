@@ -1,7 +1,9 @@
 export { APIHelloSchema } from "./hello.ts";
 export {
+  type Contact,
+  type ContactCreate,
   ContactCreateSchema,
   ContactSchema,
-  type ContactCreate,
-  type Contact,
 } from "./contact.ts";
+export { ContactsQuerySchema, IdParamsSchema } from "./contact.ts";
+export type { ContactsQuery, IdParams } from "./contact.ts";

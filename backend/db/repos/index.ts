@@ -1,9 +1,9 @@
 export {
+  type ContactInsertRow,
+  type ContactRow,
   createContact,
   deleteContact,
   getContactById,
   listContacts,
   verifyContact,
-  type ContactRow,
-  type ContactInsertRow,
 } from "./contacts.ts";
