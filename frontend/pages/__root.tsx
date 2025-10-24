@@ -31,7 +31,7 @@ const RootLayout = () => {
       <Header ref={headerRef} />
       <main
         ref={mainRef}
-        className={`container mx-auto p-2 h-[${mainHeight}px]`}
+        className={`container mx-auto p-2 min-h-[${mainHeight}px]`}
       >
         <Outlet />
       </main>
