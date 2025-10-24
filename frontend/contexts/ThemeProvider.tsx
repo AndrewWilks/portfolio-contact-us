@@ -4,6 +4,7 @@ type Theme = "light" | "dark" | "auto";
 
 interface ThemeContextValue {
   theme: Theme;
+  current: "light" | "dark";
   toggle: () => void;
   setTheme: (t: Theme) => void;
 }
@@ -26,6 +27,11 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
   };
 
   const [theme, setThemeState] = useState<Theme>(getInitial);
+  const [current, setCurrent] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    setCurrent(shouldUseDark(theme) ? "dark" : "light");
+  }, [theme]);
 
   // helper to determine whether dark should be applied
   const shouldUseDark = (t: Theme) => {
@@ -108,7 +114,7 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
   const setTheme = (t: Theme) => setThemeState(t);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggle, setTheme }}>
+    <ThemeContext.Provider value={{ theme, toggle, setTheme, current }}>
       {children}
     </ThemeContext.Provider>
   );
