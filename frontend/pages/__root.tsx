@@ -1,28 +1,16 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
-import ThemeToggle from "@components/ThemeToggle.tsx";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
+import Header from "../blocks/Header.tsx";
+import Footer from "../blocks/Footer.tsx";
 
 const RootLayout = () => (
+  // TODO: forward ref for better layout vertical height handling
   <>
-    <header className="p-2 flex items-center justify-between container mx-auto h-16">
-      <div className="flex gap-4 ">
-        <Link to="/" className="[&.active]:font-bold">
-          Home
-        </Link>
-        <Link to="/contact" className="[&.active]:font-bold">
-          Contact
-        </Link>
-        <Link to="/admin" className="[&.active]:font-bold">
-          Admin
-        </Link>
-      </div>
-      <div>
-        <ThemeToggle />
-      </div>
-    </header>
+    <Header />
     <hr />
     <main className="container mx-auto p-2 h-[calc(100vh-4rem)]">
       <Outlet />
     </main>
+    <Footer />
   </>
 );
 
