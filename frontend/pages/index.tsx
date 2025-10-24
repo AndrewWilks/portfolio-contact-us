@@ -7,11 +7,11 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <section className="flex flex-col items-center justify-center py-32 px-4 text-(--text) max-w-2xl mx-auto text-center">
+    <section className="flex flex-col items-center justify-center py-32 px-4 text-(--text) max-w-2xl mx-auto text-center min-h-fit h-[80vh]">
       <h2 className="text-4xl font-semibold text-center">Welcome to</h2>
       <HeroText
         text="OpenAgent"
-        className="text-8xl font-semibold text-center dark:text-green-400 text-green-500 pb-10 mx-auto"
+        className="lg:text-8xl text-6xl font-semibold text-center dark:text-green-400 text-green-500 pb-10 mx-auto"
         delay={100}
         duration={0.6}
         ease="power3.out"
