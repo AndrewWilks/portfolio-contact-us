@@ -1,9 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import ThemeToggle from "@components/ThemeToggle.tsx";
+import { Ref } from "react";
 
-export default function Header() {
+interface HeaderProps {
+  ref?: Ref<HTMLDivElement>;
+}
+
+export default function Header({ ref }: HeaderProps) {
   return (
-    <header className="p-2 flex items-center justify-between container mx-auto h-16">
+    <header
+      ref={ref}
+      className="p-2 flex items-center justify-between container mx-auto h-16"
+    >
       <div className="flex gap-4 ">
         <Link to="/" className="[&.active]:font-bold">
           Home
