@@ -4,7 +4,7 @@ const configSchema = z.object({
   NODE_ENV: z
     .enum(
       ["development", "production"],
-      "Invalid NODE_ENV value in environment variables",
+      "Invalid NODE_ENV value in environment variables"
     )
     .default("development"),
   FRONTEND_PORT: z.coerce
@@ -21,11 +21,9 @@ function loadConfig(): Config {
     return cachedConfig;
   }
 
-  const nodeEnv = Deno.env.get("NODE_ENV") || "development";
-
   const config = {
-    NODE_ENV: nodeEnv,
-    FRONTEND_PORT: Deno.env.get("FRONTEND_PORT"),
+    NODE_ENV: Deno.env.get("NODE_ENV") || "development",
+    FRONTEND_PORT: Deno.env.get("FRONTEND_PORT") || 3000,
   };
 
   try {

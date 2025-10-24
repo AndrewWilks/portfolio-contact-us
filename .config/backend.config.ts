@@ -15,12 +15,10 @@ function loadConfig(): Config {
     return cachedConfig;
   }
 
-  const nodeEnv = Deno.env.get("NODE_ENV") || "development";
-
   const config = {
-    DB_FILE_NAME: Deno.env.get("DB_FILE_NAME"),
-    NODE_ENV: nodeEnv,
-    BACKEND_PORT: Deno.env.get("BACKEND_PORT"),
+    DB_FILE_NAME: Deno.env.get("DB_FILE_NAME") || "./database.sqlite",
+    NODE_ENV: Deno.env.get("NODE_ENV") || "development",
+    BACKEND_PORT: Deno.env.get("BACKEND_PORT") || 8000,
   };
 
   try {
