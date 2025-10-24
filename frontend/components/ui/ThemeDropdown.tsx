@@ -1,21 +1,16 @@
 import { useTheme } from "@contexts/ThemeProvider.tsx";
 
-export default function ThemeToggle() {
-  const { theme, toggle, setTheme } = useTheme();
+export default function ThemeDropdown() {
+  const { theme, setTheme } = useTheme();
 
   return (
-    <div className="flex items-center gap-2">
-      <label className="sr-only">Theme</label>
-      <button
-        type="button"
-        onClick={toggle}
-        className="px-2 py-1 border rounded bg-gray-100 dark:bg-gray-700"
-        aria-label={`Toggle theme (current: ${theme})`}
-      >
-        {theme === "auto" ? "Auto" : theme === "dark" ? "Dark" : "Light"}
-      </button>
+    <>
+      <label className="sr-only" htmlFor="theme-select">
+        Theme
+      </label>
       <div className="hidden sm:block">
         <select
+          id="theme-select"
           aria-label="Select theme"
           value={theme}
           onChange={(e) =>
@@ -28,6 +23,6 @@ export default function ThemeToggle() {
           <option value="dark">Dark</option>
         </select>
       </div>
-    </div>
+    </>
   );
 }
