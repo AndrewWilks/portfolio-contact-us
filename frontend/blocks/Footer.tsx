@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import ThemeDropdown from "@ui/ThemeDropdown.tsx";
 
 interface FooterProps {
   ref?: React.Ref<HTMLDivElement>;
@@ -15,6 +16,11 @@ export default function Footer({ ref }: FooterProps) {
           &copy; {new Date().getFullYear()}{" "}
           <Link to={"/me/"}>Andrew Wilks</Link>. All rights reserved.
         </p>
+      </div>
+      <div className="container mx-auto text-center flex">
+        <div className="ml-auto">
+          <ThemeDropdown />
+        </div>
       </div>
     </footer>
   );
