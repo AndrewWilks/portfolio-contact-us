@@ -1,11 +1,14 @@
+/* eslint-disable react/no-inline-styles */
 import { createFileRoute } from "@tanstack/react-router";
 import { useVirtualizer, type VirtualItem } from "@tanstack/react-virtual";
 import { useRef } from "react";
 import { useAdminContacts } from "../../hooks/useAdminContacts.tsx";
+import { useConfirm } from "../../hooks/useConfirm.tsx";
 import ContactRow from "@components/Admin/ContactRow.tsx";
 
 export const Route = createFileRoute("/admin/")({ component: AdminContacts });
 
+// TODO: Add a button view to see the contact'e details
 function AdminContacts() {
   const parentRef = useRef<HTMLDivElement | null>(null);
   const { query, verifyMutation, deleteMutation } = useAdminContacts();
@@ -25,6 +28,7 @@ function AdminContacts() {
     return <div className="p-4 text-(--danger)">Error loading contacts</div>;
 
   const virtualItems = rowVirtualizer.getVirtualItems();
+  const confirm = useConfirm();
 
   return (
     <>
@@ -57,8 +61,10 @@ function AdminContacts() {
                   contact={contact}
                   onVerify={(id) => verifyMutation.mutate(id)}
                   onDelete={(id) => {
-                    if (confirm("Delete this contact?"))
-                      deleteMutation.mutate(id);
+                    (async () => {
+                      const ok = await confirm("Delete this contact?");
+                      if (ok) deleteMutation.mutate(id);
+                    })();
                   }}
                 />
               </div>
