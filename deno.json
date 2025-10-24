@@ -49,6 +49,7 @@
     "@radix-ui/react-dialog": "npm:@radix-ui/react-dialog@^1.1.15",
     "@radix-ui/react-toast": "npm:@radix-ui/react-toast@^1.1.15",
     "@tanstack/react-query": "npm:@tanstack/react-query@^5.90.5",
+    "@tanstack/react-virtual": "npm:@tanstack/react-virtual@^3.0.0",
     "typescript-eslint": "npm:typescript-eslint@^8.46.2",
     "vite": "npm:vite@^7.1.12",
     "@libsql/client": "npm:@libsql/client@^0.15.15",

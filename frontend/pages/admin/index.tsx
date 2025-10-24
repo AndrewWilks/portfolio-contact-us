@@ -1,149 +1,71 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useVirtualizer, type VirtualItem } from "@tanstack/react-virtual";
+import { useRef } from "react";
+import { useAdminContacts } from "../../hooks/useAdminContacts.tsx";
+import ContactRow from "@components/Admin/ContactRow.tsx";
 
 export const Route = createFileRoute("/admin/")({ component: AdminContacts });
 
-type ContactRow = {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone?: string | null;
-  message?: string | null;
-  verified?: boolean;
-  createdAt?: number;
-};
-
-async function fetchContacts(): Promise<ContactRow[]> {
-  const res = await fetch("/api/contacts");
-  if (!res.ok) throw new Error("Failed to load contacts");
-  const body = await res.json();
-  return body.data as ContactRow[];
-}
-
 function AdminContacts() {
-  const queryClient = useQueryClient();
+  const parentRef = useRef<HTMLDivElement | null>(null);
+  const { query, verifyMutation, deleteMutation } = useAdminContacts();
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["contacts"],
-    queryFn: fetchContacts,
+  const data = query.data ?? [];
+
+  const rowVirtualizer = useVirtualizer({
+    count: data.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 120,
+    overscan: 5,
   });
 
-  const verifyMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const res = await fetch(`/api/contacts/${id}/verify`, {
-        method: "PATCH",
-      });
-      if (!res.ok) throw new Error("Failed to verify");
-      const body = await res.json();
-      return body.data as ContactRow;
-    },
-    onMutate: async (id: string) => {
-      await queryClient.cancelQueries({ queryKey: ["contacts"] });
-      const previous =
-        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
-      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
-        old.map((c) => (c.id === id ? { ...c, verified: true } : c))
-      );
-      return { previous } as { previous: ContactRow[] };
-    },
-    onError: (
-      _err: unknown,
-      _id: string,
-      context?: { previous: ContactRow[] }
-    ) => {
-      if (context?.previous) {
-        queryClient.setQueryData(["contacts"], context.previous);
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["contacts"] });
-    },
-  });
+  if (query.isLoading) return <div className="p-4">Loading contacts...</div>;
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const res = await fetch(`/api/contacts/${id}`, { method: "DELETE" });
-      if (!res.ok && res.status !== 204) throw new Error("Failed to delete");
-      return id;
-    },
-    onMutate: async (id: string) => {
-      await queryClient.cancelQueries({ queryKey: ["contacts"] });
-      const previous =
-        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
-      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
-        old.filter((c) => c.id !== id)
-      );
-      return { previous } as { previous: ContactRow[] };
-    },
-    onError: (
-      _err: unknown,
-      _id: string,
-      context?: { previous: ContactRow[] }
-    ) => {
-      if (context?.previous) {
-        queryClient.setQueryData(["contacts"], context.previous);
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["contacts"] });
-    },
-  });
+  if (query.isError)
+    return <div className="p-4 text-(--danger)">Error loading contacts</div>;
 
-  if (isLoading) return <div className="p-4">Loading contacts...</div>;
-  if (error)
-    return <div className="p-4 text-red-600">Error loading contacts</div>;
+  const virtualItems = rowVirtualizer.getVirtualItems();
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-semibold mb-4">Admin — Contacts</h2>
-      <div className="space-y-2">
-        {data && data.length ? (
-          data.map((c) => (
-            <div key={c.id} className="p-3 card rounded">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="font-medium">
-                    {c.first_name} {c.last_name}
-                  </div>
-                  <div className="text-sm text-(--muted)">{c.email}</div>
-                </div>
-                <div className="text-sm">
-                  {c.verified ? (
-                    <span className="text-(--success)">Verified</span>
-                  ) : (
-                    <button
-                      type="button"
-                      className="px-2 py-1 text-sm bg-(--accent) text-(--text) rounded"
-                      onClick={() => verifyMutation.mutate(c.id)}
-                    >
-                      Verify
-                    </button>
-                  )}
-                </div>
-              </div>
-              {c.phone ? <div className="text-sm mt-2">{c.phone}</div> : null}
-              {c.message ? (
-                <div className="mt-2 text-sm">{c.message}</div>
-              ) : null}
-              <div className="mt-2 text-right">
-                <button
-                  type="button"
-                  className="px-2 py-1 text-sm bg-(--danger) text-(--primary-foreground) rounded"
-                  onClick={() => {
+    <>
+      <h2 className="text-2xl font-semibold mb-4">Admin - Contacts</h2>
+      <div
+        ref={parentRef}
+        className="overflow-auto h-[calc(100vh-8rem)] border"
+      >
+        <div
+          style={{
+            height: `${rowVirtualizer.getTotalSize()}px`,
+            position: "relative",
+          }}
+        >
+          {virtualItems.map((virtualRow: VirtualItem) => {
+            const contact = data[virtualRow.index];
+            return (
+              <div
+                key={contact.id}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  transform: `translateY(${virtualRow.start}px)`,
+                }}
+                className="px-2 pb-2"
+              >
+                <ContactRow
+                  contact={contact}
+                  onVerify={(id) => verifyMutation.mutate(id)}
+                  onDelete={(id) => {
                     if (confirm("Delete this contact?"))
-                      deleteMutation.mutate(c.id);
+                      deleteMutation.mutate(id);
                   }}
-                >
-                  Delete
-                </button>
+                />
               </div>
-            </div>
-          ))
-        ) : (
-          <div>No contacts found</div>
-        )}
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

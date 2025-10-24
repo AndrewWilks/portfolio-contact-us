@@ -43,9 +43,8 @@ body {
   transition: background-color 160ms ease, color 160ms ease;
 }
 
-/* Provide a simple card surface utility for places that need a panel */
-.card {
-  background: var(--card);
-  color: var(--text);
-  border: 1px solid var(--border);
+#root {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }

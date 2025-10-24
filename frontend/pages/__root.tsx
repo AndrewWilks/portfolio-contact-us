@@ -1,11 +1,10 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import ThemeToggle from "@components/ThemeToggle.tsx";
 
 const RootLayout = () => (
   <>
-    <div className="p-2 flex items-center justify-between">
-      <div className="flex gap-4">
+    <header className="p-2 flex items-center justify-between container mx-auto h-16">
+      <div className="flex gap-4 ">
         <Link to="/" className="[&.active]:font-bold">
           Home
         </Link>
@@ -19,10 +18,11 @@ const RootLayout = () => (
       <div>
         <ThemeToggle />
       </div>
-    </div>
+    </header>
     <hr />
-    <Outlet />
-    <TanStackRouterDevtools />
+    <main className="container mx-auto p-2 h-[calc(100vh-4rem)]">
+      <Outlet />
+    </main>
   </>
 );
 
