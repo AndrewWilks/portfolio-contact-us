@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import deno from "@deno/vite-plugin";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
@@ -28,6 +29,7 @@ export default defineConfig({
     }),
     react(),
     deno(),
+    tailwindcss(),
   ],
   css: {
     postcss: "../.config/postcss.config.js",
