@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './pages/__root'
 import { Route as IndexRouteImport } from './pages/index'
+import { Route as ContactIndexRouteImport } from './pages/contact/index'
+import { Route as ContactThankYouRouteImport } from './pages/contact/thank-you'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactIndexRoute = ContactIndexRouteImport.update({
+  id: '/contact/',
+  path: '/contact/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactThankYouRoute = ContactThankYouRouteImport.update({
+  id: '/contact/thank-you',
+  path: '/contact/thank-you',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/contact/thank-you': typeof ContactThankYouRoute
+  '/contact': typeof ContactIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/contact/thank-you': typeof ContactThankYouRoute
+  '/contact': typeof ContactIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/contact/thank-you': typeof ContactThankYouRoute
+  '/contact/': typeof ContactIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/contact/thank-you' | '/contact'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/contact/thank-you' | '/contact'
+  id: '__root__' | '/' | '/contact/thank-you' | '/contact/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ContactThankYouRoute: typeof ContactThankYouRoute
+  ContactIndexRoute: typeof ContactIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact/': {
+      id: '/contact/'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact/thank-you': {
+      id: '/contact/thank-you'
+      path: '/contact/thank-you'
+      fullPath: '/contact/thank-you'
+      preLoaderRoute: typeof ContactThankYouRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ContactThankYouRoute: ContactThankYouRoute,
+  ContactIndexRoute: ContactIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
