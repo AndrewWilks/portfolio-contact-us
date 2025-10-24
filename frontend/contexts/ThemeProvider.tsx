@@ -107,10 +107,14 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
     };
   }, [theme]);
 
-  const toggle = () =>
-    setThemeState((t) =>
-      t === "dark" ? "light" : t === "light" ? "auto" : "dark"
-    );
+  const toggle = () => {
+    if (theme === "auto") {
+      setThemeState(current === "dark" ? "light" : "dark");
+    } else {
+      setThemeState("auto");
+    }
+  };
+
   const setTheme = (t: Theme) => setThemeState(t);
 
   return (
