@@ -5,13 +5,17 @@ import TextField from "../ui/TextField.tsx";
 import { useNavigate } from "@tanstack/react-router";
 import ShinyCard from "@ui/ShinyCard.tsx";
 import Button from "@ui/Button.tsx";
+import useToast from "../../hooks/useToast.tsx";
 
 export function ContactForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<ContactCreate>({ resolver: zodResolver(ContactCreateSchema) });
+
+  const toast = useToast();
 
   const navigate = useNavigate();
 
@@ -28,35 +32,64 @@ export function ContactForm() {
       });
     } catch (err) {
       console.error("ContactForm: network error", err);
-      alert("Network error sending message. Check the console for details.");
+      toast.open({
+        title: "Network error",
+        description: "Check the console for details.",
+        variant: "error",
+      });
       return;
     }
     console.log("ContactForm: response", res.status, res.url);
     if (!res.ok) {
-      const text = await res.text();
-      console.error("ContactForm: non-ok response", res.status, text);
-      alert(`Failed to send message: ${res.status} ${text}`);
-      return;
-    }
-    if (!res.ok) {
-      // Try to show a simple toast using Radix viewport (fallback to alert)
+      let bodyText = "";
       try {
-        // Radix toast doesn't expose a global API; fallback:
-        alert("Failed to send message. Please try again.");
+        const parsed = await res.json();
+        bodyText =
+          parsed?.error?.message ?? parsed?.message ?? JSON.stringify(parsed);
+        // Map field errors if provided
+        if (
+          parsed?.error?.fieldErrors &&
+          Array.isArray(parsed.error.fieldErrors)
+        ) {
+          type FieldError = { field?: string; message?: string };
+          parsed.error.fieldErrors.forEach((fe: FieldError) => {
+            if (fe?.field && fe?.message)
+              setError(fe.field as keyof ContactCreate, {
+                type: "server",
+                message: fe.message,
+              });
+          });
+        }
       } catch {
-        /* ignore */
+        bodyText = await res.text().catch(() => "Unknown server error");
       }
+      console.error("ContactForm: non-ok response", res.status, bodyText);
+      toast.open({
+        title: "Failed to send",
+        description: bodyText,
+        variant: "error",
+      });
       return;
     }
 
     // navigate to the thank-you route (route-driven modal)
+    toast.open({
+      title: "Message sent",
+      description: "Thanks — we'll be in touch.",
+      variant: "success",
+    });
     navigate({ to: "/contact/thank-you" });
   };
 
   return (
     <ShinyCard className="p-4 md:p-8">
       <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="p-4 rounded card">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        className="p-4 rounded card"
+        aria-live="polite"
+      >
         <TextField
           label="First name"
           {...register("firstName")}
@@ -100,11 +133,11 @@ export function ContactForm() {
         <div className="flex justify-end">
           <Button
             type="submit"
-            disabled={isSubmitting}
+            loading={isSubmitting}
             variant="primary"
             className="cursor-pointer"
           >
-            {isSubmitting ? "Sending..." : "Send message"}
+            Send message
           </Button>
         </div>
       </form>
