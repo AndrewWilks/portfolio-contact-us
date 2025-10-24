@@ -3,6 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ContactCreateSchema, type ContactCreate } from "@shared/schema";
 import TextField from "../ui/TextField.tsx";
 import { useNavigate } from "@tanstack/react-router";
+import ShinyCard from "@ui/ShinyCard.tsx";
+import Button from "@ui/Button.tsx";
 
 export function ContactForm() {
   const {
@@ -52,57 +54,61 @@ export function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-4 rounded card">
-      <TextField
-        label="First name"
-        {...register("firstName")}
-        error={errors.firstName?.message}
-      />
-      <TextField
-        label="Last name"
-        {...register("lastName")}
-        error={errors.lastName?.message}
-      />
-      <TextField
-        label="Email"
-        type="email"
-        {...register("email")}
-        error={errors.email?.message}
-      />
-      <TextField
-        label="Phone"
-        {...register("phone")}
-        error={errors.phone?.message}
-      />
-      <div className="mb-4">
-        <label
-          htmlFor="message"
-          className="block text-sm font-medium text-(--text) mb-1"
-        >
-          Message
-        </label>
-        <textarea
-          id="message"
-          {...register("message")}
-          className="w-full border rounded px-3 py-2 bg-(--card) text-(--text) border-(--border)"
-          rows={4}
+    <ShinyCard className="p-4 md:p-8">
+      <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="p-4 rounded card">
+        <TextField
+          label="First name"
+          {...register("firstName")}
+          error={errors.firstName?.message}
         />
-        {errors.message ? (
-          <p className="mt-1 text-sm text-(--danger)">
-            {errors.message.message}
-          </p>
-        ) : null}
-      </div>
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="px-4 py-2 bg-(--primary) text-(--primary-foreground) rounded hover:bg-(--primary-hover)"
-        >
-          {isSubmitting ? "Sending..." : "Send message"}
-        </button>
-      </div>
-    </form>
+        <TextField
+          label="Last name"
+          {...register("lastName")}
+          error={errors.lastName?.message}
+        />
+        <TextField
+          label="Email"
+          type="email"
+          {...register("email")}
+          error={errors.email?.message}
+        />
+        <TextField
+          label="Phone"
+          {...register("phone")}
+          error={errors.phone?.message}
+        />
+        <div className="mb-4">
+          <label
+            htmlFor="message"
+            className="block text-sm font-medium text-(--text) mb-1"
+          >
+            Message
+          </label>
+          <textarea
+            id="message"
+            {...register("message")}
+            className="w-full border rounded px-3 py-2 bg-(--card) text-(--text) border-(--border)"
+            rows={4}
+          />
+          {errors.message ? (
+            <p className="mt-1 text-sm text-(--danger)">
+              {errors.message.message}
+            </p>
+          ) : null}
+        </div>
+        <div className="flex justify-end">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            variant="primary"
+            className="cursor-pointer"
+          >
+            {isSubmitting ? "Sending..." : "Send message"}
+          </Button>
+        </div>
+      </form>
+    </ShinyCard>
   );
 }
 
