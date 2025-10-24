@@ -1,4 +1,5 @@
 import { Context } from "hono";
+import { IdParamsSchema } from "@shared/schema";
 import {
   createContact,
   listContacts,
@@ -85,6 +86,11 @@ export async function verifyContactHandler(c: Context) {
   const id = c.req.param("id");
   if (!id) return badRequest(c, "Missing id param");
 
+  // Validate param using shared Zod schema (middleware ordering can be tricky
+  // for params so we validate inside the handler).
+  const parsed = IdParamsSchema.safeParse({ id });
+  if (!parsed.success) return badRequest(c, parsed.error.message);
+
   const updated = await verifyContact({ id });
   if (!updated) return notFound(c, "Contact not found");
   return ok(c, updated);
@@ -93,6 +99,9 @@ export async function verifyContactHandler(c: Context) {
 export async function deleteContactHandler(c: Context) {
   const id = c.req.param("id");
   if (!id) return badRequest(c, "Missing id param");
+
+  const parsed = IdParamsSchema.safeParse({ id });
+  if (!parsed.success) return badRequest(c, parsed.error.message);
 
   const deleted = await deleteContact({ id });
   if (!deleted) return notFound(c, "Contact not found");
