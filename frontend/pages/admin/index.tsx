@@ -100,21 +100,21 @@ function AdminContacts() {
       <div className="space-y-2">
         {data && data.length ? (
           data.map((c) => (
-            <div key={c.id} className="p-3 border rounded">
+            <div key={c.id} className="p-3 card rounded">
               <div className="flex justify-between items-start">
                 <div>
                   <div className="font-medium">
                     {c.first_name} {c.last_name}
                   </div>
-                  <div className="text-sm text-gray-600">{c.email}</div>
+                  <div className="text-sm text-(--muted)">{c.email}</div>
                 </div>
                 <div className="text-sm">
                   {c.verified ? (
-                    <span className="text-green-600">Verified</span>
+                    <span className="text-(--success)">Verified</span>
                   ) : (
                     <button
                       type="button"
-                      className="px-2 py-1 text-sm bg-yellow-200 rounded"
+                      className="px-2 py-1 text-sm bg-(--accent) text-(--text) rounded"
                       onClick={() => verifyMutation.mutate(c.id)}
                     >
                       Verify
@@ -129,7 +129,7 @@ function AdminContacts() {
               <div className="mt-2 text-right">
                 <button
                   type="button"
-                  className="px-2 py-1 text-sm bg-red-600 text-white rounded"
+                  className="px-2 py-1 text-sm bg-(--danger) text-(--primary-foreground) rounded"
                   onClick={() => {
                     if (confirm("Delete this contact?"))
                       deleteMutation.mutate(c.id);

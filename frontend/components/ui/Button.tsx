@@ -13,8 +13,8 @@ export function Button({
     "inline-flex items-center justify-center px-4 py-2 rounded focus:outline-none";
   const styles =
     variant === "primary"
-      ? "bg-blue-600 text-white hover:bg-blue-700"
-      : "bg-transparent text-gray-700 hover:bg-gray-100";
+      ? "bg-(--primary) text-(--primary-foreground) hover:bg-(--primary-hover)"
+      : "bg-transparent text-(--text) hover:bg-(--card)";
   return (
     <button type="button" className={`${base} ${styles}`} {...rest}>
       {children}

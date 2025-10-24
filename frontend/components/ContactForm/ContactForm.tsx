@@ -52,7 +52,7 @@ export function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="bg-white">
+    <form onSubmit={handleSubmit(onSubmit)} className="p-4 rounded card">
       <TextField
         label="First name"
         {...register("firstName")}
@@ -77,25 +77,27 @@ export function ContactForm() {
       <div className="mb-4">
         <label
           htmlFor="message"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-(--text) mb-1"
         >
           Message
         </label>
         <textarea
           id="message"
           {...register("message")}
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded px-3 py-2 bg-(--card) text-(--text) border-(--border)"
           rows={4}
         />
         {errors.message ? (
-          <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>
+          <p className="mt-1 text-sm text-(--danger)">
+            {errors.message.message}
+          </p>
         ) : null}
       </div>
       <div className="flex justify-end">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
+          className="px-4 py-2 bg-(--primary) text-(--primary-foreground) rounded hover:bg-(--primary-hover)"
         >
           {isSubmitting ? "Sending..." : "Send message"}
         </button>

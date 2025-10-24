@@ -1,1 +1,51 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Semantic color tokens for light and dark themes. Components use
+	 Tailwind arbitrary values like bg-[var(--card)] and text-[var(--text)]
+	 so toggling the `.dark` class on the document root flips the theme. */
+:root {
+  --bg: #f8fafc;
+  --text: #0f172a;
+  --muted: #64748b;
+  --card: #ffffff;
+  --border: #e6edf3;
+
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --primary-hover: #1d4ed8;
+
+  --accent: #f59e0b;
+  --success: #16a34a;
+  --danger: #dc2626;
+}
+
+.dark {
+  --bg: #0b1220;
+  --text: #e6eef8;
+  --muted: #94a3b8;
+  --card: #0f1724;
+  --border: #1f2937;
+
+  --primary: #3b82f6;
+  --primary-foreground: #0b1220;
+  --primary-hover: #2563eb;
+
+  --accent: #f59e0b;
+  --success: #22c55e;
+  --danger: #ef4444;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+/* Provide a simple card surface utility for places that need a panel */
+.card {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
