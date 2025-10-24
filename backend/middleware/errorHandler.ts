@@ -1,6 +1,6 @@
 import { HTTPException } from "hono/http-exception";
 import type { Context } from "hono";
-import { badRequest, notFound, internalError } from "../utils/errors.ts";
+import { badRequest, internalError, notFound } from "../utils/errors.ts";
 import { HTTPResponseError } from "hono/types";
 
 /**

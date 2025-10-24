@@ -81,7 +81,7 @@ Deno.test(
 
     // filter verified=true
     res = await backend.fetch(
-      new Request("http://localhost/api/contacts?verified=true")
+      new Request("http://localhost/api/contacts?verified=true"),
     );
     assertEquals(res.status, 200);
     body = await res.json();
@@ -90,7 +90,7 @@ Deno.test(
     for (const item of body.data) {
       assertEquals(item.verified, true);
     }
-  }
+  },
 );
 
 Deno.test("PATCH /api/contacts/:id/verify marks contact verified", async () => {
@@ -106,7 +106,7 @@ Deno.test("PATCH /api/contacts/:id/verify marks contact verified", async () => {
   const res = await backend.fetch(
     new Request(`http://localhost/api/contacts/${created.id}/verify`, {
       method: "PATCH",
-    })
+    }),
   );
 
   assertEquals(res.status, 200);
@@ -131,7 +131,7 @@ Deno.test(
     const res = await backend.fetch(
       new Request(`http://localhost/api/contacts/${created.id}`, {
         method: "DELETE",
-      })
+      }),
     );
 
     assertEquals(res.status, 204);
@@ -140,9 +140,9 @@ Deno.test(
     const res2 = await backend.fetch(
       new Request(`http://localhost/api/contacts/${created.id}`, {
         method: "DELETE",
-      })
+      }),
     );
     // second delete should return 404
     assertEquals(res2.status, 404);
-  }
+  },
 );

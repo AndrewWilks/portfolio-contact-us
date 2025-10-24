@@ -26,12 +26,11 @@ const safeEnv = (key: string) => {
 backend.use(
   "*",
   cors({
-    origin:
-      safeEnv("NODE_ENV") === "production"
-        ? [safeEnv("APP_URL") || ""]
-        : ["http://localhost:3000"],
+    origin: safeEnv("NODE_ENV") === "production"
+      ? [safeEnv("APP_URL") || ""]
+      : ["http://localhost:3000"],
     credentials: true,
-  })
+  }),
 );
 
 // Rate Limiting Middleware
@@ -62,12 +61,12 @@ backend.get("/hello", routes.api_hello);
 backend.post(
   "/api/contacts",
   zodValidatorWrapper("json", schema.ContactCreateSchema),
-  routes.createContactHandler
+  routes.createContactHandler,
 );
 backend.get(
   "/api/contacts",
   zodValidatorWrapper("query", schema.ContactsQuerySchema),
-  routes.listContactsHandler
+  routes.listContactsHandler,
 );
 backend.patch("/api/contacts/:id/verify", routes.verifyContactHandler);
 backend.delete("/api/contacts/:id", routes.deleteContactHandler);

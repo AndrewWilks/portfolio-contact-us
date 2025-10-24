@@ -1,25 +1,25 @@
 import { Context } from "hono";
 import { IdParamsSchema } from "@shared/schema";
 import {
+  type ContactInsertRow,
   createContact,
+  deleteContact,
   listContacts,
   verifyContact,
-  deleteContact,
-  type ContactInsertRow,
 } from "@backend/repos";
 import type { ContactCreate } from "@shared/schema";
 
 import {
   badRequest,
-  notFound,
-  ok,
   created,
   noContent,
+  notFound,
+  ok,
 } from "../utils/errors.ts";
 
 // Helper to convert camelCase DTO to snake_case DB insert shape
 function dtoToDb(
-  payload: ContactCreate
+  payload: ContactCreate,
 ): Omit<ContactInsertRow, "id" | "created_at"> {
   return {
     first_name: payload.firstName,
@@ -59,8 +59,9 @@ export async function createContactHandler(c: Context) {
 export async function listContactsHandler(c: Context) {
   const q = c.req.query("q") || undefined;
   const verifiedParam = c.req.query("verified");
-  const verified =
-    typeof verifiedParam === "string" ? verifiedParam === "true" : undefined;
+  const verified = typeof verifiedParam === "string"
+    ? verifiedParam === "true"
+    : undefined;
 
   const rows = await listContacts();
 
@@ -75,7 +76,7 @@ export async function listContactsHandler(c: Context) {
       (r) =>
         (r.first_name || "").toLowerCase().includes(term) ||
         (r.last_name || "").toLowerCase().includes(term) ||
-        (r.email || "").toLowerCase().includes(term)
+        (r.email || "").toLowerCase().includes(term),
     );
   }
 

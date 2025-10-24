@@ -35,7 +35,7 @@ Deno.test(
     assert(contact.message === null);
     assert(contact.verified === false);
     assert(typeof contact.created_at === "number");
-  }
+  },
 );
 
 Deno.test("createContact sets optional fields if provided", async () => {
@@ -72,7 +72,7 @@ Deno.test(
     const contacts = await listContacts();
     assert(Array.isArray(contacts));
     assert(contacts.length === 0);
-  }
+  },
 );
 
 Deno.test(
@@ -113,14 +113,14 @@ Deno.test(
     // Should be ordered by created_at descending
     assert(
       contacts[0].created_at >= contacts[1].created_at &&
-        contacts[1].created_at >= contacts[2].created_at
+        contacts[1].created_at >= contacts[2].created_at,
     );
 
     // IDs should match the created contacts in reverse order
     assert(contacts[0].id === contactsCreated[2].id);
     assert(contacts[1].id === contactsCreated[1].id);
     assert(contacts[2].id === contactsCreated[0].id);
-  }
+  },
 );
 
 Deno.test(
@@ -141,7 +141,7 @@ Deno.test(
     assert(contact.last_name === payload.last_name);
     assert(contact.email === payload.email);
     assert(contact.verified === false);
-  }
+  },
 );
 
 Deno.test("getContactById returns undefined for non-existent id", async () => {
@@ -167,7 +167,7 @@ Deno.test(
     assert(updated, "Updated contact should be returned");
     assert(updated.id === created.id);
     assert(updated.verified === true);
-  }
+  },
 );
 
 Deno.test(
@@ -175,7 +175,7 @@ Deno.test(
   async () => {
     const result = await verifyContact({ id: "non-existent-id" });
     assert(result === undefined);
-  }
+  },
 );
 
 Deno.test(
@@ -199,7 +199,7 @@ Deno.test(
     // Ensure the contact is no longer in the database
     const found = await getContactById({ id: created.id });
     assert(found === undefined);
-  }
+  },
 );
 
 Deno.test(
@@ -207,5 +207,5 @@ Deno.test(
   async () => {
     const deleted = await deleteContact({ id: "non-existent-id" });
     assert(deleted === undefined);
-  }
+  },
 );

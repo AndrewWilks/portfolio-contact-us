@@ -19,8 +19,8 @@ Related specs:
 
 ### Sprint 1 — Database & Persistence (MUST complete first)
 
-Purpose: full data layer with Drizzle and a contacts table ready for use by
-the API. This sprint is Phase 1 in the tech-test mapping.
+Purpose: full data layer with Drizzle and a contacts table ready for use by the
+API. This sprint is Phase 1 in the tech-test mapping.
 
 Core tasks:
 
@@ -33,9 +33,10 @@ Core tasks:
 
 Acceptance criteria:
 
-- `deno test` runs fast and repository unit tests cover create/list/verify/delete
-- DB file (or libSQL) is configurable via env and used by tests in-memory or
-  via a temp file
+- `deno test` runs fast and repository unit tests cover
+  create/list/verify/delete
+- DB file (or libSQL) is configurable via env and used by tests in-memory or via
+  a temp file
 - Repos return typed objects matching the shared Zod Contact schema
 
 ### Sprint 2 — Backend endpoints (API)
@@ -49,7 +50,8 @@ Core tasks:
 - GET /api/contacts — support optional `q` search and `verified` filter
 - PATCH /api/contacts/:id/verify — mark verified true
 - DELETE /api/contacts/:id — remove contact, return 204
-- Centralised error envelope: `{ ok: boolean, data?: T, error?: { code, message }}`
+- Centralised error envelope:
+  `{ ok: boolean, data?: T, error?: { code, message }}`
 - Add basic integration tests for endpoints (happy path + 1-2 error cases)
 
 Acceptance criteria:
@@ -66,7 +68,8 @@ Core tasks:
 
 - Contact Us page with client-side Zod validation, posts to POST /api/contacts
 - Thank You page after successful submit
-- Admin Contacts list page that calls GET /api/contacts and supports verify/delete
+- Admin Contacts list page that calls GET /api/contacts and supports
+  verify/delete
 - Keep styles minimal and responsive (no heavy design)
 
 Acceptance criteria:

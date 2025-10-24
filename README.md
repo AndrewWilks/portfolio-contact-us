@@ -1,7 +1,9 @@
 # Portfolio Contact Flow, Deno, Hono, Vite, React
+
 ## Contacts API (endpoints)
 
-Below are the endpoints implemented in this sprint with example requests and typical responses. The API uses the envelope pattern `{ ok, data, error }`.
+Below are the endpoints implemented in this sprint with example requests and
+typical responses. The API uses the envelope pattern `{ ok, data, error }`.
 
 ### POST /api/contacts
 
@@ -36,7 +38,8 @@ Below are the endpoints implemented in this sprint with example requests and typ
 }
 ```
 
-- Validation error: 400 Bad Request (envelope with `ok: false` and `error` object)
+- Validation error: 400 Bad Request (envelope with `ok: false` and `error`
+  object)
 
 ### GET /api/contacts
 
@@ -49,7 +52,9 @@ Below are the endpoints implemented in this sprint with example requests and typ
 ```json
 {
   "ok": true,
-  "data": [ /* array of contact objects (same shape as POST response data) */ ]
+  "data": [
+    /* array of contact objects (same shape as POST response data) */
+  ]
 }
 ```
 
@@ -79,10 +84,15 @@ Or a fetch example in Node/Deno/Browser:
 const res = await fetch("http://localhost:8000/api/contacts", {
   method: "POST",
   headers: { "content-type": "application/json" },
-  body: JSON.stringify({ firstName: "John", lastName: "Doe", email: "john.doe@example.com" }),
+  body: JSON.stringify({
+    firstName: "John",
+    lastName: "Doe",
+    email: "john.doe@example.com",
+  }),
 });
 const body = await res.json();
 ```
+
 - `GET /api/health`, returns `{ ok: true }`
 - `GET /api/hello`, returns `{ message: "Hello from Deno + Hono" }`
 
@@ -90,7 +100,8 @@ Use these to confirm the proxy and server are working.
 
 ## Contacts API (endpoints)
 
-Below are the endpoints implemented in this sprint with example requests and typical responses. The API uses the envelope pattern `{ ok, data, error }`.
+Below are the endpoints implemented in this sprint with example requests and
+typical responses. The API uses the envelope pattern `{ ok, data, error }`.
 
 - POST /api/contacts
   - Description: Create a new contact.
@@ -124,13 +135,15 @@ Below are the endpoints implemented in this sprint with example requests and typ
 }
 ```
 
-- Validation error: 400 Bad Request (envelope with `ok: false` and `error` object)
+- Validation error: 400 Bad Request (envelope with `ok: false` and `error`
+  object)
 
 - GET /api/contacts
   - Description: List contacts. Supports query filters.
   - Query parameters:
     - `q` (string, optional) — search first/last/email
-    - `verified` (boolean, optional) — filter by verified status (`true`/`false`)
+    - `verified` (boolean, optional) — filter by verified status
+      (`true`/`false`)
   - Success response: 200 OK
 
 ```json
@@ -144,7 +157,8 @@ Below are the endpoints implemented in this sprint with example requests and typ
 
 - PATCH /api/contacts/:id/verify
 
-  - Description: Mark a contact as verified. `:id` is the contact UUID path param.
+  - Description: Mark a contact as verified. `:id` is the contact UUID path
+    param.
   - Success: 200 OK with updated contact in the `data` envelope.
   - Not found: 404 Not Found (envelope with `ok: false` and `error`)
 
@@ -178,7 +192,9 @@ const body = await res.json();
 
 ## Running the integration tests (backend)
 
-These integration tests exercise the real Drizzle/db repository against a temporary SQLite file. The tests and utilities live under `backend/__tests__` and use the shared `clearContacts` and repo functions for setup/teardown.
+These integration tests exercise the real Drizzle/db repository against a
+temporary SQLite file. The tests and utilities live under `backend/__tests__`
+and use the shared `clearContacts` and repo functions for setup/teardown.
 
 1. Create an env file for tests (recommended):
 
@@ -208,9 +224,13 @@ deno test --allow-all --env-file ./.env.test backend/__tests__/integration --no-
 
 Notes:
 
-- The tests require filesystem access and permission to create/read the temp sqlite file; `--allow-all` is used for convenience in local runs. Tighten permissions for CI as needed.
-- `deno task db:push` relies on `.config/drizzle.config.ts` and drizzle-kit; ensure your environment allows running the npm driver used by drizzle-kit.
-- Running tests against a separate DB file avoids impacting your development DB at `backend/db/_db.sqlite`.
+- The tests require filesystem access and permission to create/read the temp
+  sqlite file; `--allow-all` is used for convenience in local runs. Tighten
+  permissions for CI as needed.
+- `deno task db:push` relies on `.config/drizzle.config.ts` and drizzle-kit;
+  ensure your environment allows running the npm driver used by drizzle-kit.
+- Running tests against a separate DB file avoids impacting your development DB
+  at `backend/db/_db.sqlite`.
 
 ## Project structure
 
@@ -287,9 +307,12 @@ fast and deterministic for CI.
 
 ## Testing with a temporary database (recommended)
 
-The repository uses a SQLite (libSQL) file for local development and tests. To run the backend unit tests locally against a temporary database, follow these steps.
+The repository uses a SQLite (libSQL) file for local development and tests. To
+run the backend unit tests locally against a temporary database, follow these
+steps.
 
-1. Create a `.env.test` file at the repository root with a temporary DB path and minimal env vars:
+1. Create a `.env.test` file at the repository root with a temporary DB path and
+   minimal env vars:
 
 ```properties
 # .env.test
@@ -298,13 +321,15 @@ NODE_ENV=test
 BACKEND_PORT=8001
 ```
 
-2. Ensure the DB schema exists. If you use Drizzle migrations, run the migration push against the test env:
+2. Ensure the DB schema exists. If you use Drizzle migrations, run the migration
+   push against the test env:
 
 ```powershell
 deno task db:push --env-file ./.env.test
 ```
 
-If you don't have migrations ready, you can create the DB folder and an empty sqlite file before running tests:
+If you don't have migrations ready, you can create the DB folder and an empty
+sqlite file before running tests:
 
 ```powershell
 mkdir .\tmp -ErrorAction SilentlyContinue
@@ -319,6 +344,10 @@ deno test --allow-all --env-file ./.env.test backend/__tests__/repos --no-check
 
 Notes:
 
-- `--allow-all` is used in tests to allow file I/O and temporary DB access. For CI you may tighten permissions as needed.
-- The tests expect the `contacts` table/schema to exist. `deno task db:push` uses `drizzle-kit` and `.config/drizzle.config.ts` to apply migrations when available.
-- Using a dedicated `DB_FILE_NAME` for tests keeps your local development DB separate and prevents accidental data loss.
+- `--allow-all` is used in tests to allow file I/O and temporary DB access. For
+  CI you may tighten permissions as needed.
+- The tests expect the `contacts` table/schema to exist. `deno task db:push`
+  uses `drizzle-kit` and `.config/drizzle.config.ts` to apply migrations when
+  available.
+- Using a dedicated `DB_FILE_NAME` for tests keeps your local development DB
+  separate and prevents accidental data loss.
