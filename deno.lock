@@ -22,6 +22,7 @@
     "npm:@cspell/dict-typescript@^3.2.3": "3.2.3",
     "npm:@deno/vite-plugin@^1.0.5": "1.0.5_vite@7.1.12__@types+node@24.9.1__picomatch@4.0.3_@types+node@24.9.1",
     "npm:@eslint/js@^9.38.0": "9.38.0",
+    "npm:@gsap/react@^2.1.2": "2.1.2_gsap@3.13.0_react@19.2.0",
     "npm:@hono/zod-validator@~0.7.4": "0.7.4_hono@4.10.2_zod@4.1.12",
     "npm:@hookform/resolvers@^5.2.2": "5.2.2_react-hook-form@7.65.0__react@19.2.0_react@19.2.0",
     "npm:@libsql/client@~0.15.15": "0.15.15",
@@ -45,7 +46,9 @@
     "npm:eslint-plugin-react-refresh@~0.4.24": "0.4.24_eslint@9.38.0",
     "npm:eslint@^9.38.0": "9.38.0",
     "npm:globals@^16.4.0": "16.4.0",
+    "npm:gsap@^3.13.0": "3.13.0",
     "npm:hono@^4.10.2": "4.10.2",
+    "npm:lucide-react@0.546": "0.546.0_react@19.2.0",
     "npm:postcss@^8.5.6": "8.5.6",
     "npm:react-dom@19.2.0": "19.2.0_react@19.2.0",
     "npm:react-hook-form@^7.65.0": "7.65.0_react@19.2.0",
@@ -959,6 +962,13 @@
       "dependencies": [
         "@eslint/core",
         "levn"
+      ]
+    },
+    "@gsap/react@2.1.2_gsap@3.13.0_react@19.2.0": {
+      "integrity": "sha512-JqliybO1837UcgH2hVOM4VO+38APk3ECNrsuSM4MuXp+rbf+/2IG2K1YJiqfTcXQHH7XlA0m3ykniFYstfq0Iw==",
+      "dependencies": [
+        "gsap",
+        "react"
       ]
     },
     "@hono/zod-validator@0.7.4_hono@4.10.2_zod@4.1.12": {
@@ -2578,6 +2588,9 @@
     "graphemer@1.4.0": {
       "integrity": "sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag=="
     },
+    "gsap@3.13.0": {
+      "integrity": "sha512-QL7MJ2WMjm1PHWsoFrAQH/J8wUeqZvMtHO58qdekHpCfhvhSL4gSiz6vJf5EeMP0LOn3ZCprL2ki/gjED8ghVw=="
+    },
     "has-flag@4.0.0": {
       "integrity": "sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ=="
     },
@@ -2793,6 +2806,12 @@
       "integrity": "sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==",
       "dependencies": [
         "yallist"
+      ]
+    },
+    "lucide-react@0.546.0_react@19.2.0": {
+      "integrity": "sha512-Z94u6fKT43lKeYHiVyvyR8fT7pwCzDu7RyMPpTvh054+xahSgj4HFQ+NmflvzdXsoAjYGdCguGaFKYuvq0ThCQ==",
+      "dependencies": [
+        "react"
       ]
     },
     "magic-string@0.30.21": {
@@ -3329,6 +3348,7 @@
       "npm:@cspell/dict-typescript@^3.2.3",
       "npm:@deno/vite-plugin@^1.0.5",
       "npm:@eslint/js@^9.38.0",
+      "npm:@gsap/react@^2.1.2",
       "npm:@hono/zod-validator@~0.7.4",
       "npm:@hookform/resolvers@^5.2.2",
       "npm:@libsql/client@~0.15.15",
@@ -3351,7 +3371,9 @@
       "npm:eslint-plugin-react-refresh@~0.4.24",
       "npm:eslint@^9.38.0",
       "npm:globals@^16.4.0",
+      "npm:gsap@^3.13.0",
       "npm:hono@^4.10.2",
+      "npm:lucide-react@0.546",
       "npm:postcss@^8.5.6",
       "npm:react-dom@19.2.0",
       "npm:react-hook-form@^7.65.0",
