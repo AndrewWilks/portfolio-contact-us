@@ -2,16 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ContactCreateSchema, type ContactCreate } from "@shared/schema";
 import TextField from "../ui/TextField.tsx";
-
-function toSnakeCasePayload(payload: ContactCreate) {
-  return {
-    first_name: payload.firstName,
-    last_name: payload.lastName,
-    email: payload.email,
-    phone: payload.phone ?? null,
-    message: payload.message ?? null,
-  };
-}
+import { useNavigate } from "@tanstack/react-router";
 
 export function ContactForm() {
   const {
@@ -20,15 +11,44 @@ export function ContactForm() {
     formState: { errors, isSubmitting },
   } = useForm<ContactCreate>({ resolver: zodResolver(ContactCreateSchema) });
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data: ContactCreate) => {
-    const body = toSnakeCasePayload(data);
-    await fetch("/api/contacts", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    // route-driven modal: navigate to thank-you route
-    globalThis.location.href = "/contact/thank-you";
+    const body = data;
+    const url = `${globalThis.location.origin}/api/contacts`;
+    console.log("ContactForm: POST", url, body);
+    let res: Response | null = null;
+    try {
+      res = await fetch(url, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    } catch (err) {
+      console.error("ContactForm: network error", err);
+      alert("Network error sending message. Check the console for details.");
+      return;
+    }
+    console.log("ContactForm: response", res.status, res.url);
+    if (!res.ok) {
+      const text = await res.text();
+      console.error("ContactForm: non-ok response", res.status, text);
+      alert(`Failed to send message: ${res.status} ${text}`);
+      return;
+    }
+    if (!res.ok) {
+      // Try to show a simple toast using Radix viewport (fallback to alert)
+      try {
+        // Radix toast doesn't expose a global API; fallback:
+        alert("Failed to send message. Please try again.");
+      } catch {
+        /* ignore */
+      }
+      return;
+    }
+
+    // navigate to the thank-you route (route-driven modal)
+    navigate({ to: "/contact/thank-you" });
   };
 
   return (

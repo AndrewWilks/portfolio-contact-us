@@ -22,31 +22,31 @@ export type ContactRow = ContactSelect;
 export async function createContact({
   payload,
 }: {
-  payload: Omit<ContactInsertRow, "id" | "created_at">;
+  payload: Omit<ContactInsertRow, "id" | "createdAt">;
 }): Promise<ContactRow> {
   const id = crypto.randomUUID();
-  const created_at = Date.now();
+  const createdAt = Date.now();
 
   await db.insert(contacts).values({
     id,
-    first_name: payload.first_name,
-    last_name: payload.last_name,
+    firstName: payload.firstName,
+    lastName: payload.lastName,
     email: payload.email,
     phone: payload.phone ?? null,
     message: payload.message ?? null,
     verified: !!payload.verified,
-    created_at,
+    createdAt,
   });
 
   return {
     id,
-    first_name: payload.first_name,
-    last_name: payload.last_name,
+    firstName: payload.firstName,
+    lastName: payload.lastName,
     email: payload.email,
     phone: payload.phone ?? null,
     message: payload.message ?? null,
     verified: !!payload.verified,
-    created_at,
+    createdAt: createdAt,
   } as const;
 }
 
@@ -59,7 +59,7 @@ export async function listContacts(): Promise<ContactRow[]> {
   const rows = await db
     .select()
     .from(contacts)
-    .orderBy(desc(contacts.created_at));
+    .orderBy(desc(contacts.createdAt));
   return rows as ContactRow[];
 }
 
@@ -79,7 +79,7 @@ export async function getContactById({
     .select()
     .from(contacts)
     .where(eq(contacts.id, id))
-    .orderBy(desc(contacts.created_at))
+    .orderBy(desc(contacts.createdAt))
     .limit(1)
     .get();
   return row;

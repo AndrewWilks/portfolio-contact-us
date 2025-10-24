@@ -1,5 +1,5 @@
 // Ensure env is set before importing modules that read config at module-evaluation time
-Deno.env.set("DB_FILE_NAME", "sqlite:./tmp/test.sqlite");
+Deno.env.set("DB_FILEName", "sqlite:./tmp/test.sqlite");
 
 import { assertEquals, assertExists } from "@std/assert";
 import { backend } from "../../server.ts";
@@ -56,16 +56,16 @@ Deno.test(
     // create one verified and one unverified contact via repo
     await createContact({
       payload: {
-        first_name: "Alice",
-        last_name: "Verified",
+        firstName: "Alice",
+        lastName: "Verified",
         email: "alice.verified@example.com",
         verified: true,
       },
     });
     await createContact({
       payload: {
-        first_name: "Bob",
-        last_name: "Unverified",
+        firstName: "Bob",
+        lastName: "Unverified",
         email: "bob.unverified@example.com",
         verified: false,
       },
@@ -81,7 +81,7 @@ Deno.test(
 
     // filter verified=true
     res = await backend.fetch(
-      new Request("http://localhost/api/contacts?verified=true"),
+      new Request("http://localhost/api/contacts?verified=true")
     );
     assertEquals(res.status, 200);
     body = await res.json();
@@ -90,14 +90,14 @@ Deno.test(
     for (const item of body.data) {
       assertEquals(item.verified, true);
     }
-  },
+  }
 );
 
 Deno.test("PATCH /api/contacts/:id/verify marks contact verified", async () => {
   const created = await createContact({
     payload: {
-      first_name: "Charlie",
-      last_name: "ToVerify",
+      firstName: "Charlie",
+      lastName: "ToVerify",
       email: "charlie@example.com",
       verified: false,
     },
@@ -106,7 +106,7 @@ Deno.test("PATCH /api/contacts/:id/verify marks contact verified", async () => {
   const res = await backend.fetch(
     new Request(`http://localhost/api/contacts/${created.id}/verify`, {
       method: "PATCH",
-    }),
+    })
   );
 
   assertEquals(res.status, 200);
@@ -121,8 +121,8 @@ Deno.test(
   async () => {
     const created = await createContact({
       payload: {
-        first_name: "Delete",
-        last_name: "Me",
+        firstName: "Delete",
+        lastName: "Me",
         email: "delete.me@example.com",
         verified: false,
       },
@@ -131,7 +131,7 @@ Deno.test(
     const res = await backend.fetch(
       new Request(`http://localhost/api/contacts/${created.id}`, {
         method: "DELETE",
-      }),
+      })
     );
 
     assertEquals(res.status, 204);
@@ -140,9 +140,9 @@ Deno.test(
     const res2 = await backend.fetch(
       new Request(`http://localhost/api/contacts/${created.id}`, {
         method: "DELETE",
-      }),
+      })
     );
     // second delete should return 404
     assertEquals(res2.status, 404);
-  },
+  }
 );

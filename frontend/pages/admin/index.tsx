@@ -1,27 +1,93 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/admin/")({ component: AdminContacts });
 
 type ContactRow = {
-  id: number;
+  id: string;
   first_name: string;
   last_name: string;
   email: string;
   phone?: string | null;
   message?: string | null;
+  verified?: boolean;
+  createdAt?: number;
 };
 
 async function fetchContacts(): Promise<ContactRow[]> {
   const res = await fetch("/api/contacts");
   if (!res.ok) throw new Error("Failed to load contacts");
-  return res.json();
+  const body = await res.json();
+  return body.data as ContactRow[];
 }
 
 function AdminContacts() {
+  const queryClient = useQueryClient();
+
   const { data, error, isLoading } = useQuery({
     queryKey: ["contacts"],
     queryFn: fetchContacts,
+  });
+
+  const verifyMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/contacts/${id}/verify`, {
+        method: "PATCH",
+      });
+      if (!res.ok) throw new Error("Failed to verify");
+      const body = await res.json();
+      return body.data as ContactRow;
+    },
+    onMutate: async (id: string) => {
+      await queryClient.cancelQueries({ queryKey: ["contacts"] });
+      const previous =
+        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
+      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
+        old.map((c) => (c.id === id ? { ...c, verified: true } : c))
+      );
+      return { previous } as { previous: ContactRow[] };
+    },
+    onError: (
+      _err: unknown,
+      _id: string,
+      context?: { previous: ContactRow[] }
+    ) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["contacts"], context.previous);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/contacts/${id}`, { method: "DELETE" });
+      if (!res.ok && res.status !== 204) throw new Error("Failed to delete");
+      return id;
+    },
+    onMutate: async (id: string) => {
+      await queryClient.cancelQueries({ queryKey: ["contacts"] });
+      const previous =
+        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
+      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
+        old.filter((c) => c.id !== id)
+      );
+      return { previous } as { previous: ContactRow[] };
+    },
+    onError: (
+      _err: unknown,
+      _id: string,
+      context?: { previous: ContactRow[] }
+    ) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["contacts"], context.previous);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
+    },
   });
 
   if (isLoading) return <div className="p-4">Loading contacts...</div>;
@@ -35,14 +101,43 @@ function AdminContacts() {
         {data && data.length ? (
           data.map((c) => (
             <div key={c.id} className="p-3 border rounded">
-              <div className="font-medium">
-                {c.first_name} {c.last_name}
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="font-medium">
+                    {c.first_name} {c.last_name}
+                  </div>
+                  <div className="text-sm text-gray-600">{c.email}</div>
+                </div>
+                <div className="text-sm">
+                  {c.verified ? (
+                    <span className="text-green-600">Verified</span>
+                  ) : (
+                    <button
+                      type="button"
+                      className="px-2 py-1 text-sm bg-yellow-200 rounded"
+                      onClick={() => verifyMutation.mutate(c.id)}
+                    >
+                      Verify
+                    </button>
+                  )}
+                </div>
               </div>
-              <div className="text-sm text-gray-600">{c.email}</div>
-              {c.phone ? <div className="text-sm">{c.phone}</div> : null}
+              {c.phone ? <div className="text-sm mt-2">{c.phone}</div> : null}
               {c.message ? (
                 <div className="mt-2 text-sm">{c.message}</div>
               ) : null}
+              <div className="mt-2 text-right">
+                <button
+                  type="button"
+                  className="px-2 py-1 text-sm bg-red-600 text-white rounded"
+                  onClick={() => {
+                    if (confirm("Delete this contact?"))
+                      deleteMutation.mutate(c.id);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))
         ) : (

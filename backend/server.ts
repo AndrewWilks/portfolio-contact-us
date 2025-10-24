@@ -26,11 +26,12 @@ const safeEnv = (key: string) => {
 backend.use(
   "*",
   cors({
-    origin: safeEnv("NODE_ENV") === "production"
-      ? [safeEnv("APP_URL") || ""]
-      : ["http://localhost:3000"],
+    origin:
+      safeEnv("NODE_ENV") === "production"
+        ? [safeEnv("APP_URL") || ""]
+        : ["http://localhost:3000"],
     credentials: true,
-  }),
+  })
 );
 
 // Rate Limiting Middleware
@@ -58,18 +59,14 @@ backend.get("/hello", routes.api_hello);
 
 // Contacts API
 // Use zod-validator wrapper middleware to validate the JSON body for create
-backend.post(
-  "/api/contacts",
-  zodValidatorWrapper("json", schema.ContactCreateSchema),
-  routes.createContactHandler,
-);
+backend.post("/contacts", routes.createContactHandler);
 backend.get(
-  "/api/contacts",
+  "/contacts",
   zodValidatorWrapper("query", schema.ContactsQuerySchema),
-  routes.listContactsHandler,
+  routes.listContactsHandler
 );
-backend.patch("/api/contacts/:id/verify", routes.verifyContactHandler);
-backend.delete("/api/contacts/:id", routes.deleteContactHandler);
+backend.patch("/contacts/:id/verify", routes.verifyContactHandler);
+backend.delete("/contacts/:id", routes.deleteContactHandler);
 
 if (import.meta.main) {
   const server = Deno.serve(backend.fetch);

@@ -63,9 +63,9 @@
   "nodeModulesDir": "auto",
   "tasks": {
     "db:push": "deno run -A npm:drizzle-kit push --config ./.config/drizzle.config.ts",
-    "dev": "deno task dev:api & deno task dev:vite",
+    "dev": "deno task dev:api & deno task dev:ui",
     "dev:api": "deno --allow-ffi --allow-env --env-file=./.env --allow-net ./backend/server.ts",
-    "dev:vite": "deno -A --env-file=./.env npm:vite --config ./.config/vite.config.ts",
+    "dev:ui": "deno -A --env-file=./.env npm:vite --config ./.config/vite.config.ts",
     "build": "deno -A --env-file=./.env npm:vite build --config ./.config/vite.config.ts",
     "test": "deno test --allow-all --env-file=./.env --no-check backend/__tests__ shared/__tests__ frontend/__tests__",
     "lint": "deno lint",
@@ -77,5 +77,8 @@
     "lib": ["dom", "dom.iterable", "deno.ns"],
     "jsx": "react-jsx",
     "jsxImportSource": "react"
+  },
+  "lint": {
+    "exclude": ["./frontend/routeTree.gen.ts"]
   }
 }
