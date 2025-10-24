@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './pages/__root'
 import { Route as IndexRouteImport } from './pages/index'
 import { Route as ContactIndexRouteImport } from './pages/contact/index'
+import { Route as AdminIndexRouteImport } from './pages/admin/index'
 import { Route as ContactThankYouRouteImport } from './pages/contact/thank-you'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const ContactIndexRoute = ContactIndexRouteImport.update({
   path: '/contact/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactThankYouRoute = ContactThankYouRouteImport.update({
   id: '/contact/thank-you',
   path: '/contact/thank-you',
@@ -32,30 +38,34 @@ const ContactThankYouRoute = ContactThankYouRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact/thank-you': typeof ContactThankYouRoute
+  '/admin': typeof AdminIndexRoute
   '/contact': typeof ContactIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact/thank-you': typeof ContactThankYouRoute
+  '/admin': typeof AdminIndexRoute
   '/contact': typeof ContactIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact/thank-you': typeof ContactThankYouRoute
+  '/admin/': typeof AdminIndexRoute
   '/contact/': typeof ContactIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contact/thank-you' | '/contact'
+  fullPaths: '/' | '/contact/thank-you' | '/admin' | '/contact'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact/thank-you' | '/contact'
-  id: '__root__' | '/' | '/contact/thank-you' | '/contact/'
+  to: '/' | '/contact/thank-you' | '/admin' | '/contact'
+  id: '__root__' | '/' | '/contact/thank-you' | '/admin/' | '/contact/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactThankYouRoute: typeof ContactThankYouRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact/thank-you': {
       id: '/contact/thank-you'
       path: '/contact/thank-you'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactThankYouRoute: ContactThankYouRoute,
+  AdminIndexRoute: AdminIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
 }
 export const routeTree = rootRouteImport

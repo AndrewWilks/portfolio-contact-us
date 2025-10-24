@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as Toast from "@radix-ui/react-toast";
+import "./index.css";
 
 // App providers
 import ThemeProvider from "@contexts/ThemeProvider.tsx";
