@@ -8,8 +8,6 @@ import {
 
 import { assert } from "@std/assert";
 import { clearContacts } from "../../db/utilities/clear.ts";
-import { db } from "@db";
-import { contacts } from "../../db/db.schema.ts";
 
 Deno.test.afterEach(async () => {
   await clearContacts();

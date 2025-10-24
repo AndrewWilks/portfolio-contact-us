@@ -1,8 +1,10 @@
 import { eq, desc } from "drizzle-orm";
 import { db } from "@db";
-import { contacts } from "@db/schema";
+import { contacts, type ContactInsert, type ContactSelect } from "@db/schema";
 
-export type ContactRow = typeof contacts.$inferInsert;
+// Export typed aliases for repository consumers
+export type ContactInsertRow = ContactInsert;
+export type ContactRow = ContactSelect;
 
 /**
  * Creates a new contact record in the database.
@@ -20,8 +22,8 @@ export type ContactRow = typeof contacts.$inferInsert;
 export async function createContact({
   payload,
 }: {
-  payload: Omit<ContactRow, "id" | "created_at">;
-}) {
+  payload: Omit<ContactInsertRow, "id" | "created_at">;
+}): Promise<ContactRow> {
   const id = crypto.randomUUID();
   const created_at = Date.now();
 
@@ -53,12 +55,12 @@ export async function createContact({
  *
  * @returns {Promise<Array<Contact>>} A promise that resolves to an array of contact records.
  */
-export async function listContacts() {
+export async function listContacts(): Promise<ContactRow[]> {
   const rows = await db
     .select()
     .from(contacts)
     .orderBy(desc(contacts.created_at));
-  return rows;
+  return rows as ContactRow[];
 }
 
 /**
@@ -68,7 +70,11 @@ export async function listContacts() {
  * @param {string} params.id - The unique identifier of the contact to retrieve.
  * @returns {Promise<Contact | undefined>} A promise that resolves to the contact record if found, or undefined otherwise.
  */
-export async function getContactById({ id }: { id: string }) {
+export async function getContactById({
+  id,
+}: {
+  id: string;
+}): Promise<ContactRow | undefined> {
   const row = await db
     .select()
     .from(contacts)
@@ -86,7 +92,11 @@ export async function getContactById({ id }: { id: string }) {
  * @param {string} params.id - The unique identifier of the contact to verify.
  * @returns {Promise<Contact>} The updated contact record after verification.
  */
-export async function verifyContact({ id }: { id: string }) {
+export async function verifyContact({
+  id,
+}: {
+  id: string;
+}): Promise<ContactRow | undefined> {
   const result = await db
     .update(contacts)
     .set({ verified: true })
@@ -101,7 +111,11 @@ export async function verifyContact({ id }: { id: string }) {
  * @param id - The unique identifier of the contact to delete.
  * @returns The deleted contact record, or `undefined` if no contact was found with the given id.
  */
-export async function deleteContact({ id }: { id: string }) {
+export async function deleteContact({
+  id,
+}: {
+  id: string;
+}): Promise<ContactRow | undefined> {
   const result = await db
     .delete(contacts)
     .where(eq(contacts.id, id))

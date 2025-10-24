@@ -10,3 +10,11 @@ export const contacts = sqliteTable("contacts", {
   verified: integer("verified", { mode: "boolean" }).notNull().default(false),
   created_at: integer("created_at").notNull(),
 });
+
+// Drizzle inferred types for the contacts table
+// - ContactInsert: shape accepted by insert operations ($inferInsert)
+// - ContactSelect: shape returned by select queries ($inferSelect)
+export type ContactInsert = typeof contacts.$inferInsert;
+export type ContactSelect = typeof contacts.$inferSelect;
+
+export default contacts;
