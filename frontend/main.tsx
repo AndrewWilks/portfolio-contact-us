@@ -2,7 +2,8 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as Toast from "@radix-ui/react-toast";
+import ToastManagerProvider from "@ui/ToastManager.tsx";
+import ConfirmDialogProvider from "@ui/ConfirmDialog.tsx";
 import "./index.css";
 
 // App providers
@@ -31,10 +32,11 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
-          <Toast.Provider>
-            <RouterProvider router={router} />
-            <Toast.Viewport />
-          </Toast.Provider>
+          <ToastManagerProvider>
+            <ConfirmDialogProvider>
+              <RouterProvider router={router} />
+            </ConfirmDialogProvider>
+          </ToastManagerProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </StrictMode>
