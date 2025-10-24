@@ -1,6 +1,6 @@
 import { Contact } from "lucide-react";
 
-export default function PostalAddress() {
+export default function ContactDetails() {
   return (
     <>
       <Contact size={18} />
