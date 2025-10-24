@@ -172,6 +172,29 @@ Deno.test(
 );
 
 Deno.test(
+  "unverifyContact sets verified to false for an existing contact",
+  async () => {
+    const payload = {
+      firstName: "Undo",
+      lastName: "Verify",
+      email: "undo.verify@example.com",
+      verified: true,
+    };
+    const created = await createContact({ payload });
+
+    // Initially verified
+    assert(created.verified === true);
+
+    const updated = await (
+      await import("@backend/repos")
+    ).unverifyContact({ id: created.id });
+    assert(updated, "Updated contact should be returned");
+    assert(updated?.id === created.id);
+    assert(updated?.verified === false);
+  }
+);
+
+Deno.test(
   "verifyContact returns undefined for non-existent contact",
   async () => {
     const result = await verifyContact({ id: "non-existent-id" });

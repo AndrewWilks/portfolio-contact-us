@@ -6,4 +6,5 @@ export {
   getContactById,
   listContacts,
   verifyContact,
+  unverifyContact,
 } from "./contacts.ts";

@@ -106,6 +106,26 @@ export async function verifyContact({
 }
 
 /**
+ * Marks a contact as unverified in the database.
+ *
+ * @param {Object} params - The parameters for unverifying a contact.
+ * @param {string} params.id - The unique identifier of the contact to unverify.
+ * @returns {Promise<ContactRow|undefined>} The updated contact record after unverification.
+ */
+export async function unverifyContact({
+  id,
+}: {
+  id: string;
+}): Promise<ContactRow | undefined> {
+  const result = await db
+    .update(contacts)
+    .set({ verified: false })
+    .where(eq(contacts.id, id))
+    .returning();
+  return result[0];
+}
+
+/**
  * Deletes a contact from the database by its unique identifier.
  *
  * @param id - The unique identifier of the contact to delete.

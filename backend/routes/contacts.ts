@@ -6,6 +6,7 @@ import {
   deleteContact,
   listContacts,
   verifyContact,
+  unverifyContact,
 } from "@backend/repos";
 import type { ContactCreate } from "@shared/schema";
 
@@ -108,9 +109,22 @@ export async function deleteContactHandler(c: Context) {
   return noContent(c);
 }
 
+export async function unverifyContactHandler(c: Context) {
+  const id = c.req.param("id");
+  if (!id) return badRequest(c, "Missing id param");
+
+  const parsed = IdParamsSchema.safeParse({ id });
+  if (!parsed.success) return badRequest(c, parsed.error.message);
+
+  const updated = await unverifyContact({ id });
+  if (!updated) return notFound(c, "Contact not found");
+  return ok(c, updated);
+}
+
 export default {
   createContactHandler,
   listContactsHandler,
   verifyContactHandler,
   deleteContactHandler,
+  unverifyContactHandler,
 };
