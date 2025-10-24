@@ -61,7 +61,9 @@ const HeroText: React.FC<HeroTextProps> = ({
       if (el._rbsplitInstance) {
         try {
           el._rbsplitInstance.revert();
-        } catch (_) {}
+        } catch (_) {
+          // ignore revert errors
+        }
         el._rbsplitInstance = undefined;
       }
 
@@ -131,7 +133,9 @@ const HeroText: React.FC<HeroTextProps> = ({
         });
         try {
           splitInstance.revert();
-        } catch (_) {}
+        } catch (_) {
+          // ignore revert errors
+        }
         el._rbsplitInstance = undefined;
       };
     },
