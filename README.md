@@ -156,3 +156,41 @@ deno test --allow-env --env-file=./.env backend/__tests__/hello.test.ts --no-che
 
 These notes are part of Phase 0 developer guidance and keep the test workflow
 fast and deterministic for CI.
+
+## Testing with a temporary database (recommended)
+
+The repository uses a SQLite (libSQL) file for local development and tests. To run the backend unit tests locally against a temporary database, follow these steps.
+
+1. Create a `.env.test` file at the repository root with a temporary DB path and minimal env vars:
+
+```properties
+# .env.test
+DB_FILE_NAME=sqlite:./tmp/test.sqlite
+NODE_ENV=test
+BACKEND_PORT=8001
+```
+
+2. Ensure the DB schema exists. If you use Drizzle migrations, run the migration push against the test env:
+
+```powershell
+deno task db:push --env-file ./.env.test
+```
+
+If you don't have migrations ready, you can create the DB folder and an empty sqlite file before running tests:
+
+```powershell
+mkdir .\tmp -ErrorAction SilentlyContinue
+New-Item -Path .\tmp\test.sqlite -ItemType File -Force
+```
+
+3. Run the tests (backend-only example):
+
+```powershell
+deno test --allow-all --env-file ./.env.test backend/__tests__/repos --no-check
+```
+
+Notes:
+
+- `--allow-all` is used in tests to allow file I/O and temporary DB access. For CI you may tighten permissions as needed.
+- The tests expect the `contacts` table/schema to exist. `deno task db:push` uses `drizzle-kit` and `.config/drizzle.config.ts` to apply migrations when available.
+- Using a dedicated `DB_FILE_NAME` for tests keeps your local development DB separate and prevents accidental data loss.
