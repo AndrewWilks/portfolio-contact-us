@@ -7,6 +7,7 @@
     // Backend modules
     "@db": "./backend/db/index.ts",
     "@db/schema": "./backend/db/schema/index.ts",
+    "@backend/repos": "./backend/db/repos/index.ts",
     "@backend/routes": "./backend/routes/index.ts",
 
     // Frontend modules
@@ -53,7 +54,7 @@
     "dev:api": "deno --allow-env --env-file=./.env --allow-net ./backend/server.ts",
     "dev:vite": "deno -A --env-file=./.env npm:vite --config ./.config/vite.config.ts",
     "build": "deno -A --env-file=./.env npm:vite build --config ./.config/vite.config.ts",
-    "test": "deno test --allow-env --env-file=./.env --no-check backend/__tests__ shared/__tests__ frontend/__tests__",
+    "test": "deno test --allow-all --env-file=./.env --no-check backend/__tests__ shared/__tests__ frontend/__tests__",
     "lint": "deno lint",
     "format": "deno fmt",
     "spell:check": "deno run -A npm:cspell@^9.2.2 \"backend/**/*.{ts,tsx}\" \"shared/**/*.{ts,tsx}\" \"frontend/**/*.{ts,tsx}\" --config ./.config/.cspell.json"
