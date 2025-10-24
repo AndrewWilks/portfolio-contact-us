@@ -1,4 +1,5 @@
 import {
+  ContactRow,
   createContact,
   deleteContact,
   getContactById,
@@ -100,7 +101,7 @@ Deno.test(
     ];
 
     // Create contacts with a slight delay to ensure different created_at values
-    const contactsCreated: any[] = [];
+    const contactsCreated: ContactRow[] = [];
     for (const payload of payloads) {
       const contact = await createContact({ payload });
       contactsCreated.push(contact);
