@@ -54,9 +54,9 @@ export function ConfirmDialogProvider({
       {children}
       <Dialog.Root open={open} onOpenChange={(v) => !v && handleClose()}>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/40" />
-          <div className="fixed inset-0 flex items-center justify-center p-4">
-            <Dialog.Content className="bg-(--card) border-(--border) p-4 rounded shadow-lg w-full max-w-md">
+          <Dialog.Overlay className="fixed inset-0 bg-black/40 z-9999" />
+          <div className="fixed inset-0 flex items-center justify-center p-4 z-10000">
+            <Dialog.Content className="bg-(--card) border-(--border) p-4 rounded shadow-lg w-full max-w-md z-10001">
               <Dialog.Title className="font-semibold">
                 {options?.title ?? "Please confirm"}
               </Dialog.Title>
