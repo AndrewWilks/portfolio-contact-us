@@ -1,5 +1,6 @@
 import Card from "@ui/Card.tsx";
 import type { ContactRow as ContactRowType } from "../../hooks/useAdminContacts.tsx";
+import Button from "@ui/Button.tsx";
 
 interface Props {
   contact: ContactRowType;
@@ -22,13 +23,15 @@ export function ContactRow({ contact, onVerify, onDelete, onView }: Props) {
           {contact.verified ? (
             <span className="text-(--success)">Verified</span>
           ) : (
-            <button
+            <Button
               type="button"
-              className="px-2 py-1 text-sm bg-(--accent) text-(--text) rounded"
+              variant="outline"
+              size="small"
+              icon="CheckCircle"
               onClick={() => onVerify(contact.id)}
             >
               Verify
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -38,20 +41,24 @@ export function ContactRow({ contact, onVerify, onDelete, onView }: Props) {
       ) : null}
 
       <div className="flex justify-end gap-2">
-        <button
+        <Button
           type="button"
-          className="px-2 py-1 text-sm bg-(--muted) text-(--text) rounded"
+          variant="muted"
+          size="small"
+          icon="Eye"
           onClick={() => onView?.(contact)}
         >
           View
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className="px-2 py-1 text-sm bg-(--danger) text-(--primary-foreground) rounded"
+          variant="danger"
+          size="small"
+          icon="Trash2"
           onClick={() => onDelete(contact.id)}
         >
           Delete
-        </button>
+        </Button>
       </div>
     </Card>
   );
