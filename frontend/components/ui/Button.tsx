@@ -32,7 +32,7 @@ function getVariantStyles(variant: ButtonProps["variant"]) {
     case "muted":
       return "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700";
     case "danger":
-      return "bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700";
+      return "bg-red-500 text-white hover:bg-red-600 dark:bg-red-800 dark:text-white dark:hover:bg-red-700";
     case "success":
       return "bg-green-500 text-white hover:bg-green-600 dark:bg-green-500 dark:text-white dark:hover:bg-green-600";
     case "outline":
@@ -47,11 +47,33 @@ function getVariantStyles(variant: ButtonProps["variant"]) {
 function getSizeStyles(size: ButtonProps["size"]) {
   switch (size) {
     case "small":
-      return "px-2 py-1 text-sm";
+      return "px-2 py-1";
     case "large":
-      return "px-6 py-3 text-lg";
+      return "px-6 py-3";
     default:
       return "px-4 py-2";
+  }
+}
+
+function getTextSize(size: ButtonProps["size"]) {
+  switch (size) {
+    case "small":
+      return "text-sm";
+    case "large":
+      return "text-lg";
+    default:
+      return "text-base";
+  }
+}
+
+function getSpanPadding(size: ButtonProps["size"]) {
+  switch (size) {
+    case "small":
+      return "pb-0 pt-0";
+    case "large":
+      return "pb-1 pt-1";
+    default:
+      return "pb-0.5 pt-0.5";
   }
 }
 
@@ -67,9 +89,11 @@ export function Button({
   ...rest
 }: ButtonProps) {
   const base =
-    "inline-flex items-center justify-center rounded focus:outline-none gap-2";
+    "inline-flex items-center justify-center rounded focus:outline-none gap-2 font-medium transition-colors duration-150 ease-in-out";
   const styles = getVariantStyles(variant);
   const sizeStyles = getSizeStyles(size);
+  const textSize = getTextSize(size);
+  const spanPadding = getSpanPadding(size);
 
   const isDisabled = disabled || loading;
 
@@ -110,7 +134,14 @@ export function Button({
     >
       {iconPosition === "left" && iconElement}
       {loading ? <Spinner className={`${spinnerSize} text-current`} /> : null}
-      <span aria-hidden={loading ? true : undefined}>{children}</span>
+      {children && (
+        <span
+          aria-hidden={loading ? true : undefined}
+          className={`leading-none h-fit ${spanPadding} ${textSize}`}
+        >
+          {children}
+        </span>
+      )}
       {iconPosition === "right" && iconElement}
     </button>
   );
