@@ -1,11 +1,17 @@
 import { z } from "zod";
 
 export const ContactCreateSchema = z.object({
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
-  email: z.email(),
-  phone: z.string().optional(),
-  message: z.string().max(2000).optional(),
+  firstName: z.string().min(1, "First name is required."),
+  lastName: z.string().min(1, "Last name is required."),
+  email: z.email("Please enter a valid email address."),
+  phone: z
+    .string()
+    .regex(/^\+?[\d\s\-\(\)]+$/, "Please enter a valid phone number.")
+    .optional(),
+  message: z
+    .string()
+    .max(2000, "Message must not exceed 2000 characters.")
+    .optional(),
 });
 
 export const ContactSchema = ContactCreateSchema.extend({
