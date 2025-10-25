@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ContactCreateSchema, type ContactCreate } from "@shared/schema";
@@ -18,6 +18,9 @@ type ContactRow = {
 interface Props {
   open: boolean;
   contact?: ContactRow | null;
+  // called when the user requests the panel to close (overlay/cancel)
+  onRequestClose: () => void;
+  // called when the panel has finished closing (animation complete)
   onClose: () => void;
   onSave: (id: string, payload: ContactCreate) => Promise<void>;
 }
@@ -25,6 +28,7 @@ interface Props {
 export default function ContactDetailsSidebar({
   open,
   contact,
+  onRequestClose,
   onClose,
   onSave,
 }: Props) {
@@ -49,30 +53,71 @@ export default function ContactDetailsSidebar({
     }
   }, [contact, reset]);
 
-  if (!open || !contact) return null;
+  // Internal mount + visible state so we can animate in/out even if parent toggles `open`.
+  const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      // wait for next frame then show (so transition runs)
+      requestAnimationFrame(() => setVisible(true));
+    } else if (mounted) {
+      // start hide animation
+      setVisible(false);
+      // after animation completes, unmount and notify parent
+      const t = setTimeout(() => {
+        setMounted(false);
+        onClose();
+      }, 300);
+      return () => clearTimeout(t);
+    }
+  }, [open, mounted, onClose]);
+
+  // Lock body scroll when visible
+  useEffect(() => {
+    if (visible) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+    return;
+  }, [visible]);
+
+  if (!mounted || !contact) return null;
 
   const isEditable = !contact.verified;
 
   const submit = async (data: ContactCreate) => {
     await onSave(contact.id, data);
-    onClose();
+    // close with animation
+    onRequestClose();
   };
+
+  const overlayOpacity = visible
+    ? "opacity-100"
+    : "opacity-0 pointer-events-none";
+  const panelTransform = visible ? "translate-x-0" : "translate-x-full";
 
   return (
     <div className="fixed inset-0 z-50 flex">
       <div
-        className="flex-1 bg-black/40"
-        onClick={() => onClose()}
+        className={`flex-1 bg-black/40 transition-opacity duration-300 ${overlayOpacity}`}
+        onClick={() => onRequestClose()}
         aria-hidden
       />
-      <aside className="w-96 bg-(--card) p-4 border-l">
+      <aside
+        className={`w-96 bg-(--card) p-4 border-l transform transition-transform duration-300 ${panelTransform}`}
+      >
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Contact details</h3>
           <button
             type="button"
-            onClick={onClose}
+            onClick={() => onRequestClose()}
             aria-label="Close"
-            className="text-sm"
+            className="text-sm cursor-pointer"
           >
             Close
           </button>
@@ -123,16 +168,18 @@ export default function ContactDetailsSidebar({
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="ghost" onClick={() => reset()}>
-              Discard
-            </Button>
             {isEditable ? (
-              <Button type="submit" loading={isSubmitting} variant="primary">
-                Save
-              </Button>
+              <>
+                <Button type="button" variant="ghost" onClick={() => reset()}>
+                  Discard
+                </Button>
+                <Button type="submit" loading={isSubmitting} variant="primary">
+                  Save
+                </Button>
+              </>
             ) : (
               <div className="text-sm text-(--muted) self-center">
-                Verified — read only
+                Verified - read only
               </div>
             )}
           </div>
