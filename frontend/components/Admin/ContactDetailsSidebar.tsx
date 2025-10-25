@@ -230,7 +230,7 @@ export default function ContactDetailsSidebar({
         role="dialog"
         aria-modal="true"
         aria-labelledby="contact-details-title"
-        className={`fixed right-0 top-0 bottom-0 w-96 bg-(--card) p-4 border-l border-l-zinc-200 dark:border-l-zinc-700 z-50 shadow-2xl transform-gpu`}
+        className={`fixed right-0 top-0 bottom-0 w-full sm:w-96 bg-(--card) p-4 sm:border-l sm:border-l-zinc-200 sm:dark:border-l-zinc-700 z-50 shadow-2xl transform-gpu overflow-auto`}
       >
         <div className="flex items-center justify-between mb-4">
           <h3 id="contact-details-title" className="text-lg font-semibold">
