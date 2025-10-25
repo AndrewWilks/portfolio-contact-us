@@ -216,20 +216,26 @@ export default function ContactDetailsSidebar({
   // (GSAP drives animation on overlayRef and panelRef)
 
   return (
-    <div className="fixed inset-0 z-50 flex">
+    <div className="fixed inset-0 z-50">
+      {/* full-screen overlay sits under the panel to avoid a hard seam during animation */}
       <div
         ref={overlayRef}
-        className="flex-1 bg-black/40 opacity-0 pointer-events-none z-40"
+        className="fixed inset-0 bg-black/40 opacity-0 pointer-events-none z-40"
         onClick={() => onRequestClose()}
         aria-hidden
       />
       <aside
         ref={panelRef}
         data-state={panelState}
-        className={`w-96 bg-(--card) p-4 border-l border-l-zinc-200 dark:border-l-zinc-700 z-50`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="contact-details-title"
+        className={`fixed right-0 top-0 bottom-0 w-96 bg-(--card) p-4 border-l border-l-zinc-200 dark:border-l-zinc-700 z-50 shadow-2xl transform-gpu`}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Contact details</h3>
+          <h3 id="contact-details-title" className="text-lg font-semibold">
+            Contact details
+          </h3>
           <Button
             onClick={() => onRequestClose()}
             aria-label="Close"
