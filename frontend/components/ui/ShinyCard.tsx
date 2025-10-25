@@ -68,7 +68,7 @@ const ShinyCard: React.FC<ShinyCardProps> = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={`relative rounded-3xl border dark:border-neutral-900 dark:bg-neutral-950 bg-neutral-100 shadow-lg border-gray-300
-        overflow-hidden p-8 ${className}`}
+        overflow-hidden p-4 lg:p-8 ${className}`}
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out"
