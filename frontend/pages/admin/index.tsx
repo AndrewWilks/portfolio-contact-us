@@ -82,7 +82,7 @@ function AdminContacts() {
       <ContactDetailsSidebar
         open={sidebarOpen}
         contact={selectedContact}
-        onRequestClose={() => setSidebarOpen(false)}
+        onRequestClose={() => setSidebarOpen(!sidebarOpen)}
         onClose={() => setSelected(null)}
         onSave={async (id, payload) => {
           await updateMutation.mutateAsync({ id, payload });
