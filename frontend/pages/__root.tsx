@@ -4,7 +4,6 @@ import Footer from "../blocks/Footer.tsx";
 import { useRef, useState, useLayoutEffect } from "react";
 
 const RootLayout = () => {
-  // TODO: forward ref for better layout vertical height handling
   const mainRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
