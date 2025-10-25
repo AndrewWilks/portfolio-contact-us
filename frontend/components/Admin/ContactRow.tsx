@@ -5,15 +5,16 @@ interface Props {
   contact: ContactRowType;
   onVerify: (id: string) => void;
   onDelete: (id: string) => void;
+  onView?: (contact: ContactRowType) => void;
 }
 
-export function ContactRow({ contact, onVerify, onDelete }: Props) {
+export function ContactRow({ contact, onVerify, onDelete, onView }: Props) {
   return (
     <Card className="flex flex-col gap-2">
       <div className="flex justify-between items-start">
         <div>
           <div className="font-medium text-(--text)">
-            {contact.first_name} {contact.last_name}
+            {contact.firstName} {contact.lastName}
           </div>
           <div className="text-sm text-(--muted)">{contact.email}</div>
         </div>
@@ -35,11 +36,15 @@ export function ContactRow({ contact, onVerify, onDelete }: Props) {
       {contact.phone ? (
         <div className="text-sm text-(--muted)">{contact.phone}</div>
       ) : null}
-      {contact.message ? (
-        <div className="text-sm">{contact.message}</div>
-      ) : null}
 
-      <div className="text-right">
+      <div className="flex justify-end gap-2">
+        <button
+          type="button"
+          className="px-2 py-1 text-sm bg-(--muted) text-(--text) rounded"
+          onClick={() => onView?.(contact)}
+        >
+          View
+        </button>
         <button
           type="button"
           className="px-2 py-1 text-sm bg-(--danger) text-(--primary-foreground) rounded"

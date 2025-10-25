@@ -1,17 +1,22 @@
 /* eslint-disable react/no-inline-styles */
 import { createFileRoute } from "@tanstack/react-router";
 import { useVirtualizer, type VirtualItem } from "@tanstack/react-virtual";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useAdminContacts } from "../../hooks/useAdminContacts.tsx";
 import { useConfirm } from "../../hooks/useConfirm.tsx";
 import ContactRow from "@components/Admin/ContactRow.tsx";
+import ContactDetailsSidebar from "@components/Admin/ContactDetailsSidebar.tsx";
 
 export const Route = createFileRoute("/admin/")({ component: AdminContacts });
 
-// TODO: Add a button view to see the contact'e details
 function AdminContacts() {
   const parentRef = useRef<HTMLDivElement | null>(null);
-  const { query, verifyMutation, deleteMutation } = useAdminContacts();
+  const { query, verifyMutation, deleteMutation, updateMutation } =
+    useAdminContacts();
+  const [selected, setSelected] = useState<string | null>(null);
+
+  const selectedContact =
+    (query.data ?? []).find((c) => c.id === selected) ?? null;
 
   const data = query.data ?? [];
 
@@ -33,10 +38,7 @@ function AdminContacts() {
   return (
     <>
       <h2 className="text-2xl font-semibold mb-4">Admin - Contacts</h2>
-      <div
-        ref={parentRef}
-        className="overflow-auto h-[calc(100vh-8rem)] border"
-      >
+      <div ref={parentRef} className="overflow-auto h-[calc(100vh-8rem)]">
         <div
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,
@@ -66,12 +68,21 @@ function AdminContacts() {
                       if (ok) deleteMutation.mutate(id);
                     })();
                   }}
+                  onView={(c) => setSelected(c.id)}
                 />
               </div>
             );
           })}
         </div>
       </div>
+      <ContactDetailsSidebar
+        open={!!selected}
+        contact={selectedContact}
+        onClose={() => setSelected(null)}
+        onSave={async (id, payload) => {
+          await updateMutation.mutateAsync({ id, payload });
+        }}
+      />
     </>
   );
 }
