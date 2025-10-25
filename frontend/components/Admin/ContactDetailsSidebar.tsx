@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ContactCreateSchema, type ContactCreate } from "@shared/schema";
 import Button from "@ui/Button.tsx";
+import gsap from "gsap";
 import TextField from "@ui/TextField.tsx";
 import { CheckCheck } from "lucide-react";
+
+// TODO: Componentise this into reusable components with GSAP animations
 
 type ContactRow = {
   id: string;
@@ -54,39 +57,152 @@ export default function ContactDetailsSidebar({
     }
   }, [contact, reset]);
 
-  // Internal mount + visible state so we can animate in/out even if parent toggles `open`.
+  // Internal mount state so we can keep DOM mounted while animating
   const [mounted, setMounted] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
+  const prevActiveElement = useRef<HTMLElement | null>(null);
+  const [panelState, setPanelState] = useState<
+    "closed" | "opening" | "open" | "closing"
+  >("closed");
 
   useEffect(() => {
+    let tl: gsap.core.Timeline | null = null;
+
     if (open) {
       setMounted(true);
-      // wait for next frame then show (so transition runs)
-      requestAnimationFrame(() => setVisible(true));
-    } else if (mounted) {
-      // start hide animation
-      setVisible(false);
-      // after animation completes, unmount and notify parent
-      const t = setTimeout(() => {
-        setMounted(false);
-        onClose();
-      }, 300);
-      return () => clearTimeout(t);
     }
-  }, [open, mounted, onClose]);
 
-  // Lock body scroll when visible
-  useEffect(() => {
-    if (visible) {
+    // animate in when mounted and open
+    if (mounted && open) {
+      if (!overlayRef.current || !panelRef.current) return;
       const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
+
+      setPanelState("opening");
+
+      // ensure starting state
+      gsap.set(overlayRef.current, { opacity: 0, pointerEvents: "none" });
+      gsap.set(panelRef.current, { xPercent: 100 });
+
+      tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+      tl.to(
+        overlayRef.current,
+        { opacity: 1, duration: 0.28, pointerEvents: "auto" },
+        0
+      );
+      tl.to(panelRef.current, { xPercent: 0, duration: 0.36 }, 0);
+
+      tl.eventCallback("onComplete", () => {
+        setPanelState("open");
+        try {
+          prevActiveElement.current = document.activeElement as HTMLElement;
+        } catch (_e) {
+          /* ignore */
+        }
+        const first = panelRef.current?.querySelector<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (first) first.focus();
+      });
+
       return () => {
         document.body.style.overflow = prev;
+        tl?.kill();
       };
     }
-    return;
-  }, [visible]);
 
+    // animate out then unmount
+    if (!open && mounted) {
+      if (!overlayRef.current || !panelRef.current) return;
+      const prev = document.body.style.overflow;
+      setPanelState("closing");
+      const out = gsap.timeline({ defaults: { ease: "power2.in" } });
+      out.to(panelRef.current, { xPercent: 100, duration: 0.36 });
+      out.to(
+        overlayRef.current,
+        { opacity: 0, duration: 0.28, pointerEvents: "none" },
+        "-=-0.2"
+      );
+      out.eventCallback("onComplete", () => {
+        setPanelState("closed");
+        setMounted(false);
+        onClose();
+        try {
+          prevActiveElement.current?.focus();
+        } catch (_e) {
+          /* ignore */
+        }
+        document.body.style.overflow = prev;
+      });
+
+      return () => out.kill();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, mounted, contact]);
+  // Focus trap + Escape handling while the panel is open.
+  useEffect(() => {
+    if (!mounted) return;
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onRequestClose();
+        return;
+      }
+
+      if (e.key !== "Tab") return;
+
+      const panel = panelRef.current;
+      if (!panel) return;
+
+      const selector =
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+      const nodeList = Array.from(
+        panel.querySelectorAll<HTMLElement>(selector)
+      );
+      const focusable = nodeList.filter((el) => {
+        // element must be visible
+        return !!(
+          el.offsetWidth ||
+          el.offsetHeight ||
+          el.getClientRects().length
+        );
+      });
+
+      if (focusable.length === 0) {
+        e.preventDefault();
+        return;
+      }
+
+      const currentIndex = focusable.indexOf(
+        document.activeElement as HTMLElement
+      );
+
+      if (e.shiftKey) {
+        // Move backward
+        if (currentIndex === 0 || document.activeElement === panel) {
+          e.preventDefault();
+          focusable[focusable.length - 1].focus();
+        }
+      } else {
+        // Move forward
+        if (currentIndex === focusable.length - 1) {
+          e.preventDefault();
+          focusable[0].focus();
+        }
+      }
+    };
+
+    if (panelState === "open") {
+      document.addEventListener("keydown", handleKey);
+      return () => document.removeEventListener("keydown", handleKey);
+    }
+    return;
+  }, [mounted, panelState, onRequestClose]);
+
+  // don't render until we've mounted and have a contact to show
   if (!mounted || !contact) return null;
 
   const isEditable = !contact.verified;
@@ -97,20 +213,20 @@ export default function ContactDetailsSidebar({
     onRequestClose();
   };
 
-  const overlayOpacity = visible
-    ? "opacity-100"
-    : "opacity-0 pointer-events-none";
-  const panelTransform = visible ? "translate-x-0" : "translate-x-full";
+  // (GSAP drives animation on overlayRef and panelRef)
 
   return (
     <div className="fixed inset-0 z-50 flex">
       <div
-        className={`flex-1 bg-black/40 transition-opacity duration-300 ${overlayOpacity}`}
+        ref={overlayRef}
+        className="flex-1 bg-black/40 opacity-0 pointer-events-none z-40"
         onClick={() => onRequestClose()}
         aria-hidden
       />
       <aside
-        className={`w-96 bg-(--card) p-4 border-l border-l-zinc-200 dark:border-l-zinc-700 transform transition-transform duration-300 ${panelTransform}`}
+        ref={panelRef}
+        data-state={panelState}
+        className={`w-96 bg-(--card) p-4 border-l border-l-zinc-200 dark:border-l-zinc-700 z-50`}
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Contact details</h3>
