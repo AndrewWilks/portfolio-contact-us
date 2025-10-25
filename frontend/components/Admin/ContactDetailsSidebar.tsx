@@ -505,6 +505,8 @@ export default function ContactDetailsSidebar({
                   type="button"
                   variant="ghost"
                   onClick={() => void handleDiscard()}
+                  disabled={!isDirty}
+                  title={isDirty ? "Discard changes" : "No changes to discard"}
                 >
                   Discard
                 </Button>
@@ -513,6 +515,8 @@ export default function ContactDetailsSidebar({
                   onClick={handleSubmit(submit)}
                   loading={_isSubmitting}
                   variant="primary"
+                  disabled={!isDirty}
+                  title={isDirty ? "Save changes" : "No changes to save"}
                 >
                   Save
                 </Button>
