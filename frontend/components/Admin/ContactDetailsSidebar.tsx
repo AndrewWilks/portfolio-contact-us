@@ -349,7 +349,6 @@ export default function ContactDetailsSidebar({
     };
   }, [mounted]);
 
-  // (debugging removed)
   // Focus trap + Escape handling while the panel is open.
   useEffect(() => {
     if (!mounted) return;
