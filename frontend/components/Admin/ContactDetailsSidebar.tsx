@@ -349,71 +349,7 @@ export default function ContactDetailsSidebar({
     };
   }, [mounted]);
 
-  // DEBUG: attach a capture-phase click listener to inspect where clicks go.
-  // Remove this after debugging.
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      try {
-        // Log basic target
-        // eslint-disable-next-line no-console
-        console.log("[ContactDetailsSidebar] capture click target:", e.target);
-
-        // Log composed path (first few entries)
-        const cp =
-          typeof (e as PointerEvent & { composedPath?: () => EventTarget[] })
-            .composedPath === "function"
-            ? (e as PointerEvent & { composedPath: () => EventTarget[] })
-                .composedPath()
-                .slice(0, 5)
-            : null;
-        // eslint-disable-next-line no-console
-        console.log("[ContactDetailsSidebar] composedPath:", cp);
-
-        // Log elementFromPoint at the click coordinates
-        const x = e.clientX;
-        const y = e.clientY;
-        const elAtPoint = document.elementFromPoint(x, y);
-        // eslint-disable-next-line no-console
-        console.log(
-          "[ContactDetailsSidebar] elementFromPoint:",
-          elAtPoint,
-          "computed pointer-events:",
-          elAtPoint ? getComputedStyle(elAtPoint).pointerEvents : undefined
-        );
-
-        // Attach temporary native listeners to buttons inside the panel to see if native clicks fire
-        const panel = panelRef.current;
-        if (panel) {
-          const buttons = Array.from(
-            panel.querySelectorAll("button")
-          ) as HTMLButtonElement[];
-          buttons.forEach((b, i) => {
-            if (
-              !(b as unknown as { __debugAttached?: boolean }).__debugAttached
-            ) {
-              const nb = (ev: MouseEvent) => {
-                // eslint-disable-next-line no-console
-                console.log(
-                  "[ContactDetailsSidebar] NATIVE button click ->",
-                  i,
-                  b,
-                  ev.target
-                );
-              };
-              b.addEventListener("click", nb);
-              // mark so we don't reattach repeatedly
-              (b as unknown as { __debugAttached?: boolean }).__debugAttached =
-                true;
-            }
-          });
-        }
-      } catch (_e) {
-        /* ignore */
-      }
-    };
-    document.addEventListener("click", handler, true);
-    return () => document.removeEventListener("click", handler, true);
-  }, []);
+  // (debugging removed)
   // Focus trap + Escape handling while the panel is open.
   useEffect(() => {
     if (!mounted) return;
@@ -505,10 +441,7 @@ export default function ContactDetailsSidebar({
             Contact details
           </h3>
           <Button
-            onClick={() => {
-              console.log("Closing contact details");
-              handleCloseAttempt();
-            }}
+            onClick={handleCloseAttempt}
             aria-label="Close"
             size="small"
             variant="ghost"
