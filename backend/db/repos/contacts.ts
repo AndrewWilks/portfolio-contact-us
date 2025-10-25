@@ -142,3 +142,39 @@ export async function deleteContact({
     .returning();
   return result[0];
 }
+
+/**
+ * Update a contact's editable fields.
+ *
+ * Only the provided fields will be updated. Returns the updated row or undefined
+ * when the contact does not exist.
+ */
+export async function updateContact({
+  id,
+  payload,
+}: {
+  id: string;
+  payload: Partial<
+    Pick<
+      ContactInsert,
+      "firstName" | "lastName" | "email" | "phone" | "message"
+    >
+  >;
+}): Promise<ContactRow | undefined> {
+  const toSet: Partial<ContactInsert> = {};
+  if (typeof payload.firstName !== "undefined")
+    toSet.firstName = payload.firstName;
+  if (typeof payload.lastName !== "undefined")
+    toSet.lastName = payload.lastName;
+  if (typeof payload.email !== "undefined") toSet.email = payload.email;
+  if (typeof payload.phone !== "undefined") toSet.phone = payload.phone ?? null;
+  if (typeof payload.message !== "undefined")
+    toSet.message = payload.message ?? null;
+
+  const result = await db
+    .update(contacts)
+    .set(toSet)
+    .where(eq(contacts.id, id))
+    .returning();
+  return result[0];
+}

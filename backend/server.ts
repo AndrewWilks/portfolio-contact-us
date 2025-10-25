@@ -72,6 +72,11 @@ backend.get(
 backend.patch("contacts/:id/verify", routes.verifyContactHandler);
 backend.delete("contacts/:id", routes.deleteContactHandler);
 backend.patch("contacts/:id/unverify", routes.unverifyContactHandler);
+backend.patch(
+  "contacts/:id",
+  zodValidatorWrapper("json", schema.ContactCreateSchema.partial()),
+  routes.updateContactHandler
+);
 
 if (import.meta.main) {
   const server = Deno.serve(backend.fetch);

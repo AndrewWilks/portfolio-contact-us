@@ -7,6 +7,7 @@ import {
   listContacts,
   verifyContact,
   unverifyContact,
+  updateContact,
 } from "@backend/repos";
 import type { ContactCreate } from "@shared/schema";
 
@@ -117,6 +118,29 @@ export async function unverifyContactHandler(c: Context) {
   if (!parsed.success) return badRequest(c, parsed.error.message);
 
   const updated = await unverifyContact({ id });
+  if (!updated) return notFound(c, "Contact not found");
+  return ok(c, updated);
+}
+
+export async function updateContactHandler(c: Context) {
+  const id = c.req.param("id");
+  if (!id) return badRequest(c, "Missing id param");
+
+  // Validate id param
+  const parsed = IdParamsSchema.safeParse({ id });
+  if (!parsed.success) return badRequest(c, parsed.error.message);
+
+  const body = await c.req.json().catch(() => null);
+  if (!body) return badRequest(c, "Missing or invalid JSON body");
+
+  // Use the shared ContactCreate schema as a basis for validation but allow partial updates.
+  // We validate here to avoid middleware ordering assumptions.
+  const { ContactCreateSchema } = await import("@shared/schema");
+  const updateSchema = ContactCreateSchema.partial();
+  const parsedBody = updateSchema.safeParse(body);
+  if (!parsedBody.success) return badRequest(c, parsedBody.error.message);
+
+  const updated = await updateContact({ id, payload: parsedBody.data });
   if (!updated) return notFound(c, "Contact not found");
   return ok(c, updated);
 }

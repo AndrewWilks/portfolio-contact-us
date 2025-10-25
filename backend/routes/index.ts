@@ -5,4 +5,5 @@ export {
   listContactsHandler,
   verifyContactHandler,
   unverifyContactHandler,
+  updateContactHandler,
 } from "./contacts.ts";
