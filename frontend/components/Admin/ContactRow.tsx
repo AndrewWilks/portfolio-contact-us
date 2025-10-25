@@ -1,6 +1,7 @@
 import Card from "@ui/Card.tsx";
 import type { ContactRow as ContactRowType } from "../../hooks/useAdminContacts.tsx";
 import Button from "@ui/Button.tsx";
+import { CheckCheck } from "lucide-react";
 
 interface Props {
   contact: ContactRowType;
@@ -21,7 +22,9 @@ export function ContactRow({ contact, onVerify, onDelete, onView }: Props) {
         </div>
         <div className="text-sm">
           {contact.verified ? (
-            <span className="text-(--success)">Verified</span>
+            <span className="text-(--success)" title="Verified">
+              <CheckCheck />
+            </span>
           ) : (
             <Button
               type="button"
