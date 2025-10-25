@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ContactCreateSchema, type ContactCreate } from "@shared/schema";
 import TextField from "../ui/TextField.tsx";
 import { useNavigate } from "@tanstack/react-router";
-import ShinyCard from "@ui/ShinyCard.tsx";
 import Button from "@ui/Button.tsx";
 import useToast from "../../hooks/useToast.tsx";
 
@@ -82,7 +81,7 @@ export function ContactForm() {
   };
 
   return (
-    <ShinyCard>
+    <>
       <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -141,7 +140,7 @@ export function ContactForm() {
           </Button>
         </div>
       </form>
-    </ShinyCard>
+    </>
   );
 }
 

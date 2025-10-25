@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
+import Button from "./Button.tsx";
 
 type ConfirmOptions = {
   title?: string;
@@ -64,20 +65,12 @@ export function ConfirmDialogProvider({
                 {options?.description ?? message}
               </Dialog.Description>
               <div className="mt-4 flex justify-end gap-2">
-                <button
-                  type="button"
-                  className="px-3 py-1"
-                  onClick={handleClose}
-                >
+                <Button onClick={handleClose} variant="secondary">
                   {options?.cancelText ?? "Cancel"}
-                </button>
-                <button
-                  type="button"
-                  className="px-3 py-1 bg-(--danger) text-white rounded"
-                  onClick={handleConfirm}
-                >
+                </Button>
+                <Button variant="danger" onClick={handleConfirm}>
                   {options?.confirmText ?? "Delete"}
-                </button>
+                </Button>
               </div>
             </Dialog.Content>
           </div>
