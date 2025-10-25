@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import deno from "@deno/vite-plugin";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import { config as backend } from "@config/backend";
 import { config as frontend } from "@config/frontend";
 
@@ -16,7 +18,19 @@ export default defineConfig({
       },
     },
   },
-  plugins: [react(), deno()],
+  plugins: [
+    tanstackRouter({
+      target: "react",
+      autoCodeSplitting: true,
+      routesDirectory: "./frontend/pages",
+      generatedRouteTree: "./routeTree.gen.ts",
+      routeFileIgnorePrefix: "-",
+      quoteStyle: "single",
+    }),
+    react(),
+    deno(),
+    tailwindcss(),
+  ],
   css: {
     postcss: "../.config/postcss.config.js",
   },
