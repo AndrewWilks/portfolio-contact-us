@@ -154,6 +154,59 @@ Deno.test(
   }
 );
 
+Deno.test("PATCH /contacts/:id updates editable fields", async () => {
+  const created = await createContact({
+    payload: {
+      firstName: "Ed",
+      lastName: "Update",
+      email: "ed.update@example.com",
+      phone: "111",
+      verified: false,
+    },
+  });
+
+  const payload = { firstName: "Edwin", phone: "999" };
+  const res = await backend.fetch(
+    new Request(`http://localhost/contacts/${created.id}`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+  );
+
+  assertEquals(res.status, 200);
+  const body = await res.json();
+  assertEquals(body.ok, true);
+  assertEquals(body.data.id, created.id);
+  assertEquals(body.data.firstName, payload.firstName);
+  assertEquals(body.data.phone, payload.phone);
+});
+
+Deno.test("PATCH /contacts/:id returns 400 for invalid payload", async () => {
+  const created = await createContact({
+    payload: {
+      firstName: "Invalid",
+      lastName: "Payload",
+      email: "invalid.payload@example.com",
+      verified: false,
+    },
+  });
+
+  const payload = { email: "not-an-email" };
+  const res = await backend.fetch(
+    new Request(`http://localhost/contacts/${created.id}`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+  );
+
+  assertEquals(res.status, 400);
+  const body = await res.json();
+  assertEquals(body.ok, false);
+  assertExists(body.error);
+});
+
 Deno.test(
   "DELETE /contacts/:id deletes the contact and returns 204",
   async () => {
