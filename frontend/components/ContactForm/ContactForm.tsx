@@ -82,12 +82,12 @@ export function ContactForm() {
   };
 
   return (
-    <ShinyCard className="p-4 md:p-8">
+    <ShinyCard>
       <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate
-        className="p-4 rounded card"
+        className="rounded card"
         aria-live="polite"
       >
         <TextField
