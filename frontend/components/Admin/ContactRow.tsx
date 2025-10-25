@@ -10,6 +10,8 @@ interface Props {
   onView?: (contact: ContactRowType) => void;
 }
 
+// TODO: improve the layout of the contact row. use gird and also be prepard for it to become a card in a grid instrad of a stack like we have it at the moment.
+
 export function ContactRow({ contact, onVerify, onDelete, onView }: Props) {
   return (
     <Card className="flex flex-col gap-2">
