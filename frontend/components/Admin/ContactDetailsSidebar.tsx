@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ContactCreateSchema, type ContactCreate } from "@shared/schema";
 import Button from "@ui/Button.tsx";
 import TextField from "@ui/TextField.tsx";
+import { CheckCheck } from "lucide-react";
 
 type ContactRow = {
   id: string;
@@ -109,18 +110,17 @@ export default function ContactDetailsSidebar({
         aria-hidden
       />
       <aside
-        className={`w-96 bg-(--card) p-4 border-l transform transition-transform duration-300 ${panelTransform}`}
+        className={`w-96 bg-(--card) p-4 border-l border-l-zinc-200 dark:border-l-zinc-700 transform transition-transform duration-300 ${panelTransform}`}
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Contact details</h3>
-          <button
-            type="button"
+          <Button
             onClick={() => onRequestClose()}
             aria-label="Close"
-            className="text-sm cursor-pointer"
-          >
-            Close
-          </button>
+            size="small"
+            variant="ghost"
+            icon="XCircle"
+          />
         </div>
 
         <form onSubmit={handleSubmit(submit)} noValidate>
@@ -178,8 +178,13 @@ export default function ContactDetailsSidebar({
                 </Button>
               </>
             ) : (
-              <div className="text-sm text-(--muted) self-center">
-                Verified - read only
+              <div className="text-sm text-(--muted) self-center flex items-center gap-1">
+                <CheckCheck
+                  size={16}
+                  className="text-green-500 dark:text-green-300 mr-1"
+                />
+                <span className="font-medium">Verified</span>
+                <span className="text-xs"> | Read Only</span>
               </div>
             )}
           </div>
