@@ -14,6 +14,7 @@ function AdminContacts() {
   const { query, verifyMutation, deleteMutation, updateMutation } =
     useAdminContacts();
   const [selected, setSelected] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const selectedContact =
     (query.data ?? []).find((c) => c.id === selected) ?? null;
@@ -68,7 +69,10 @@ function AdminContacts() {
                       if (ok) deleteMutation.mutate(id);
                     })();
                   }}
-                  onView={(c) => setSelected(c.id)}
+                  onView={(c) => {
+                    setSelected(c.id);
+                    setSidebarOpen(true);
+                  }}
                 />
               </div>
             );
@@ -76,8 +80,9 @@ function AdminContacts() {
         </div>
       </div>
       <ContactDetailsSidebar
-        open={!!selected}
+        open={sidebarOpen}
         contact={selectedContact}
+        onRequestClose={() => setSidebarOpen(false)}
         onClose={() => setSelected(null)}
         onSave={async (id, payload) => {
           await updateMutation.mutateAsync({ id, payload });
