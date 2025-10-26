@@ -63,22 +63,22 @@ Phase C — Drawer + small lazy-loads
 
 ## Work plan and checklist
 
-- [ ] Phase A — Core helpers
-  - [ ] Add API client (shared/lib/api/client.ts)
-  - [ ] Add query keys (shared/lib/query/keys.ts)
-  - [ ] Add submit helper (shared/lib/toast/submit.ts)
-- [ ] Phase B — Admin & Contact
-  - [ ] Admin services (features/admin/services/contacts.api.ts)
-  - [ ] Refactor admin hook to use services + keys
-  - [ ] Ensure contact service uses API client
-  - [ ] Refactor contact create hook to use submit helper
-  - [ ] Build + commit (phase B)
+- [x] Phase A — Core helpers
+  - [x] Add API client (shared/lib/api/client.ts)
+  - [x] Add query keys (shared/lib/query/keys.ts)
+  - [x] Add submit helper (shared/lib/toast/submit.ts)
+- [x] Phase B — Admin & Contact
+  - [x] Admin services (features/admin/services/contacts.api.ts)
+  - [x] Refactor admin hook to use services + keys
+  - [x] Ensure contact service uses API client
+  - [x] Refactor contact create hook to use submit helper
+  - [x] Build + commit (phase B)
 - [ ] Phase C — Drawer & lazy-loads
-  - [ ] Create Drawer component
-  - [ ] Refactor ContactDetailsSidebar to Drawer
-  - [ ] Lazy-load contact blocks
+  - [x] Create Drawer component
+  - [x] Refactor ContactDetailsSidebar to Drawer
+  - [x] Lazy-load contact blocks
   - [ ] Router fallbacks (optional)
-  - [ ] Final build + commit
+  - [x] Final build + commit
 - [ ] Optional: investigate Deno vite-plugin resolver error separately
 
 ## Acceptance
