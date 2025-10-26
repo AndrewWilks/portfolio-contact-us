@@ -32,3 +32,4 @@ dist-ssr
 !.env.*.example
 Junior Software Engineer Tech Test.pdf
 routeTree.gen.ts
+frontend/routeTree.imports.d.ts

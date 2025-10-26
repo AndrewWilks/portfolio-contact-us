@@ -81,7 +81,7 @@ Deno.test(
 
     // filter verified=true
     res = await backend.fetch(
-      new Request("http://localhost/contacts?verified=true")
+      new Request("http://localhost/contacts?verified=true"),
     );
     assertEquals(res.status, 200);
     body = await res.json();
@@ -90,7 +90,7 @@ Deno.test(
     for (const item of body.data) {
       assertEquals(item.verified, true);
     }
-  }
+  },
 );
 
 Deno.test("PATCH /contacts/:id/verify marks contact verified", async () => {
@@ -106,7 +106,7 @@ Deno.test("PATCH /contacts/:id/verify marks contact verified", async () => {
   const res = await backend.fetch(
     new Request(`http://localhost/contacts/${created.id}/verify`, {
       method: "PATCH",
-    })
+    }),
   );
 
   assertEquals(res.status, 200);
@@ -132,7 +132,7 @@ Deno.test(
     const resVerify = await backend.fetch(
       new Request(`http://localhost/contacts/${created.id}/verify`, {
         method: "PATCH",
-      })
+      }),
     );
     assertEquals(resVerify.status, 200);
     const bodyVerify = await resVerify.json();
@@ -143,7 +143,7 @@ Deno.test(
     const res = await backend.fetch(
       new Request(`http://localhost/contacts/${created.id}/unverify`, {
         method: "PATCH",
-      })
+      }),
     );
 
     assertEquals(res.status, 200);
@@ -151,7 +151,7 @@ Deno.test(
     assertEquals(body.ok, true);
     assertEquals(body.data.id, created.id);
     assertEquals(body.data.verified, false);
-  }
+  },
 );
 
 Deno.test("PATCH /contacts/:id updates editable fields", async () => {
@@ -171,7 +171,7 @@ Deno.test("PATCH /contacts/:id updates editable fields", async () => {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(payload),
-    })
+    }),
   );
 
   assertEquals(res.status, 200);
@@ -198,7 +198,7 @@ Deno.test("PATCH /contacts/:id returns 400 for invalid payload", async () => {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(payload),
-    })
+    }),
   );
 
   assertEquals(res.status, 400);
@@ -222,7 +222,7 @@ Deno.test(
     const res = await backend.fetch(
       new Request(`http://localhost/contacts/${created.id}`, {
         method: "DELETE",
-      })
+      }),
     );
 
     assertEquals(res.status, 204);
@@ -231,9 +231,9 @@ Deno.test(
     const res2 = await backend.fetch(
       new Request(`http://localhost/contacts/${created.id}`, {
         method: "DELETE",
-      })
+      }),
     );
     // second delete should return 404
     assertEquals(res2.status, 404);
-  }
+  },
 );

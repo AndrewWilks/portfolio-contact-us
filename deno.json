@@ -11,11 +11,12 @@
     "@backend/routes": "./backend/routes/index.ts",
 
     // Frontend modules
-    "@components/": "./frontend/components/",
     "@contexts/": "./frontend/contexts/",
     "@pages/": "./frontend/pages/",
-    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.16",
-    "@ui/": "./frontend/components/ui/",
+    "@features/": "./frontend/features/",
+    "@blocks/": "./frontend/shared/blocks/",
+    "@hooks/": "./frontend/hooks/",
+    "@ui/": "./frontend/shared/ui/",
 
     // Shared modules
     "@shared/schema": "./shared/schema/index.ts",
@@ -58,6 +59,7 @@
     "@libsql/client": "npm:@libsql/client@^0.15.15",
     "zod": "npm:zod@^4.1.12",
     "tailwindcss": "npm:tailwindcss@^4.1.16",
+    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.16",
     "autoprefixer": "npm:autoprefixer@^10.4.21",
     "postcss": "npm:postcss@^8.5.6",
     "@types/node": "npm:@types/node@^24.2.0",
@@ -71,18 +73,38 @@
     "dev:api": "deno --allow-ffi --allow-env --env-file=./.env --allow-net ./backend/server.ts",
     "dev:ui": "deno -A --env-file=./.env npm:vite --config ./.config/vite.config.ts",
     "build": "deno -A --env-file=./.env npm:vite build --config ./.config/vite.config.ts",
-    "test": "deno test --allow-all --env-file=./.env --no-check backend/__tests__ shared/__tests__ frontend/__tests__",
+    "test": "deno test --allow-all --env-file=./.env --no-check",
     "lint": "deno lint",
+    "check": "deno check --sloppy-imports ./.config/vite.config.ts ./backend/server.ts ./frontend/main.tsx",
     "format": "deno fmt",
     "spell:check": "deno run -A npm:cspell@^9.2.2 \"backend/**/*.{ts,tsx}\" \"shared/**/*.{ts,tsx}\" \"frontend/**/*.{ts,tsx}\" --config ./.config/.cspell.json"
   },
+  "test": {
+    "files": {
+      "include": [
+        "./backend/__tests__",
+        "./frontend/__tests__",
+        "./shared/__tests__"
+      ],
+      "exclude": [
+        "./frontend/routeTree.gen.ts",
+        "./frontend/routeTree.imports.d.ts"
+      ]
+    }
+  },
   "compilerOptions": {
-    "types": [],
+    "types": ["npm:@types/node"],
     "lib": ["dom", "dom.iterable", "deno.ns"],
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   },
   "lint": {
     "exclude": ["./frontend/routeTree.gen.ts"]
+  },
+  "check": {
+    "exclude": [
+      "./frontend/routeTree.gen.ts",
+      "./frontend/routeTree.imports.d.ts"
+    ]
   }
 }
