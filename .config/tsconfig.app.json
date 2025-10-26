@@ -28,7 +28,13 @@
     "baseUrl": "../",
     "paths": {
       "@shared/*": ["shared/*"],
-      "@frontend/*": ["frontend/*"]
+      "@frontend/*": ["frontend/*"],
+      "@features/*": ["frontend/features/*"],
+      "@blocks/*": ["frontend/shared/blocks/*"],
+      "@ui/*": ["frontend/shared/ui/*"],
+      "@components/*": ["frontend/components/*"],
+      "@contexts/*": ["frontend/contexts/*"],
+      "@hooks/*": ["frontend/hooks/*"]
     }
   },
   "include": ["src", "../shared", "../frontend"]

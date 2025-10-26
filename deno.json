@@ -14,8 +14,11 @@
     "@components/": "./frontend/components/",
     "@contexts/": "./frontend/contexts/",
     "@pages/": "./frontend/pages/",
+    "@features/": "./frontend/features/",
+    "@blocks/": "./frontend/shared/blocks/",
+    "@hooks/": "./frontend/hooks/",
     "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.16",
-    "@ui/": "./frontend/components/ui/",
+    "@ui/": "./frontend/shared/ui/",
 
     // Shared modules
     "@shared/schema": "./shared/schema/index.ts",

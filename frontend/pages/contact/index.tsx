@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ContactForm from "@components/ContactForm/ContactForm.tsx";
-import OfficeHours from "../../blocks/OfficeHours.tsx";
-import PostalAddress from "../../blocks/PostalAddress.tsx";
+import ContactForm from "@features/contact/components/ContactForm.tsx";
+import OfficeHours from "@blocks/OfficeHours.tsx";
+import PostalAddress from "@blocks/PostalAddress.tsx";
 import ShinyCard from "@ui/Affects/ShinyCard.tsx";
-import CompanyContactDetails from "../../blocks/CompanyContactDetails.tsx";
+import CompanyContactDetails from "@blocks/CompanyContactDetails.tsx";
 
 export const Route = createFileRoute("/contact/")({
   component: ContactPage,

@@ -1,11 +1,13 @@
 /* eslint-disable react/no-inline-styles */
 import { createFileRoute } from "@tanstack/react-router";
 import { useVirtualizer, type VirtualItem } from "@tanstack/react-virtual";
-import { useRef, useState } from "react";
-import { useAdminContacts } from "../../hooks/useAdminContacts.tsx";
-import { useConfirm } from "../../hooks/useConfirm.tsx";
-import ContactRow from "@components/Admin/ContactRow.tsx";
-import ContactDetailsSidebar from "../../blocks/ContactDetailsSidebar.tsx";
+import { useRef, useState, Suspense, lazy } from "react";
+import { useAdminContacts } from "@features/admin/hooks/useAdminContacts.tsx";
+import { useConfirm } from "@hooks/useConfirm.tsx";
+import ContactRow from "@features/admin/components/ContactRow.tsx";
+const ContactDetailsSidebar = lazy(
+  () => import("@blocks/ContactDetailsSidebar.tsx")
+);
 
 export const Route = createFileRoute("/admin/")({ component: AdminContacts });
 
@@ -16,8 +18,8 @@ function AdminContacts() {
   const [selected, setSelected] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const selectedContact = (query.data ?? []).find((c) => c.id === selected) ??
-    null;
+  const selectedContact =
+    (query.data ?? []).find((c) => c.id === selected) ?? null;
 
   const data = query.data ?? [];
 
@@ -80,15 +82,17 @@ function AdminContacts() {
           })}
         </div>
       </div>
-      <ContactDetailsSidebar
-        open={sidebarOpen}
-        contact={selectedContact}
-        onRequestClose={() => setSidebarOpen(!sidebarOpen)}
-        onClose={() => setSelected(null)}
-        onSave={async (id, payload) => {
-          await updateMutation.mutateAsync({ id, payload });
-        }}
-      />
+      <Suspense fallback={null}>
+        <ContactDetailsSidebar
+          open={sidebarOpen}
+          contact={selectedContact}
+          onRequestClose={() => setSidebarOpen(!sidebarOpen)}
+          onClose={() => setSelected(null)}
+          onSave={async (id, payload) => {
+            await updateMutation.mutateAsync({ id, payload });
+          }}
+        />
+      </Suspense>
     </>
   );
 }

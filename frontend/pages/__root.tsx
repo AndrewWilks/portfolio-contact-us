@@ -1,6 +1,6 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
-import Header from "../blocks/Header.tsx";
-import Footer from "../blocks/Footer.tsx";
+import Header from "@blocks/Header.tsx";
+import Footer from "@blocks/Footer.tsx";
 import { useLayoutEffect, useRef, useState } from "react";
 
 const RootLayout = () => {
