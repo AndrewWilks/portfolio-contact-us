@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Button from "@ui/Button.tsx";
+import Button from "@ui/Primitives/Button.tsx";
 import { ContactCreateSchema, type ContactCreate } from "@shared/schema";
-import TextField from "@ui/TextField.tsx";
-import TextAreaField from "@ui/TextFieldArea.tsx";
+import TextField from "@ui/Fields/TextField.tsx";
+import TextAreaField from "@ui/Fields/TextFieldArea.tsx";
 import { onDiscard } from "./handlers/onDiscard.tsx";
 
 interface ContactFormUIProps {

@@ -1,4 +1,4 @@
-import { useToastContext } from "@ui/ToastManager.tsx";
+import { useToastContext } from "@ui/Toast/ToastManager.tsx";
 
 export function useToast() {
   const ctx = useToastContext();

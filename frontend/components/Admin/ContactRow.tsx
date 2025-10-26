@@ -1,8 +1,7 @@
-import Card from "@ui/Card.tsx";
 import type { ContactRow as ContactRowType } from "../../hooks/useAdminContacts.tsx";
-import Button from "@ui/Button.tsx";
+import Button from "@ui/Primitives/Button.tsx";
 import { CheckCheck } from "lucide-react";
-import ShinyCard from "@ui/ShinyCard.tsx";
+import ShinyCard from "@ui/Affects/ShinyCard.tsx";
 
 interface Props {
   contact: ContactRowType;

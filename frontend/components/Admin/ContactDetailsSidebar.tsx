@@ -2,13 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ContactCreateSchema, type ContactCreate } from "@shared/schema";
-import Button from "@ui/Button.tsx";
+import Button from "@ui/Primitives/Button.tsx";
 import gsap from "gsap";
-import TextField from "@ui/TextField.tsx";
+import TextField from "@ui/Fields/TextField.tsx";
 import { CheckCheck } from "lucide-react";
 import { useConfirm } from "../../hooks/useConfirm.tsx";
-
-// TODO: Componentise this into reusable components with GSAP animations
 
 type ContactRow = {
   id: string;

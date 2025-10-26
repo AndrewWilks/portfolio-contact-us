@@ -1,5 +1,5 @@
 import type React from "react";
-import Spinner from "@ui/Spinner.tsx";
+import Spinner from "./Spinner.tsx";
 import * as LucideIcons from "lucide-react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

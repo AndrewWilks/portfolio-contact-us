@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ToastManagerProvider from "@ui/ToastManager.tsx";
+import ToastManagerProvider from "@ui/Toast/ToastManager.tsx";
 import ConfirmDialogProvider from "@ui/ConfirmDialog.tsx";
 import "./index.css";
 

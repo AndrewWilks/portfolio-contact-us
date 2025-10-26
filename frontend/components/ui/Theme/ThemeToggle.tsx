@@ -1,5 +1,5 @@
 import { useTheme } from "@contexts/ThemeProvider.tsx";
-import Button from "./Button.tsx";
+import Button from "../Primitives/Button.tsx";
 
 export default function ThemeToggle() {
   const { theme, toggle } = useTheme();

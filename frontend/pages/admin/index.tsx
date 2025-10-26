@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { useAdminContacts } from "../../hooks/useAdminContacts.tsx";
 import { useConfirm } from "../../hooks/useConfirm.tsx";
 import ContactRow from "@components/Admin/ContactRow.tsx";
-import ContactDetailsSidebar from "@components/Admin/ContactDetailsSidebar.tsx";
+import ContactDetailsSidebar from "../../blocks/ContactDetailsSidebar.tsx";
 
 export const Route = createFileRoute("/admin/")({ component: AdminContacts });
 

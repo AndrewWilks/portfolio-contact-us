@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import Button from "./Button.tsx";
+import Button from "./Primitives/Button.tsx";
 
 type ConfirmOptions = {
   title?: string;

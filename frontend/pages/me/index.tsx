@@ -5,5 +5,9 @@ export const Route = createFileRoute("/me/")({
 });
 
 function MePage() {
-  return <></>;
+  return (
+    <>
+      <h1>About Me</h1>
+    </>
+  );
 }

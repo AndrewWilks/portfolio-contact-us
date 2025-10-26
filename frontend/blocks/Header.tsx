@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import ThemeToggle from "@ui/ThemeToggle.tsx";
+import ThemeToggle from "@ui/Theme/ThemeToggle.tsx";
 import { Ref } from "react";
 
 interface HeaderProps {

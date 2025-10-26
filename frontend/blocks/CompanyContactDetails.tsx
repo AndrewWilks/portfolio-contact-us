@@ -1,6 +1,6 @@
 import { Contact } from "lucide-react";
 
-export default function ContactDetails() {
+export default function CompanyContactDetails() {
   return (
     <>
       <Contact size={18} />

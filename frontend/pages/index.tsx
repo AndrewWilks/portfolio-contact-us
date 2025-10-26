@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import HeroText from "@ui/HeroText.tsx";
+import HeroText from "@ui/Affects/HeroText.tsx";
 
 export const Route = createFileRoute("/")({
   component: Index,
