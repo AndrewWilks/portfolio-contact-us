@@ -16,6 +16,7 @@
     "@features/": "./frontend/features/",
     "@blocks/": "./frontend/shared/blocks/",
     "@hooks/": "./frontend/hooks/",
+    "@playwright/test": "npm:@playwright/test@^1.56.1",
     "@ui/": "./frontend/shared/ui/",
 
     // Shared modules
@@ -78,8 +79,8 @@
     "check": "deno check --sloppy-imports ./.config/vite.config.ts ./backend/server.ts ./frontend/main.tsx",
     "format": "deno fmt",
     "spell:check": "deno run -A npm:cspell@^9.2.2 \"backend/**/*.{ts,tsx}\" \"shared/**/*.{ts,tsx}\" \"frontend/**/*.{ts,tsx}\" --config ./.config/.cspell.json",
-    "e2e": "npx playwright test",
-    "e2e:ui": "npx playwright test --ui"
+    "e2e": "npx playwright test -c ./.config/playwright.config.ts",
+    "e2e:ui": "npx playwright test -c ./.config/playwright.config.ts --ui"
   },
   "test": {
     "files": {
@@ -103,7 +104,7 @@
   "lint": {
     "exclude": [
       "./frontend/routeTree.gen.ts",
-      "./playwright.config.ts",
+      "./.config/playwright.config.ts",
       "./frontend/__tests__/**"
     ]
   },
@@ -111,7 +112,7 @@
     "exclude": [
       "./frontend/routeTree.gen.ts",
       "./frontend/routeTree.imports.d.ts",
-      "./playwright.config.ts",
+      "./.config/playwright.config.ts",
       "./frontend/__tests__/**"
     ]
   }
