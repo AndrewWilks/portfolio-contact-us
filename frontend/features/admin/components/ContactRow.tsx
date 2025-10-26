@@ -10,9 +10,6 @@ interface Props {
   onView?: (contact: ContactRowType) => void;
 }
 
-// TODO: improve the layout of the contact row. use grid and also be prepared for it
-// to become a card in a grid instead of a vertical stack like we have at the moment.
-
 export function ContactRow({ contact, onVerify, onDelete, onView }: Props) {
   return (
     <ShinyCard className="flex flex-col gap-2">
@@ -25,23 +22,21 @@ export function ContactRow({ contact, onVerify, onDelete, onView }: Props) {
           <div className="text-sm text-(--muted)">{contact.phone}</div>
         </div>
         <div className="text-sm">
-          {contact.verified
-            ? (
-              <span className="text-(--success)" title="Verified">
-                <CheckCheck />
-              </span>
-            )
-            : (
-              <Button
-                type="button"
-                variant="outline"
-                size="small"
-                icon="CheckCircle"
-                onClick={() => onVerify(contact.id)}
-              >
-                Verify
-              </Button>
-            )}
+          {contact.verified ? (
+            <span className="text-(--success)" title="Verified">
+              <CheckCheck />
+            </span>
+          ) : (
+            <Button
+              type="button"
+              variant="outline"
+              size="small"
+              icon="CheckCircle"
+              onClick={() => onVerify(contact.id)}
+            >
+              Verify
+            </Button>
+          )}
         </div>
       </div>
 
