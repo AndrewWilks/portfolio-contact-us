@@ -13,7 +13,7 @@ export function TextField({ label, error, ...rest }: TextFieldProps) {
   };
   const id = restTyped.id ?? restTyped.name;
   return (
-    <div className="mb-4">
+    <div>
       <label
         htmlFor={id as string}
         className="block text-sm font-medium text-(--text) mb-1"
