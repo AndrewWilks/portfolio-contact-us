@@ -126,11 +126,13 @@ Use this checklist as the source of truth. I will update it as items start/compl
 - [ ] Phase 3 — Route fallbacks (optional)
   - [ ] Add Suspense fallback and error boundary at `__root`
 - [ ] Phase 4 — Build/resolver fix (separate)
-  - [ ] Reproduce production build failure and capture error output
-  - [ ] Align router paths with Vite root (routesDirectory: `"pages"`, generatedRouteTree: `"routeTree.gen.ts"`)
-  - [ ] Adjust plugin order so `deno()` runs before `react()` (and router plugin if needed)
-  - [ ] Retry production build
-  - [ ] If still failing: bump `@deno/vite-plugin`, or temporarily disable `deno()` to isolate; add `resolve.alias` if needed
+  - [x] Reproduce production build failure and capture error output
+  - [x] Align router/plugin paths for generator (use project-absolute from `.config`)
+  - [x] Adjust plugin order so `deno()` runs before `react()` (and router plugin)
+  - [x] Add explicit `resolve.alias` for `@ui`, `@blocks`, `@features`, `@pages`, `@hooks`, `@contexts`, and `@shared/schema`
+  - [x] Temporarily disable `deno()` during build to isolate the resolver crash
+  - [x] Retry production build (PASS)
+  - [ ] Optional: Re-enable `deno()` in dev only (keep disabled for build), or upgrade plugin when a fixed version is available
 
 ## Completed (for context)
 
