@@ -82,23 +82,17 @@ Acceptance:
 - Normalize ARIA attributes in `shared/ui/Primitives/Button.tsx`:
   - Ensure `aria-busy`, `aria-hidden`, etc., use valid boolean/string values.
 
-### Phase 2 — Lazy-load heavier visuals
-
-- GSAP components:
-  - `shared/ui/Affects/HeroText.tsx`, `ShinyCard.tsx`: dynamic-import GSAP within effects or lazy-load the effect wrapper component.
-  - Keep above-the-fold usage only where needed; otherwise lazy-load at use sites.
-
-### Phase 3 — Structure polish (SOLID-friendly)
+### Phase 2 — Structure polish (SOLID-friendly)
 
 - Add barrel files:
   - `features/*/services/index.ts`, `features/*/hooks/index.ts`, and in `shared/ui/*` subfolders where helpful.
 - Keep services framework-free (no React); hooks orchestrate query/mutation + toasts; components stay presentational.
 
-### Phase 4 — Route fallbacks (optional)
+### Phase 3 — Route fallbacks (optional)
 
 - Add small Suspense fallback and error boundary at `pages/__root.tsx` to standardize loading/error UX.
 
-### Phase 5 — Build/resolver fix (separate track)
+### Phase 4 — Build/resolver fix (separate track)
 
 - Investigate the `@deno/vite-plugin` resolver crash:
   - Bump plugin to latest compatible version.
@@ -124,15 +118,12 @@ Use this checklist as the source of truth. I will update it as items start/compl
     - [x] `HeroText.tsx` (align + will-change via Tailwind)
     - [ ] `ShinyCard.tsx` (most inline styles are required for effect)
   - [x] Normalize ARIA attributes in `shared/ui/Primitives/Button.tsx`
-- [ ] Phase 2 — Lazy-load heavier visuals
-  - [ ] Dynamic-import GSAP within effects or lazy-load wrappers
-  - [ ] Lazy-load `ShinyCard` where not above-the-fold
-- [ ] Phase 3 — Structure polish
-  - [ ] Add barrels for services/hooks in features
+- [ ] Phase 2 — Structure polish
+  - [x] Add barrels for services/hooks in features
   - [ ] Add barrels in shared/ui subtrees where useful
-- [ ] Phase 4 — Route fallbacks (optional)
+- [ ] Phase 3 — Route fallbacks (optional)
   - [ ] Add Suspense fallback and error boundary at `__root`
-- [ ] Phase 5 — Build/resolver fix (separate)
+- [ ] Phase 4 — Build/resolver fix (separate)
   - [ ] Resolve `@deno/vite-plugin` resolver crash and restore production build
 
 ## Completed (for context)
