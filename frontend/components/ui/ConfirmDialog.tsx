@@ -11,6 +11,11 @@ type ConfirmOptions = {
 
 type ConfirmContextValue = {
   confirm: (message: string, opts?: ConfirmOptions) => Promise<boolean>;
+  // New: three-way confirm used by components that need Save|Discard|Cancel
+  confirmThreeWay: (
+    message: string,
+    opts?: ConfirmOptions
+  ) => Promise<"save" | "discard" | "cancel">;
 };
 
 const ConfirmContext = createContext<ConfirmContextValue | null>(null);
@@ -24,6 +29,10 @@ export function ConfirmDialogProvider({
   const [message, setMessage] = useState("");
   const [options, setOptions] = useState<ConfirmOptions | undefined>(undefined);
   const [resolver, setResolver] = useState<((v: boolean) => void) | null>(null);
+  const [threeWayResolver, setThreeWayResolver] = useState<
+    ((v: "save" | "discard" | "cancel") => void) | null
+  >(null);
+  // three-way state is inferred from threeWayResolver presence
 
   const confirm = useCallback((msg: string, opts?: ConfirmOptions) => {
     setMessage(msg);
@@ -34,13 +43,26 @@ export function ConfirmDialogProvider({
     });
   }, []);
 
+  const confirmThreeWay = useCallback((msg: string, opts?: ConfirmOptions) => {
+    setMessage(msg);
+    setOptions(opts);
+    setOpen(true);
+    return new Promise<"save" | "discard" | "cancel">((resolve) => {
+      setThreeWayResolver(() => resolve);
+    });
+  }, []);
+
   const handleClose = useCallback(() => {
     setOpen(false);
     if (resolver) {
       resolver(false);
       setResolver(null);
     }
-  }, [resolver]);
+    if (threeWayResolver) {
+      threeWayResolver("cancel");
+      setThreeWayResolver(null);
+    }
+  }, [resolver, threeWayResolver]);
 
   const handleConfirm = useCallback(() => {
     setOpen(false);
@@ -48,10 +70,22 @@ export function ConfirmDialogProvider({
       resolver(true);
       setResolver(null);
     }
-  }, [resolver]);
+    if (threeWayResolver) {
+      threeWayResolver("save");
+      setThreeWayResolver(null);
+    }
+  }, [resolver, threeWayResolver]);
+
+  const handleThreeWayDiscard = useCallback(() => {
+    setOpen(false);
+    if (threeWayResolver) {
+      threeWayResolver("discard");
+      setThreeWayResolver(null);
+    }
+  }, [threeWayResolver]);
 
   return (
-    <ConfirmContext.Provider value={{ confirm }}>
+    <ConfirmContext.Provider value={{ confirm, confirmThreeWay }}>
       {children}
       <Dialog.Root open={open} onOpenChange={(v) => !v && handleClose()}>
         <Dialog.Portal>
@@ -65,12 +99,29 @@ export function ConfirmDialogProvider({
                 {options?.description ?? message}
               </Dialog.Description>
               <div className="mt-4 flex justify-end gap-2">
-                <Button onClick={handleClose} variant="secondary">
-                  {options?.cancelText ?? "Cancel"}
-                </Button>
-                <Button variant="danger" onClick={handleConfirm}>
-                  {options?.confirmText ?? "Delete"}
-                </Button>
+                {/* If a three-way confirm is active, render Cancel | Discard | Save */}
+                {threeWayResolver ? (
+                  <>
+                    <Button onClick={handleClose} variant="secondary">
+                      {options?.cancelText ?? "Cancel"}
+                    </Button>
+                    <Button variant="ghost" onClick={handleThreeWayDiscard}>
+                      {options?.cancelText ?? "Discard"}
+                    </Button>
+                    <Button variant="primary" onClick={handleConfirm}>
+                      {options?.confirmText ?? "Save"}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button onClick={handleClose} variant="secondary">
+                      {options?.cancelText ?? "Cancel"}
+                    </Button>
+                    <Button variant="danger" onClick={handleConfirm}>
+                      {options?.confirmText ?? "Delete"}
+                    </Button>
+                  </>
+                )}
               </div>
             </Dialog.Content>
           </div>
