@@ -14,7 +14,7 @@ type ConfirmContextValue = {
   // New: three-way confirm used by components that need Save|Discard|Cancel
   confirmThreeWay: (
     message: string,
-    opts?: ConfirmOptions
+    opts?: ConfirmOptions,
   ) => Promise<"save" | "discard" | "cancel">;
 };
 
@@ -100,28 +100,30 @@ export function ConfirmDialogProvider({
               </Dialog.Description>
               <div className="mt-4 flex justify-end gap-2">
                 {/* If a three-way confirm is active, render Cancel | Discard | Save */}
-                {threeWayResolver ? (
-                  <>
-                    <Button onClick={handleClose} variant="secondary">
-                      {options?.cancelText ?? "Cancel"}
-                    </Button>
-                    <Button variant="ghost" onClick={handleThreeWayDiscard}>
-                      {options?.cancelText ?? "Discard"}
-                    </Button>
-                    <Button variant="primary" onClick={handleConfirm}>
-                      {options?.confirmText ?? "Save"}
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button onClick={handleClose} variant="secondary">
-                      {options?.cancelText ?? "Cancel"}
-                    </Button>
-                    <Button variant="danger" onClick={handleConfirm}>
-                      {options?.confirmText ?? "Delete"}
-                    </Button>
-                  </>
-                )}
+                {threeWayResolver
+                  ? (
+                    <>
+                      <Button onClick={handleClose} variant="secondary">
+                        {options?.cancelText ?? "Cancel"}
+                      </Button>
+                      <Button variant="ghost" onClick={handleThreeWayDiscard}>
+                        {options?.cancelText ?? "Discard"}
+                      </Button>
+                      <Button variant="primary" onClick={handleConfirm}>
+                        {options?.confirmText ?? "Save"}
+                      </Button>
+                    </>
+                  )
+                  : (
+                    <>
+                      <Button onClick={handleClose} variant="secondary">
+                        {options?.cancelText ?? "Cancel"}
+                      </Button>
+                      <Button variant="danger" onClick={handleConfirm}>
+                        {options?.confirmText ?? "Delete"}
+                      </Button>
+                    </>
+                  )}
               </div>
             </Dialog.Content>
           </div>
@@ -133,10 +135,11 @@ export function ConfirmDialogProvider({
 
 export function useConfirmContext() {
   const ctx = useContext(ConfirmContext);
-  if (!ctx)
+  if (!ctx) {
     throw new Error(
-      "useConfirmContext must be used within ConfirmDialogProvider"
+      "useConfirmContext must be used within ConfirmDialogProvider",
     );
+  }
   return ctx;
 }
 

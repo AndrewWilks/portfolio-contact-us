@@ -5,7 +5,7 @@ import useToast from "../../../hooks/useToast.tsx";
 export async function onCreate(
   data: ContactCreate,
   toast: ReturnType<typeof useToast>,
-  navigate: ReturnType<typeof useNavigate>
+  navigate: ReturnType<typeof useNavigate>,
 ) {
   const body = data;
   const url = `${globalThis.location.origin}/api/contacts`;
@@ -30,8 +30,8 @@ export async function onCreate(
     let bodyText = "";
     try {
       const parsed = await res.json();
-      bodyText =
-        parsed?.error?.message ?? parsed?.message ?? JSON.stringify(parsed);
+      bodyText = parsed?.error?.message ?? parsed?.message ??
+        JSON.stringify(parsed);
     } catch {
       bodyText = await res.text().catch(() => "Unknown server error");
     }

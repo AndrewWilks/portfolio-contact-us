@@ -97,11 +97,14 @@ export function Button({
 
   const isDisabled = disabled || loading;
 
-  const buttonType =
-    (rest.type as "submit" | "reset" | "button" | undefined) ?? "button";
+  const buttonType = (rest.type as "submit" | "reset" | "button" | undefined) ??
+    "button";
 
-  const spinnerSize =
-    size === "small" ? "w-3 h-3" : size === "large" ? "w-5 h-5" : "w-4 h-4";
+  const spinnerSize = size === "small"
+    ? "w-3 h-3"
+    : size === "large"
+    ? "w-5 h-5"
+    : "w-4 h-4";
 
   const iconSize = size === "small" ? 12 : size === "large" ? 20 : 16;
 

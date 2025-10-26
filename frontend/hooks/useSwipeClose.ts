@@ -16,7 +16,7 @@ const isInteractive = (el: EventTarget | null) => {
 
 export default function useSwipeClose(
   ref: { current: HTMLElement | null },
-  opts: Options
+  opts: Options,
 ) {
   const { threshold = 120, onCloseAttempt } = opts;
   const startX = useRef<number | null>(null);

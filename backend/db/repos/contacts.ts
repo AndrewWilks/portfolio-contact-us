@@ -162,14 +162,17 @@ export async function updateContact({
   >;
 }): Promise<ContactRow | undefined> {
   const toSet: Partial<ContactInsert> = {};
-  if (typeof payload.firstName !== "undefined")
+  if (typeof payload.firstName !== "undefined") {
     toSet.firstName = payload.firstName;
-  if (typeof payload.lastName !== "undefined")
+  }
+  if (typeof payload.lastName !== "undefined") {
     toSet.lastName = payload.lastName;
+  }
   if (typeof payload.email !== "undefined") toSet.email = payload.email;
   if (typeof payload.phone !== "undefined") toSet.phone = payload.phone ?? null;
-  if (typeof payload.message !== "undefined")
+  if (typeof payload.message !== "undefined") {
     toSet.message = payload.message ?? null;
+  }
 
   const result = await db
     .update(contacts)

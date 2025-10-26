@@ -16,8 +16,8 @@ function AdminContacts() {
   const [selected, setSelected] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const selectedContact =
-    (query.data ?? []).find((c) => c.id === selected) ?? null;
+  const selectedContact = (query.data ?? []).find((c) => c.id === selected) ??
+    null;
 
   const data = query.data ?? [];
 
@@ -30,8 +30,9 @@ function AdminContacts() {
 
   if (query.isLoading) return <div className="p-4">Loading contacts...</div>;
 
-  if (query.isError)
+  if (query.isError) {
     return <div className="p-4 text-(--danger)">Error loading contacts</div>;
+  }
 
   const virtualItems = rowVirtualizer.getVirtualItems();
   const confirm = useConfirm();

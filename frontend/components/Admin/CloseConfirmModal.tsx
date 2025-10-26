@@ -16,7 +16,7 @@ export default function CloseConfirmModal({
   type ThreeWayCtx = {
     confirmThreeWay?: (
       msg: string,
-      opts?: unknown
+      opts?: unknown,
     ) => Promise<"save" | "discard" | "cancel">;
   };
 
@@ -35,7 +35,7 @@ export default function CloseConfirmModal({
     }
     // Fallback to local UI modal if provider not present — simple confirm via globalThis
     const choice = globalThis.confirm(
-      title ?? "You have unsaved changes. Save first?"
+      title ?? "You have unsaved changes. Save first?",
     );
     onLocalConfirm?.(choice ? "save" : "discard");
   };

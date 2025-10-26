@@ -17,8 +17,9 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
   const getInitial = (): Theme => {
     try {
       const stored = localStorage.getItem("theme");
-      if (stored === "light" || stored === "dark" || stored === "auto")
+      if (stored === "light" || stored === "dark" || stored === "auto") {
         return stored as Theme;
+      }
       // default to auto if not set
       return "auto";
     } catch {

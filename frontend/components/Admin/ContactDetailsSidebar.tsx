@@ -1,7 +1,7 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ContactCreateSchema, type ContactCreate } from "@shared/schema";
+import { type ContactCreate, ContactCreateSchema } from "@shared/schema";
 import Button from "@ui/Primitives/Button.tsx";
 import gsap from "gsap";
 import TextField from "@ui/Fields/TextField.tsx";
@@ -91,7 +91,7 @@ export default function ContactDetailsSidebar({
       tl.to(
         overlayRef.current,
         { opacity: 1, duration: 0.28, pointerEvents: "auto" },
-        0
+        0,
       );
       tl.to(panelRef.current, { xPercent: 0, duration: 0.36 }, 0);
 
@@ -103,7 +103,7 @@ export default function ContactDetailsSidebar({
           /* ignore */
         }
         const first = panelRef.current?.querySelector<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
         );
         if (first) first.focus();
       });
@@ -124,7 +124,7 @@ export default function ContactDetailsSidebar({
       out.to(
         overlayRef.current,
         { opacity: 0, duration: 0.28, pointerEvents: "none" },
-        "-=-0.2"
+        "-=-0.2",
       );
       out.eventCallback("onComplete", () => {
         setPanelState("closed");
@@ -157,7 +157,7 @@ export default function ContactDetailsSidebar({
       description?: string;
       confirmText?: string;
       cancelText?: string;
-    }
+    },
   ): Promise<boolean> => {
     try {
       if (typeof confirmDialog === "function") {
@@ -166,7 +166,7 @@ export default function ContactDetailsSidebar({
         return await (
           confirmDialog as unknown as (
             m: string,
-            o?: unknown
+            o?: unknown,
           ) => Promise<boolean>
         )(message, opts);
       }
@@ -178,7 +178,7 @@ export default function ContactDetailsSidebar({
       globalThis as unknown as { confirm?: (m: string) => boolean }
     ).confirm;
     return Promise.resolve(
-      nativeConfirm ? nativeConfirm(opts?.title ?? message) : false
+      nativeConfirm ? nativeConfirm(opts?.title ?? message) : false,
     );
   };
 
@@ -214,13 +214,13 @@ export default function ContactDetailsSidebar({
       reset(
         contact
           ? {
-              firstName: contact.firstName ?? "",
-              lastName: contact.lastName ?? "",
-              email: contact.email ?? "",
-              phone: contact.phone ?? undefined,
-              message: contact.message ?? undefined,
-            }
-          : undefined
+            firstName: contact.firstName ?? "",
+            lastName: contact.lastName ?? "",
+            email: contact.email ?? "",
+            phone: contact.phone ?? undefined,
+            message: contact.message ?? undefined,
+          }
+          : undefined,
       );
       return;
     }
@@ -235,13 +235,13 @@ export default function ContactDetailsSidebar({
     reset(
       contact
         ? {
-            firstName: contact.firstName ?? "",
-            lastName: contact.lastName ?? "",
-            email: contact.email ?? "",
-            phone: contact.phone ?? undefined,
-            message: contact.message ?? undefined,
-          }
-        : undefined
+          firstName: contact.firstName ?? "",
+          lastName: contact.lastName ?? "",
+          email: contact.email ?? "",
+          phone: contact.phone ?? undefined,
+          message: contact.message ?? undefined,
+        }
+        : undefined,
     );
   };
 
@@ -260,7 +260,7 @@ export default function ContactDetailsSidebar({
   // Attach listeners only after the panel is mounted. Use a ref to the
   // latest handleCloseAttempt so handlers don't hold stale closures.
   const handleCloseAttemptRef = useRef<(() => Promise<void> | void) | null>(
-    null
+    null,
   );
 
   useEffect(() => {
@@ -290,7 +290,7 @@ export default function ContactDetailsSidebar({
         if (
           targetEl &&
           targetEl.closest(
-            "button, [role=button], a, input, textarea, select, label, summary"
+            "button, [role=button], a, input, textarea, select, label, summary",
           )
         ) {
           // Let the interactive element handle the pointer normally
@@ -366,7 +366,7 @@ export default function ContactDetailsSidebar({
       const selector =
         'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
       const nodeList = Array.from(
-        panel.querySelectorAll<HTMLElement>(selector)
+        panel.querySelectorAll<HTMLElement>(selector),
       );
       const focusable = nodeList.filter((el) => {
         // element must be visible
@@ -383,7 +383,7 @@ export default function ContactDetailsSidebar({
       }
 
       const currentIndex = focusable.indexOf(
-        document.activeElement as HTMLElement
+        document.activeElement as HTMLElement,
       );
 
       if (e.shiftKey) {
@@ -485,11 +485,13 @@ export default function ContactDetailsSidebar({
                 rows={6}
                 disabled={!isEditable}
               />
-              {errors.message ? (
-                <p className="mt-1 text-sm text-(--danger)">
-                  {errors.message.message}
-                </p>
-              ) : null}
+              {errors.message
+                ? (
+                  <p className="mt-1 text-sm text-(--danger)">
+                    {errors.message.message}
+                  </p>
+                )
+                : null}
             </div>
           </form>
         </div>
@@ -497,115 +499,121 @@ export default function ContactDetailsSidebar({
         {/* footer (sticky) */}
         <div className="p-3 border-t border-(--border) bg-(--card)">
           <div className="flex justify-end gap-2">
-            {isEditable ? (
-              <>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={() => void handleDiscard()}
-                  disabled={!isDirty}
-                  title={isDirty ? "Discard changes" : "No changes to discard"}
-                >
-                  Discard
-                </Button>
-                <Button
-                  type="button"
-                  onClick={handleSubmit(submit)}
-                  loading={_isSubmitting}
-                  variant="primary"
-                  disabled={!isDirty}
-                  title={isDirty ? "Save changes" : "No changes to save"}
-                >
-                  Save
-                </Button>
-              </>
-            ) : (
-              <div className="text-sm text-(--muted) self-center flex items-center gap-1">
-                <CheckCheck
-                  size={16}
-                  className="text-green-500 dark:text-green-300 mr-1"
-                />
-                <span className="font-medium">Verified</span>
-                <span className="text-xs"> | Read Only</span>
-              </div>
-            )}
+            {isEditable
+              ? (
+                <>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => void handleDiscard()}
+                    disabled={!isDirty}
+                    title={isDirty
+                      ? "Discard changes"
+                      : "No changes to discard"}
+                  >
+                    Discard
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleSubmit(submit)}
+                    loading={_isSubmitting}
+                    variant="primary"
+                    disabled={!isDirty}
+                    title={isDirty ? "Save changes" : "No changes to save"}
+                  >
+                    Save
+                  </Button>
+                </>
+              )
+              : (
+                <div className="text-sm text-(--muted) self-center flex items-center gap-1">
+                  <CheckCheck
+                    size={16}
+                    className="text-green-500 dark:text-green-300 mr-1"
+                  />
+                  <span className="font-medium">Verified</span>
+                  <span className="text-xs">| Read Only</span>
+                </div>
+              )}
           </div>
         </div>
       </aside>
 
       {/* Local 3-way confirm modal for close attempts when the form is dirty */}
-      {closeModalOpen ? (
-        <div className="fixed inset-0 z-60 flex items-center justify-center">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setCloseModalOpen(false)}
-            aria-hidden
-          />
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="close-modal-title"
-            className="relative bg-(--card) w-full max-w-lg mx-4 rounded shadow-2xl p-4 z-70"
-          >
-            <h4 id="close-modal-title" className="text-lg font-semibold">
-              Unsaved changes
-            </h4>
-            <p className="text-sm text-(--muted) mt-2">
-              You have unsaved changes. Would you like to save them before
-              closing?
-            </p>
+      {closeModalOpen
+        ? (
+          <div className="fixed inset-0 z-60 flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setCloseModalOpen(false)}
+              aria-hidden
+            />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="close-modal-title"
+              className="relative bg-(--card) w-full max-w-lg mx-4 rounded shadow-2xl p-4 z-70"
+            >
+              <h4 id="close-modal-title" className="text-lg font-semibold">
+                Unsaved changes
+              </h4>
+              <p className="text-sm text-(--muted) mt-2">
+                You have unsaved changes. Would you like to save them before
+                closing?
+              </p>
 
-            <div className="mt-4 flex justify-end gap-2">
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => setCloseModalOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  // Discard changes and close
-                  reset(
-                    contact
-                      ? {
+              <div className="mt-4 flex justify-end gap-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => setCloseModalOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    // Discard changes and close
+                    reset(
+                      contact
+                        ? {
                           firstName: contact.firstName ?? "",
                           lastName: contact.lastName ?? "",
                           email: contact.email ?? "",
                           phone: contact.phone ?? undefined,
                           message: contact.message ?? undefined,
                         }
-                      : undefined
-                  );
-                  setCloseModalOpen(false);
-                  onRequestClose();
-                }}
-              >
-                Discard
-              </Button>
-              <Button
-                type="button"
-                variant="primary"
-                onClick={async () => {
-                  // Save then close
-                  const valid = await trigger();
-                  if (!valid) return;
-                  const values = getValues();
-                  try {
-                    await performSaveAndClose(values as ContactCreate);
-                  } finally {
+                        : undefined,
+                    );
                     setCloseModalOpen(false);
-                  }
-                }}
-              >
-                Save
-              </Button>
+                    onRequestClose();
+                  }}
+                >
+                  Discard
+                </Button>
+                <Button
+                  type="button"
+                  variant="primary"
+                  onClick={async () => {
+                    // Save then close
+                    const valid = await trigger();
+                    if (!valid) return;
+                    const values = getValues();
+                    try {
+                      await performSaveAndClose(values as ContactCreate);
+                    } finally {
+                      setCloseModalOpen(false);
+                    }
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      ) : null}
+        )
+        : null}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@ui/Primitives/Button.tsx";
-import { ContactCreateSchema, type ContactCreate } from "@shared/schema";
+import { type ContactCreate, ContactCreateSchema } from "@shared/schema";
 import TextField from "@ui/Fields/TextField.tsx";
 import TextAreaField from "@ui/Fields/TextFieldArea.tsx";
 import { onDiscard } from "./handlers/onDiscard.tsx";
@@ -96,13 +96,13 @@ export default function ContactFormUI({
           loading={isSubmitting}
           variant="primary"
           disabled={!isDirty}
-          title={
-            isDirty
-              ? `${submitLabel.slice(0, 1).toUpperCase()}${submitLabel.slice(
-                  1
-                )}`
-              : `Please make changes to enable ${submitLabel.toLowerCase()}.`
-          }
+          title={isDirty
+            ? `${submitLabel.slice(0, 1).toUpperCase()}${
+              submitLabel.slice(
+                1,
+              )
+            }`
+            : `Please make changes to enable ${submitLabel.toLowerCase()}.`}
         >
           {isSubmitting ? "Sending..." : submitLabel}
         </Button>

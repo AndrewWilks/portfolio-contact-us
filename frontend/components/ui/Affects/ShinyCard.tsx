@@ -56,8 +56,9 @@ const ShinyCard: React.FC<ShinyCardProps> = ({
 
   const { current } = useTheme();
 
-  const _spotlightColor: colour =
-    current === "dark" ? spotlightColor.dark : spotlightColor.light;
+  const _spotlightColor: colour = current === "dark"
+    ? spotlightColor.dark
+    : spotlightColor.light;
 
   return (
     <div
@@ -74,7 +75,8 @@ const ShinyCard: React.FC<ShinyCardProps> = ({
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out"
         style={{
           opacity,
-          background: `radial-gradient(circle at ${position.x}px ${position.y}px, ${_spotlightColor}, transparent 80%)`,
+          background:
+            `radial-gradient(circle at ${position.x}px ${position.y}px, ${_spotlightColor}, transparent 80%)`,
         }}
       />
       {children}

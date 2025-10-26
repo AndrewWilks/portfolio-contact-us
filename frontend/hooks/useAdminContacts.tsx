@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useToast from "./useToast.tsx";
 import type { ContactCreate } from "@shared/schema";
 
@@ -37,10 +37,12 @@ export function useAdminContacts() {
     },
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({ queryKey: ["contacts"] });
-      const previous =
-        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
-      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
-        old.map((c) => (c.id === id ? { ...c, verified: true } : c))
+      const previous = queryClient.getQueryData<ContactRow[]>(["contacts"]) ||
+        [];
+      queryClient.setQueryData<ContactRow[]>(
+        ["contacts"],
+        (old = []) =>
+          old.map((c) => (c.id === id ? { ...c, verified: true } : c)),
       );
       // show a processing toast and keep id in context
       const toastId = toast.open({
@@ -56,10 +58,11 @@ export function useAdminContacts() {
     onError: (
       _err,
       _id,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
-      if (context?.previous)
+      if (context?.previous) {
         queryClient.setQueryData(["contacts"], context.previous);
+      }
       if (context?.toastId) {
         toast.dismiss(context.toastId);
       }
@@ -72,7 +75,7 @@ export function useAdminContacts() {
     onSuccess: (
       data,
       id,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
       if (context?.toastId) toast.dismiss(context.toastId);
       // show success with undo
@@ -95,10 +98,11 @@ export function useAdminContacts() {
     },
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({ queryKey: ["contacts"] });
-      const previous =
-        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
-      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
-        old.filter((c) => c.id !== id)
+      const previous = queryClient.getQueryData<ContactRow[]>(["contacts"]) ||
+        [];
+      queryClient.setQueryData<ContactRow[]>(
+        ["contacts"],
+        (old = []) => old.filter((c) => c.id !== id),
       );
       const toastId = toast.open({
         title: "Deleting...",
@@ -113,10 +117,11 @@ export function useAdminContacts() {
     onError: (
       _err,
       _id,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
-      if (context?.previous)
+      if (context?.previous) {
         queryClient.setQueryData(["contacts"], context.previous);
+      }
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({
         title: "Delete failed",
@@ -127,7 +132,7 @@ export function useAdminContacts() {
     onSuccess: (
       _id,
       _variables,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({ title: "Contact deleted", variant: "success" });
@@ -147,16 +152,19 @@ export function useAdminContacts() {
     },
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({ queryKey: ["contacts"] });
-      const previous =
-        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
-      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
-        old.map((c) => (c.id === id ? { ...c, verified: false } : c))
+      const previous = queryClient.getQueryData<ContactRow[]>(["contacts"]) ||
+        [];
+      queryClient.setQueryData<ContactRow[]>(
+        ["contacts"],
+        (old = []) =>
+          old.map((c) => (c.id === id ? { ...c, verified: false } : c)),
       );
       return { previous } as { previous: ContactRow[] };
     },
     onError: (_err, _id, context?: { previous: ContactRow[] }) => {
-      if (context?.previous)
+      if (context?.previous) {
         queryClient.setQueryData(["contacts"], context.previous);
+      }
       toast.open({ title: "Undo failed", variant: "error" });
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["contacts"] }),
@@ -181,10 +189,11 @@ export function useAdminContacts() {
     },
     onMutate: async ({ id, payload }) => {
       await queryClient.cancelQueries({ queryKey: ["contacts"] });
-      const previous =
-        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
-      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
-        old.map((c) => (c.id === id ? { ...c, ...payload } : c))
+      const previous = queryClient.getQueryData<ContactRow[]>(["contacts"]) ||
+        [];
+      queryClient.setQueryData<ContactRow[]>(
+        ["contacts"],
+        (old = []) => old.map((c) => (c.id === id ? { ...c, ...payload } : c)),
       );
       const toastId = toast.open({
         title: "Saving...",
@@ -199,17 +208,18 @@ export function useAdminContacts() {
     onError: (
       _err,
       _vars,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
-      if (context?.previous)
+      if (context?.previous) {
         queryClient.setQueryData(["contacts"], context.previous);
+      }
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({ title: "Update failed", variant: "error" });
     },
     onSuccess: (
       _data,
       _vars,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({ title: "Contact updated", variant: "success" });

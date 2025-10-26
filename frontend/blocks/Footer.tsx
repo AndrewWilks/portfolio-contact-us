@@ -13,8 +13,8 @@ export default function Footer({ ref }: FooterProps) {
     >
       <div className="container mx-auto text-center">
         <p>
-          &copy; {new Date().getFullYear()} <Link to="/me/">Andrew Wilks</Link>.
-          All rights reserved.
+          &copy; {new Date().getFullYear()}{" "}
+          <Link to="/me/">Andrew Wilks</Link>. All rights reserved.
         </p>
       </div>
       <div className="container mx-auto text-center flex">
