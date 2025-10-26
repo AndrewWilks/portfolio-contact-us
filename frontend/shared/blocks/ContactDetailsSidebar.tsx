@@ -82,7 +82,7 @@ export default function ContactDetailsSidebarBlock({
     async (data: ContactCreate) => {
       await onSave(contact!.id, data);
     },
-    [contact, onSave]
+    [contact, onSave],
   );
 
   // kept for reference earlier; not used in the new unified close flow
@@ -97,11 +97,11 @@ export default function ContactDetailsSidebarBlock({
   const submit = async (data: ContactCreate) => {
     const ok = confirmCtx
       ? await confirmCtx.confirm("Save changes?", {
-          title: "Save changes",
-          description: "Save changes to this contact?",
-          confirmText: "Save",
-          cancelText: "Cancel",
-        })
+        title: "Save changes",
+        description: "Save changes to this contact?",
+        confirmText: "Save",
+        cancelText: "Cancel",
+      })
       : Promise.resolve(globalThis.confirm("Save changes?"));
     if (!ok) return;
     await performSaveOnly(data);
@@ -112,35 +112,35 @@ export default function ContactDetailsSidebarBlock({
       reset(
         contact
           ? {
-              firstName: contact.firstName ?? "",
-              lastName: contact.lastName ?? "",
-              email: contact.email ?? "",
-              phone: contact.phone ?? undefined,
-              message: contact.message ?? undefined,
-            }
-          : undefined
-      );
-      return;
-    }
-    const ok = confirmCtx
-      ? await confirmCtx.confirm("Discard changes?", {
-          title: "Discard changes",
-          description: "You have unsaved changes. Discard them?",
-          confirmText: "Discard",
-          cancelText: "Cancel",
-        })
-      : Promise.resolve(globalThis.confirm("Discard changes?"));
-    if (!ok) return;
-    reset(
-      contact
-        ? {
             firstName: contact.firstName ?? "",
             lastName: contact.lastName ?? "",
             email: contact.email ?? "",
             phone: contact.phone ?? undefined,
             message: contact.message ?? undefined,
           }
-        : undefined
+          : undefined,
+      );
+      return;
+    }
+    const ok = confirmCtx
+      ? await confirmCtx.confirm("Discard changes?", {
+        title: "Discard changes",
+        description: "You have unsaved changes. Discard them?",
+        confirmText: "Discard",
+        cancelText: "Cancel",
+      })
+      : Promise.resolve(globalThis.confirm("Discard changes?"));
+    if (!ok) return;
+    reset(
+      contact
+        ? {
+          firstName: contact.firstName ?? "",
+          lastName: contact.lastName ?? "",
+          email: contact.email ?? "",
+          phone: contact.phone ?? undefined,
+          message: contact.message ?? undefined,
+        }
+        : undefined,
     );
   };
 
@@ -152,7 +152,7 @@ export default function ContactDetailsSidebarBlock({
 
     if (confirmCtx?.confirmThreeWay) {
       const res = await confirmCtx.confirmThreeWay(
-        "You have unsaved changes. Save before closing?"
+        "You have unsaved changes. Save before closing?",
       );
       if (res === "save") {
         const valid = await trigger();
@@ -165,13 +165,13 @@ export default function ContactDetailsSidebarBlock({
         reset(
           contact
             ? {
-                firstName: contact.firstName ?? "",
-                lastName: contact.lastName ?? "",
-                email: contact.email ?? "",
-                phone: contact.phone ?? undefined,
-                message: contact.message ?? undefined,
-              }
-            : undefined
+              firstName: contact.firstName ?? "",
+              lastName: contact.lastName ?? "",
+              email: contact.email ?? "",
+              phone: contact.phone ?? undefined,
+              message: contact.message ?? undefined,
+            }
+            : undefined,
         );
         return true;
       }
@@ -193,13 +193,13 @@ export default function ContactDetailsSidebarBlock({
       reset(
         contact
           ? {
-              firstName: contact.firstName ?? "",
-              lastName: contact.lastName ?? "",
-              email: contact.email ?? "",
-              phone: contact.phone ?? undefined,
-              message: contact.message ?? undefined,
-            }
-          : undefined
+            firstName: contact.firstName ?? "",
+            lastName: contact.lastName ?? "",
+            email: contact.email ?? "",
+            phone: contact.phone ?? undefined,
+            message: contact.message ?? undefined,
+          }
+          : undefined,
       );
       return true;
     }
@@ -226,38 +226,40 @@ export default function ContactDetailsSidebarBlock({
 
   const footer = (
     <div className="flex justify-end gap-2">
-      {isEditable ? (
-        <>
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => void handleDiscard()}
-            disabled={!isDirty}
-            title={isDirty ? "Discard changes" : "No changes to discard"}
-          >
-            Discard
-          </Button>
-          <Button
-            type="button"
-            onClick={handleSubmit(submit)}
-            loading={_isSubmitting}
-            variant="primary"
-            disabled={!isDirty}
-            title={isDirty ? "Save changes" : "No changes to save"}
-          >
-            Save
-          </Button>
-        </>
-      ) : (
-        <div className="text-sm text-(--muted) self-center flex items-center gap-1">
-          <CheckCheck
-            size={16}
-            className="text-green-500 dark:text-green-300 mr-1"
-          />
-          <span className="font-medium">Verified</span>
-          <span className="text-xs">| Read Only</span>
-        </div>
-      )}
+      {isEditable
+        ? (
+          <>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => void handleDiscard()}
+              disabled={!isDirty}
+              title={isDirty ? "Discard changes" : "No changes to discard"}
+            >
+              Discard
+            </Button>
+            <Button
+              type="button"
+              onClick={handleSubmit(submit)}
+              loading={_isSubmitting}
+              variant="primary"
+              disabled={!isDirty}
+              title={isDirty ? "Save changes" : "No changes to save"}
+            >
+              Save
+            </Button>
+          </>
+        )
+        : (
+          <div className="text-sm text-(--muted) self-center flex items-center gap-1">
+            <CheckCheck
+              size={16}
+              className="text-green-500 dark:text-green-300 mr-1"
+            />
+            <span className="font-medium">Verified</span>
+            <span className="text-xs">| Read Only</span>
+          </div>
+        )}
     </div>
   );
 

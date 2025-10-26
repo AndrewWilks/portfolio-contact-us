@@ -96,13 +96,13 @@ export default function ContactFormUI({
           loading={isSubmitting}
           variant="primary"
           disabled={!isDirty}
-          title={
-            isDirty
-              ? `${submitLabel.slice(0, 1).toUpperCase()}${submitLabel.slice(
-                  1
-                )}`
-              : `Please make changes to enable ${submitLabel.toLowerCase()}.`
-          }
+          title={isDirty
+            ? `${submitLabel.slice(0, 1).toUpperCase()}${
+              submitLabel.slice(
+                1,
+              )
+            }`
+            : `Please make changes to enable ${submitLabel.toLowerCase()}.`}
         >
           {isSubmitting ? "Sending..." : submitLabel}
         </Button>

@@ -3,7 +3,7 @@ import type { ContactCreate } from "@shared/schema";
 
 export function onDiscard(
   initialValues: ContactCreate | undefined,
-  reset: UseFormReset<ContactCreate>
+  reset: UseFormReset<ContactCreate>,
 ) {
   reset(
     initialValues || {
@@ -12,7 +12,7 @@ export function onDiscard(
       email: "",
       phone: "",
       message: "",
-    }
+    },
   );
 }
 

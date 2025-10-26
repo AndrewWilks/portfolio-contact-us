@@ -3,11 +3,11 @@ import useToast from "@hooks/useToast.tsx";
 import type { Contact, ContactCreate } from "@shared/schema";
 import { qk } from "../../../shared/lib/query/keys.ts";
 import {
+  deleteContact,
   listContacts,
-  verifyContact,
   unverifyContact,
   updateContact,
-  deleteContact,
+  verifyContact,
 } from "../services/contacts.api.ts";
 
 type ContactRow = Contact;
@@ -26,8 +26,10 @@ export function useAdminContacts() {
       await queryClient.cancelQueries({ queryKey: qk.contacts.list });
       const previous =
         queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
-      queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
-        old.map((c) => (c.id === id ? { ...c, verified: true } : c))
+      queryClient.setQueryData<ContactRow[]>(
+        qk.contacts.list,
+        (old = []) =>
+          old.map((c) => (c.id === id ? { ...c, verified: true } : c)),
       );
       // show a processing toast and keep id in context
       const toastId = toast.open({
@@ -43,7 +45,7 @@ export function useAdminContacts() {
     onError: (
       _err,
       _id,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
       if (context?.previous) {
         queryClient.setQueryData(qk.contacts.list, context.previous);
@@ -60,7 +62,7 @@ export function useAdminContacts() {
     onSuccess: (
       data,
       id,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
       if (context?.toastId) toast.dismiss(context.toastId);
       // show success with undo
@@ -85,8 +87,9 @@ export function useAdminContacts() {
       await queryClient.cancelQueries({ queryKey: qk.contacts.list });
       const previous =
         queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
-      queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
-        old.filter((c) => c.id !== id)
+      queryClient.setQueryData<ContactRow[]>(
+        qk.contacts.list,
+        (old = []) => old.filter((c) => c.id !== id),
       );
       const toastId = toast.open({
         title: "Deleting...",
@@ -101,7 +104,7 @@ export function useAdminContacts() {
     onError: (
       _err,
       _id,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
       if (context?.previous) {
         queryClient.setQueryData(qk.contacts.list, context.previous);
@@ -116,7 +119,7 @@ export function useAdminContacts() {
     onSuccess: (
       _id,
       _variables,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({ title: "Contact deleted", variant: "success" });
@@ -134,8 +137,10 @@ export function useAdminContacts() {
       await queryClient.cancelQueries({ queryKey: qk.contacts.list });
       const previous =
         queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
-      queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
-        old.map((c) => (c.id === id ? { ...c, verified: false } : c))
+      queryClient.setQueryData<ContactRow[]>(
+        qk.contacts.list,
+        (old = []) =>
+          old.map((c) => (c.id === id ? { ...c, verified: false } : c)),
       );
       return { previous } as { previous: ContactRow[] };
     },
@@ -163,8 +168,9 @@ export function useAdminContacts() {
       await queryClient.cancelQueries({ queryKey: qk.contacts.list });
       const previous =
         queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
-      queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
-        old.map((c) => (c.id === id ? { ...c, ...payload } : c))
+      queryClient.setQueryData<ContactRow[]>(
+        qk.contacts.list,
+        (old = []) => old.map((c) => (c.id === id ? { ...c, ...payload } : c)),
       );
       const toastId = toast.open({
         title: "Saving...",
@@ -179,7 +185,7 @@ export function useAdminContacts() {
     onError: (
       _err,
       _vars,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
       if (context?.previous) {
         queryClient.setQueryData(qk.contacts.list, context.previous);
@@ -190,7 +196,7 @@ export function useAdminContacts() {
     onSuccess: (
       _data,
       _vars,
-      context?: { previous: ContactRow[]; toastId?: string }
+      context?: { previous: ContactRow[]; toastId?: string },
     ) => {
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({ title: "Contact updated", variant: "success" });

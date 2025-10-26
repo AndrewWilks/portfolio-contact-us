@@ -8,8 +8,9 @@ interface TextFieldProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 export function TextAreaField({ label, error, ...rest }: TextFieldProps) {
   // `rest` may contain a `name` or `id` property coming from react-hook-form's
   // register spread. Prefer `id` if provided, otherwise use `name` for htmlFor.
-  const restTyped =
-    rest as React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  const restTyped = rest as
+    & React.TextareaHTMLAttributes<HTMLTextAreaElement>
+    & {
       name?: string;
     };
   const id = restTyped.id ?? restTyped.name;

@@ -4,7 +4,7 @@ import ContactForm from "@features/contact/components/ContactForm.tsx";
 import ShinyCard from "@ui/Affects/ShinyCard.tsx";
 
 const CompanyContactDetails = lazy(
-  () => import("@blocks/CompanyContactDetails.tsx")
+  () => import("@blocks/CompanyContactDetails.tsx"),
 );
 const OfficeHours = lazy(() => import("@blocks/OfficeHours.tsx"));
 const PostalAddress = lazy(() => import("@blocks/PostalAddress.tsx"));

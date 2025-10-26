@@ -37,11 +37,11 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
     swipeCancelVelocity = 0.2,
     children,
   },
-  forwardedRef
+  forwardedRef,
 ) {
   const [mounted, setMounted] = useState(false);
   const [state, setState] = useState<"closed" | "opening" | "open" | "closing">(
-    "closed"
+    "closed",
   );
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
@@ -94,7 +94,7 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
       tl.to(
         overlayRef.current,
         { opacity: 1, duration: 0.28, pointerEvents: "auto" },
-        0
+        0,
       );
       tl.to(panelRef.current, { xPercent: 0, duration: 0.36 }, 0);
 
@@ -105,8 +105,7 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
         } catch (err) {
           void err;
         }
-        const selector =
-          initialFocusSelector ??
+        const selector = initialFocusSelector ??
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
         const first = panelRef.current?.querySelector<HTMLElement>(selector);
         first?.focus();
@@ -126,7 +125,7 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
       out.to(
         overlayRef.current,
         { opacity: 0, duration: 0.28, pointerEvents: "none" },
-        "-=-0.2"
+        "-=-0.2",
       );
       out.eventCallback("onComplete", () => {
         setState("closed");
@@ -158,18 +157,18 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
       const selector =
         'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
       const nodeList = Array.from(
-        panel.querySelectorAll<HTMLElement>(selector)
+        panel.querySelectorAll<HTMLElement>(selector),
       );
       const focusable = nodeList.filter(
         (el) =>
-          !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length)
+          !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length),
       );
       if (focusable.length === 0) {
         e.preventDefault();
         return;
       }
       const currentIndex = focusable.indexOf(
-        document.activeElement as HTMLElement
+        document.activeElement as HTMLElement,
       );
       if (e.shiftKey) {
         if (currentIndex === 0 || document.activeElement === panel) {
@@ -239,8 +238,7 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
       const dt = Math.max(1, performance.now() - startT); // ms
       const velocity = dx / dt; // px per ms
       const percent = Math.min(100, (dx / width) * 100);
-      const shouldClose =
-        percent >= (swipeThresholdPx / width) * 100 ||
+      const shouldClose = percent >= (swipeThresholdPx / width) * 100 ||
         velocity >= swipeCancelVelocity;
       if (shouldClose) {
         void attemptClose();
@@ -293,11 +291,13 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
           {headerRightSlot}
         </div>
         <div className="px-4 py-3 overflow-auto">{children}</div>
-        {footerSlot ? (
-          <div className="p-3 border-t border-(--border) bg-(--card)">
-            {footerSlot}
-          </div>
-        ) : null}
+        {footerSlot
+          ? (
+            <div className="p-3 border-t border-(--border) bg-(--card)">
+              {footerSlot}
+            </div>
+          )
+          : null}
       </aside>
     </div>
   );

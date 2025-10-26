@@ -71,12 +71,11 @@ const HeroText: React.FC<HeroTextProps> = ({
       const marginMatch = /^(\-?\d+(?:\.\d+)?)(px|em|rem|%)?$/.exec(rootMargin);
       const marginValue = marginMatch ? parseFloat(marginMatch[1]) : 0;
       const marginUnit = marginMatch ? marginMatch[2] || "px" : "px";
-      const sign =
-        marginValue === 0
-          ? ""
-          : marginValue < 0
-          ? `-=${Math.abs(marginValue)}${marginUnit}`
-          : `+=${marginValue}${marginUnit}`;
+      const sign = marginValue === 0
+        ? ""
+        : marginValue < 0
+        ? `-=${Math.abs(marginValue)}${marginUnit}`
+        : `+=${marginValue}${marginUnit}`;
       const start = `top ${startPct}%${sign}`;
       let targets: Element[] = [];
       const assignTargets = (self: GSAPSplitText) => {
@@ -133,7 +132,7 @@ const HeroText: React.FC<HeroTextProps> = ({
               },
               willChange: "transform, opacity",
               force3D: true,
-            }
+            },
           );
         },
       });
@@ -165,19 +164,19 @@ const HeroText: React.FC<HeroTextProps> = ({
         onLetterAnimationComplete,
       ],
       scope: ref,
-    }
+    },
   );
 
   const renderTag = () => {
-    const alignClass =
-      textAlign === "left"
-        ? "text-left"
-        : textAlign === "right"
-        ? "text-right"
-        : textAlign === "justify"
-        ? "text-justify"
-        : "text-center";
-    const classes = `split-parent overflow-hidden inline-block whitespace-normal break-words [will-change:transform,opacity] ${alignClass} ${className}`;
+    const alignClass = textAlign === "left"
+      ? "text-left"
+      : textAlign === "right"
+      ? "text-right"
+      : textAlign === "justify"
+      ? "text-justify"
+      : "text-center";
+    const classes =
+      `split-parent overflow-hidden inline-block whitespace-normal break-words [will-change:transform,opacity] ${alignClass} ${className}`;
     switch (tag) {
       case "h1":
         return (

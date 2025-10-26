@@ -14,8 +14,7 @@ export default function ThemeDropdown() {
           aria-label="Select theme"
           value={theme}
           onChange={(e) =>
-            setTheme(e.target.value as "auto" | "light" | "dark")
-          }
+            setTheme(e.target.value as "auto" | "light" | "dark")}
           className="px-2 py-1 border rounded bg-white dark:bg-gray-800"
         >
           <option value="auto">Auto</option>

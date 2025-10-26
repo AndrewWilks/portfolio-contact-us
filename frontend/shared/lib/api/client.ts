@@ -7,7 +7,7 @@ const API_BASE = "/api";
 
 function toAppError(
   err: unknown,
-  fallbackMessage = "Request failed"
+  fallbackMessage = "Request failed",
 ): AppError {
   if (err instanceof Error) return err as AppError;
   const e = new Error(fallbackMessage) as AppError;
@@ -56,14 +56,14 @@ async function request<T>(
   method: string,
   path: string,
   body?: unknown,
-  opts: FetchOpts = {}
+  opts: FetchOpts = {},
 ): Promise<T> {
   const url = path.startsWith("/")
     ? `${API_BASE}${path}`
     : `${API_BASE}/${path}`;
   const headers: Record<string, string> = Object.assign(
     { "Content-Type": "application/json" },
-    opts.headers ?? {}
+    opts.headers ?? {},
   );
   try {
     const res = await fetch(url, {
@@ -88,7 +88,7 @@ export const api = {
   patch: <TRes, TBody = unknown>(
     path: string,
     body?: TBody,
-    opts?: FetchOpts
+    opts?: FetchOpts,
   ) => request<TRes>("PATCH", path, body, opts),
   del: <T>(path: string, opts?: FetchOpts) =>
     request<T>("DELETE", path, undefined, opts),

@@ -21,9 +21,9 @@ export function ToastRoot({
   return (
     <RadixToast.Root className="bg-(--card) border-(--border) p-3 rounded shadow-md">
       <RadixToast.Title className="font-semibold">{title}</RadixToast.Title>
-      {description ? (
-        <RadixToast.Description>{description}</RadixToast.Description>
-      ) : null}
+      {description
+        ? <RadixToast.Description>{description}</RadixToast.Description>
+        : null}
       <RadixToast.Close className="ml-2">Close</RadixToast.Close>
     </RadixToast.Root>
   );
