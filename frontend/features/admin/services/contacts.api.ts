@@ -18,7 +18,7 @@ export async function unverifyContact(id: string): Promise<Contact> {
 
 export async function updateContact(
   id: string,
-  payload: ContactCreate,
+  payload: ContactCreate
 ): Promise<Contact> {
   const res = await api.patch<{ data: Contact }>(`/contacts/${id}`, payload);
   return res.data;

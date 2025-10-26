@@ -1,9 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 import ContactForm from "@features/contact/components/ContactForm.tsx";
-import OfficeHours from "@blocks/OfficeHours.tsx";
-import PostalAddress from "@blocks/PostalAddress.tsx";
 import ShinyCard from "@ui/Affects/ShinyCard.tsx";
-import CompanyContactDetails from "@blocks/CompanyContactDetails.tsx";
+
+const CompanyContactDetails = lazy(
+  () => import("@blocks/CompanyContactDetails.tsx")
+);
+const OfficeHours = lazy(() => import("@blocks/OfficeHours.tsx"));
+const PostalAddress = lazy(() => import("@blocks/PostalAddress.tsx"));
 
 export const Route = createFileRoute("/contact/")({
   component: ContactPage,
@@ -22,13 +26,19 @@ function ContactPage() {
           Here are extra ways to contact us
         </h2>
         <ShinyCard className=" xl:col-start-2 xl:col-end-3">
-          <CompanyContactDetails />
+          <Suspense fallback={null}>
+            <CompanyContactDetails />
+          </Suspense>
         </ShinyCard>
         <ShinyCard className="xl:col-start-3 xl:col-end-4">
-          <OfficeHours />
+          <Suspense fallback={null}>
+            <OfficeHours />
+          </Suspense>
         </ShinyCard>
         <ShinyCard className="xl:col-start-4 xl:col-end-5">
-          <PostalAddress />
+          <Suspense fallback={null}>
+            <PostalAddress />
+          </Suspense>
         </ShinyCard>
       </section>
     </>

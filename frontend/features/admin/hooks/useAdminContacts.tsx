@@ -24,7 +24,8 @@ export function useAdminContacts() {
     },
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({ queryKey: qk.contacts.list });
-      const previous = queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
+      const previous =
+        queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
       queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
         old.map((c) => (c.id === id ? { ...c, verified: true } : c))
       );
@@ -71,7 +72,8 @@ export function useAdminContacts() {
         onAction: () => unverifyMutation.mutate(String(id)),
       });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
   });
 
   const deleteMutation = useMutation({
@@ -81,7 +83,8 @@ export function useAdminContacts() {
     },
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({ queryKey: qk.contacts.list });
-      const previous = queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
+      const previous =
+        queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
       queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
         old.filter((c) => c.id !== id)
       );
@@ -118,7 +121,8 @@ export function useAdminContacts() {
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({ title: "Contact deleted", variant: "success" });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
   });
 
   // mutation to undo verify
@@ -128,7 +132,8 @@ export function useAdminContacts() {
     },
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({ queryKey: qk.contacts.list });
-      const previous = queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
+      const previous =
+        queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
       queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
         old.map((c) => (c.id === id ? { ...c, verified: false } : c))
       );
@@ -140,7 +145,8 @@ export function useAdminContacts() {
       }
       toast.open({ title: "Undo failed", variant: "error" });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
   });
 
   const updateMutation = useMutation({
@@ -155,7 +161,8 @@ export function useAdminContacts() {
     },
     onMutate: async ({ id, payload }) => {
       await queryClient.cancelQueries({ queryKey: qk.contacts.list });
-      const previous = queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
+      const previous =
+        queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
       queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
         old.map((c) => (c.id === id ? { ...c, ...payload } : c))
       );
@@ -188,7 +195,8 @@ export function useAdminContacts() {
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({ title: "Contact updated", variant: "success" });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
   });
 
   return { query, verifyMutation, deleteMutation, updateMutation };
