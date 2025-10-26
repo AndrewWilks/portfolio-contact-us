@@ -169,52 +169,55 @@ const HeroText: React.FC<HeroTextProps> = ({
   );
 
   const renderTag = () => {
-    const style: React.CSSProperties = {
-      textAlign,
-      wordWrap: "break-word",
-      willChange: "transform, opacity",
-    };
-    const classes = `split-parent overflow-hidden inline-block whitespace-normal ${className}`;
+    const alignClass =
+      textAlign === "left"
+        ? "text-left"
+        : textAlign === "right"
+        ? "text-right"
+        : textAlign === "justify"
+        ? "text-justify"
+        : "text-center";
+    const classes = `split-parent overflow-hidden inline-block whitespace-normal break-words [will-change:transform,opacity] ${alignClass} ${className}`;
     switch (tag) {
       case "h1":
         return (
-          <h1 ref={ref} style={style} className={classes}>
+          <h1 ref={ref} className={classes}>
             {text}
           </h1>
         );
       case "h2":
         return (
-          <h2 ref={ref} style={style} className={classes}>
+          <h2 ref={ref} className={classes}>
             {text}
           </h2>
         );
       case "h3":
         return (
-          <h3 ref={ref} style={style} className={classes}>
+          <h3 ref={ref} className={classes}>
             {text}
           </h3>
         );
       case "h4":
         return (
-          <h4 ref={ref} style={style} className={classes}>
+          <h4 ref={ref} className={classes}>
             {text}
           </h4>
         );
       case "h5":
         return (
-          <h5 ref={ref} style={style} className={classes}>
+          <h5 ref={ref} className={classes}>
             {text}
           </h5>
         );
       case "h6":
         return (
-          <h6 ref={ref} style={style} className={classes}>
+          <h6 ref={ref} className={classes}>
             {text}
           </h6>
         );
       default:
         return (
-          <p ref={ref} style={style} className={classes}>
+          <p ref={ref} className={classes}>
             {text}
           </p>
         );

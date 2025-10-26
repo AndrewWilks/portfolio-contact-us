@@ -119,9 +119,11 @@ Use this checklist as the source of truth. I will update it as items start/compl
   - [x] Wire `onBeforeClose` in `ContactDetailsSidebar` and remove local swipe logic
 - [ ] Phase 1 — Quick wins
   - [x] Remove duplicate `useSwipeClose` file/imports
-  - [ ] Replace inline styles in `pages/admin/index.tsx`
-  - [ ] Reduce inline styles in `HeroText.tsx` and `ShinyCard.tsx` where trivial
-  - [ ] Normalize ARIA attributes in `shared/ui/Primitives/Button.tsx`
+  - [x] Replace inline styles in `pages/admin/index.tsx` (retain necessary dynamic transform)
+  - [ ] Reduce inline styles where trivial
+    - [x] `HeroText.tsx` (align + will-change via Tailwind)
+    - [ ] `ShinyCard.tsx` (most inline styles are required for effect)
+  - [x] Normalize ARIA attributes in `shared/ui/Primitives/Button.tsx`
 - [ ] Phase 2 — Lazy-load heavier visuals
   - [ ] Dynamic-import GSAP within effects or lazy-load wrappers
   - [ ] Lazy-load `ShinyCard` where not above-the-fold

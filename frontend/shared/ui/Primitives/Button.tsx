@@ -125,7 +125,7 @@ export function Button({
   return (
     <button
       type={buttonType}
-      aria-busy={loading || undefined}
+      aria-busy={loading ? "true" : undefined}
       disabled={isDisabled}
       className={`${base} ${sizeStyles} ${styles} ${
         isDisabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
@@ -136,7 +136,7 @@ export function Button({
       {loading ? <Spinner className={`${spinnerSize} text-current`} /> : null}
       {children && (
         <span
-          aria-hidden={loading || undefined}
+          aria-hidden={loading ? "true" : undefined}
           className={`leading-none h-fit ${spanPadding} ${textSize}`}
         >
           {children}
