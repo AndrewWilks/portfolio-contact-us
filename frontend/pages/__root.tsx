@@ -1,8 +1,9 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { Link, createRootRoute, Outlet } from "@tanstack/react-router";
 import Header from "@blocks/Header.tsx";
 import Footer from "@blocks/Footer.tsx";
 import { useLayoutEffect, useRef, useState } from "react";
 import Spinner from "@ui/Primitives/Spinner.tsx";
+import { TriangleAlert, SearchX, ArrowLeft } from "lucide-react";
 
 const RootLayout = () => {
   const mainRef = useRef<HTMLDivElement>(null);
@@ -51,9 +52,44 @@ const ErrorBoundary = ({ error }: { error: unknown }) => {
   const message = error instanceof Error ? error.message : String(error);
   return (
     <div className="container mx-auto p-4">
-      <div className="rounded-md border border-red-300 bg-red-50 text-red-800 p-4">
-        <h2 className="font-semibold mb-1">Something went wrong</h2>
-        <pre className="whitespace-pre-wrap text-sm">{message}</pre>
+      <div className="rounded-lg border border-red-200 bg-red-50 text-red-800 p-6 flex gap-4 items-start">
+        <TriangleAlert className="w-6 h-6 mt-1 shrink-0" />
+        <div>
+          <h2 className="font-semibold mb-1 text-red-900">Something went wrong</h2>
+          <pre className="whitespace-pre-wrap text-sm opacity-90">{message}</pre>
+          <div className="mt-4">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 rounded-md bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 px-4 py-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to home
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const NotFound = () => {
+  return (
+    <div className="container mx-auto p-8">
+      <div className="mx-auto max-w-lg text-center">
+        <SearchX className="w-12 h-12 mx-auto text-gray-400" />
+        <h1 className="mt-4 text-2xl font-semibold">Page not found</h1>
+        <p className="mt-2 text-gray-500">
+          The page you’re looking for doesn’t exist or may have moved.
+        </p>
+        <div className="mt-6">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:hover:bg-blue-500 px-4 py-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Go to home
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -63,4 +99,5 @@ export const Route = createRootRoute({
   component: RootLayout,
   pendingComponent: Pending,
   errorComponent: ErrorBoundary,
+  notFoundComponent: NotFound,
 });
