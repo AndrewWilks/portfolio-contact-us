@@ -118,7 +118,7 @@ Use this checklist as the source of truth. I will update it as items start/compl
   - [x] Ensure animation parity and delayed unmount on close
   - [x] Wire `onBeforeClose` in `ContactDetailsSidebar` and remove local swipe logic
 - [ ] Phase 1 — Quick wins
-  - [ ] Remove duplicate `useSwipeClose` file/imports
+  - [x] Remove duplicate `useSwipeClose` file/imports
   - [ ] Replace inline styles in `pages/admin/index.tsx`
   - [ ] Reduce inline styles in `HeroText.tsx` and `ShinyCard.tsx` where trivial
   - [ ] Normalize ARIA attributes in `shared/ui/Primitives/Button.tsx`

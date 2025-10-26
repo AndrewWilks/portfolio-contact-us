@@ -6,7 +6,6 @@ import { ContactCreateSchema } from "@shared/schema";
 import Button from "@ui/Primitives/Button.tsx";
 import TextField from "@ui/Fields/TextField.tsx";
 import { CheckCheck } from "lucide-react";
-import useSwipeClose from "@hooks/useSwipeClose.ts";
 import { useConfirmContext } from "@ui/ConfirmDialog.tsx";
 import TextAreaField from "@ui/Fields/TextFieldArea.tsx";
 import Drawer from "@ui/Overlays/Drawer.tsx";
@@ -221,11 +220,6 @@ export default function ContactDetailsSidebarBlock({
     if (ok) onRequestClose();
   }, [confirmClose, onRequestClose]);
 
-  // Attach swipe handler via the hook
-  useSwipeClose(panelRef, {
-    threshold: 80,
-    onCloseAttempt: () => void handleCloseAttempt(),
-  });
   if (!contact) return null;
 
   const isEditable = !contact.verified;
