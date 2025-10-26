@@ -1,9 +1,9 @@
-import { Link, createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import Header from "@blocks/Header.tsx";
 import Footer from "@blocks/Footer.tsx";
 import { useLayoutEffect, useRef, useState } from "react";
 import Spinner from "@ui/Primitives/Spinner.tsx";
-import { TriangleAlert, SearchX, ArrowLeft } from "lucide-react";
+import { ArrowLeft, SearchX, TriangleAlert } from "lucide-react";
 
 const RootLayout = () => {
   const mainRef = useRef<HTMLDivElement>(null);

@@ -16,8 +16,8 @@ function AdminContacts() {
   const [selected, setSelected] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const selectedContact =
-    (query.data ?? []).find((c) => c.id === selected) ?? null;
+  const selectedContact = (query.data ?? []).find((c) => c.id === selected) ??
+    null;
 
   const data = query.data ?? [];
 
@@ -40,7 +40,7 @@ function AdminContacts() {
   const GAP = 16; // px
   const itemsPerRow = Math.max(
     1,
-    Math.floor((containerWidth + GAP) / (MIN_CARD_WIDTH + GAP))
+    Math.floor((containerWidth + GAP) / (MIN_CARD_WIDTH + GAP)),
   );
   const rowCount = Math.ceil(data.length / itemsPerRow);
 
@@ -83,7 +83,8 @@ function AdminContacts() {
                 <div
                   className="grid gap-4"
                   style={{
-                    gridTemplateColumns: `repeat(${itemsPerRow}, minmax(0, 1fr))`,
+                    gridTemplateColumns:
+                      `repeat(${itemsPerRow}, minmax(0, 1fr))`,
                   }}
                 >
                   {rowItems.map((contact) => (
