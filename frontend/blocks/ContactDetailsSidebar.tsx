@@ -9,6 +9,7 @@ import TextField from "@ui/Fields/TextField.tsx";
 import { CheckCheck } from "lucide-react";
 import useSwipeClose from "../hooks/useSwipeClose.ts";
 import { useConfirmContext } from "@ui/ConfirmDialog.tsx";
+import TextAreaField from "@ui/Fields/TextFieldArea.tsx";
 
 type ContactRow = {
   id: string;
@@ -84,7 +85,7 @@ export default function ContactDetailsSidebarBlock({
       tl.to(
         overlayRef.current,
         { opacity: 1, duration: 0.28, pointerEvents: "auto" },
-        0,
+        0
       );
       tl.to(panelRef.current, { xPercent: 0, duration: 0.36 }, 0);
 
@@ -96,7 +97,7 @@ export default function ContactDetailsSidebarBlock({
           void err;
         }
         const first = panelRef.current?.querySelector<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
         if (first) first.focus();
       });
@@ -116,7 +117,7 @@ export default function ContactDetailsSidebarBlock({
       out.to(
         overlayRef.current,
         { opacity: 0, duration: 0.28, pointerEvents: "none" },
-        "-=-0.2",
+        "-=-0.2"
       );
       out.eventCallback("onComplete", () => {
         setPanelState("closed");
@@ -146,7 +147,7 @@ export default function ContactDetailsSidebarBlock({
     async (data: ContactCreate) => {
       await onSave(contact!.id, data);
     },
-    [contact, onSave],
+    [contact, onSave]
   );
 
   const performSaveAndClose = useCallback(
@@ -154,17 +155,17 @@ export default function ContactDetailsSidebarBlock({
       await onSave(contact!.id, data);
       onRequestClose();
     },
-    [contact, onSave, onRequestClose],
+    [contact, onSave, onRequestClose]
   );
 
   const submit = async (data: ContactCreate) => {
     const ok = confirmCtx
       ? await confirmCtx.confirm("Save changes?", {
-        title: "Save changes",
-        description: "Save changes to this contact?",
-        confirmText: "Save",
-        cancelText: "Cancel",
-      })
+          title: "Save changes",
+          description: "Save changes to this contact?",
+          confirmText: "Save",
+          cancelText: "Cancel",
+        })
       : Promise.resolve(globalThis.confirm("Save changes?"));
     if (!ok) return;
     await performSaveOnly(data);
@@ -175,35 +176,35 @@ export default function ContactDetailsSidebarBlock({
       reset(
         contact
           ? {
+              firstName: contact.firstName ?? "",
+              lastName: contact.lastName ?? "",
+              email: contact.email ?? "",
+              phone: contact.phone ?? undefined,
+              message: contact.message ?? undefined,
+            }
+          : undefined
+      );
+      return;
+    }
+    const ok = confirmCtx
+      ? await confirmCtx.confirm("Discard changes?", {
+          title: "Discard changes",
+          description: "You have unsaved changes. Discard them?",
+          confirmText: "Discard",
+          cancelText: "Cancel",
+        })
+      : Promise.resolve(globalThis.confirm("Discard changes?"));
+    if (!ok) return;
+    reset(
+      contact
+        ? {
             firstName: contact.firstName ?? "",
             lastName: contact.lastName ?? "",
             email: contact.email ?? "",
             phone: contact.phone ?? undefined,
             message: contact.message ?? undefined,
           }
-          : undefined,
-      );
-      return;
-    }
-    const ok = confirmCtx
-      ? await confirmCtx.confirm("Discard changes?", {
-        title: "Discard changes",
-        description: "You have unsaved changes. Discard them?",
-        confirmText: "Discard",
-        cancelText: "Cancel",
-      })
-      : Promise.resolve(globalThis.confirm("Discard changes?"));
-    if (!ok) return;
-    reset(
-      contact
-        ? {
-          firstName: contact.firstName ?? "",
-          lastName: contact.lastName ?? "",
-          email: contact.email ?? "",
-          phone: contact.phone ?? undefined,
-          message: contact.message ?? undefined,
-        }
-        : undefined,
+        : undefined
     );
   };
 
@@ -216,7 +217,7 @@ export default function ContactDetailsSidebarBlock({
 
     if (confirmCtx?.confirmThreeWay) {
       const res = await confirmCtx.confirmThreeWay(
-        "You have unsaved changes. Save before closing?",
+        "You have unsaved changes. Save before closing?"
       );
       if (res === "save") {
         const valid = await trigger();
@@ -229,13 +230,13 @@ export default function ContactDetailsSidebarBlock({
         reset(
           contact
             ? {
-              firstName: contact.firstName ?? "",
-              lastName: contact.lastName ?? "",
-              email: contact.email ?? "",
-              phone: contact.phone ?? undefined,
-              message: contact.message ?? undefined,
-            }
-            : undefined,
+                firstName: contact.firstName ?? "",
+                lastName: contact.lastName ?? "",
+                email: contact.email ?? "",
+                phone: contact.phone ?? undefined,
+                message: contact.message ?? undefined,
+              }
+            : undefined
         );
         onRequestClose();
         return;
@@ -258,13 +259,13 @@ export default function ContactDetailsSidebarBlock({
       reset(
         contact
           ? {
-            firstName: contact.firstName ?? "",
-            lastName: contact.lastName ?? "",
-            email: contact.email ?? "",
-            phone: contact.phone ?? undefined,
-            message: contact.message ?? undefined,
-          }
-          : undefined,
+              firstName: contact.firstName ?? "",
+              lastName: contact.lastName ?? "",
+              email: contact.email ?? "",
+              phone: contact.phone ?? undefined,
+              message: contact.message ?? undefined,
+            }
+          : undefined
       );
       onRequestClose();
     }
@@ -300,18 +301,18 @@ export default function ContactDetailsSidebarBlock({
       const selector =
         'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
       const nodeList = Array.from(
-        panel.querySelectorAll<HTMLElement>(selector),
+        panel.querySelectorAll<HTMLElement>(selector)
       );
       const focusable = nodeList.filter(
         (el) =>
-          !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length),
+          !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length)
       );
       if (focusable.length === 0) {
         e.preventDefault();
         return;
       }
       const currentIndex = focusable.indexOf(
-        document.activeElement as HTMLElement,
+        document.activeElement as HTMLElement
       );
       if (e.shiftKey) {
         if (currentIndex === 0 || document.activeElement === panel) {
@@ -366,7 +367,11 @@ export default function ContactDetailsSidebarBlock({
         </div>
 
         <div className="px-4 py-3 overflow-auto">
-          <form onSubmit={handleSubmit(submit)} noValidate>
+          <form
+            onSubmit={handleSubmit(submit)}
+            noValidate
+            className="flex flex-col gap-4"
+          >
             <TextField
               label="First name"
               {...register("firstName")}
@@ -392,65 +397,51 @@ export default function ContactDetailsSidebarBlock({
               error={errors.phone?.message}
               disabled={!isEditable}
             />
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-(--text) mb-1">
-                Message
-              </label>
-              <textarea
-                {...register("message")}
-                className="w-full border rounded px-3 py-2 bg-(--card) text-(--text) border-(--border)"
-                rows={6}
-                disabled={!isEditable}
-              />
-              {errors.message
-                ? (
-                  <p className="mt-1 text-sm text-(--danger)">
-                    {errors.message.message}
-                  </p>
-                )
-                : null}
-            </div>
+
+            <TextAreaField
+              {...register("message")}
+              rows={6}
+              disabled={!isEditable}
+              label="Message"
+              error={errors.message?.message}
+            />
           </form>
         </div>
 
         <div className="p-3 border-t border-(--border) bg-(--card)">
           <div className="flex justify-end gap-2">
-            {isEditable
-              ? (
-                <>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={() => void handleDiscard()}
-                    disabled={!isDirty}
-                    title={isDirty
-                      ? "Discard changes"
-                      : "No changes to discard"}
-                  >
-                    Discard
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={handleSubmit(submit)}
-                    loading={_isSubmitting}
-                    variant="primary"
-                    disabled={!isDirty}
-                    title={isDirty ? "Save changes" : "No changes to save"}
-                  >
-                    Save
-                  </Button>
-                </>
-              )
-              : (
-                <div className="text-sm text-(--muted) self-center flex items-center gap-1">
-                  <CheckCheck
-                    size={16}
-                    className="text-green-500 dark:text-green-300 mr-1"
-                  />
-                  <span className="font-medium">Verified</span>
-                  <span className="text-xs">| Read Only</span>
-                </div>
-              )}
+            {isEditable ? (
+              <>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => void handleDiscard()}
+                  disabled={!isDirty}
+                  title={isDirty ? "Discard changes" : "No changes to discard"}
+                >
+                  Discard
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleSubmit(submit)}
+                  loading={_isSubmitting}
+                  variant="primary"
+                  disabled={!isDirty}
+                  title={isDirty ? "Save changes" : "No changes to save"}
+                >
+                  Save
+                </Button>
+              </>
+            ) : (
+              <div className="text-sm text-(--muted) self-center flex items-center gap-1">
+                <CheckCheck
+                  size={16}
+                  className="text-green-500 dark:text-green-300 mr-1"
+                />
+                <span className="font-medium">Verified</span>
+                <span className="text-xs">| Read Only</span>
+              </div>
+            )}
           </div>
         </div>
       </aside>
