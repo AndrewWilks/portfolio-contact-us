@@ -73,18 +73,37 @@
     "dev:api": "deno --allow-ffi --allow-env --env-file=./.env --allow-net ./backend/server.ts",
     "dev:ui": "deno -A --env-file=./.env npm:vite --config ./.config/vite.config.ts",
     "build": "deno -A --env-file=./.env npm:vite build --config ./.config/vite.config.ts",
-    "test": "deno test --allow-all --env-file=./.env --no-check backend/__tests__ shared/__tests__ frontend/__tests__",
+    "test": "deno test --allow-all --env-file=./.env --no-check",
     "lint": "deno lint",
     "format": "deno fmt",
     "spell:check": "deno run -A npm:cspell@^9.2.2 \"backend/**/*.{ts,tsx}\" \"shared/**/*.{ts,tsx}\" \"frontend/**/*.{ts,tsx}\" --config ./.config/.cspell.json"
   },
+  "test": {
+    "files": {
+      "include": [
+        "./backend/__tests__",
+        "./frontend/__tests__",
+        "./shared/__tests__"
+      ],
+      "exclude": [
+        "./frontend/routeTree.gen.ts",
+        "./frontend/routeTree.imports.d.ts"
+      ]
+    }
+  },
   "compilerOptions": {
-    "types": [],
+    "types": ["npm:@types/node"],
     "lib": ["dom", "dom.iterable", "deno.ns"],
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   },
   "lint": {
     "exclude": ["./frontend/routeTree.gen.ts"]
+  },
+  "check": {
+    "exclude": [
+      "./frontend/routeTree.gen.ts",
+      "./frontend/routeTree.imports.d.ts"
+    ]
   }
 }

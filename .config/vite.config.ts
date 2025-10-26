@@ -27,8 +27,8 @@ export default defineConfig(({ command }) => ({
     tanstackRouter({
       target: "react",
       autoCodeSplitting: true,
-      routesDirectory: "./frontend/pages",
-      generatedRouteTree: "./frontend/routeTree.gen.ts",
+      routesDirectory: "./pages",
+      generatedRouteTree: "./routeTree.gen.ts",
       routeFileIgnorePrefix: "-",
       quoteStyle: "single",
     }),
@@ -48,31 +48,31 @@ export default defineConfig(({ command }) => ({
     alias: {
       "@ui": path.resolve(
         fileURLToPath(new URL(".", import.meta.url)),
-        "../frontend/shared/ui",
+        "../frontend/shared/ui"
       ),
       "@blocks": path.resolve(
         fileURLToPath(new URL(".", import.meta.url)),
-        "../frontend/shared/blocks",
+        "../frontend/shared/blocks"
       ),
       "@features": path.resolve(
         fileURLToPath(new URL(".", import.meta.url)),
-        "../frontend/features",
+        "../frontend/features"
       ),
       "@hooks": path.resolve(
         fileURLToPath(new URL(".", import.meta.url)),
-        "../frontend/hooks",
+        "../frontend/hooks"
       ),
       "@pages": path.resolve(
         fileURLToPath(new URL(".", import.meta.url)),
-        "../frontend/pages",
+        "../frontend/pages"
       ),
       "@contexts": path.resolve(
         fileURLToPath(new URL(".", import.meta.url)),
-        "../frontend/contexts",
+        "../frontend/contexts"
       ),
       "@shared/schema": path.resolve(
         fileURLToPath(new URL(".", import.meta.url)),
-        "../shared/schema/index.ts",
+        "../shared/schema/index.ts"
       ),
     },
   },

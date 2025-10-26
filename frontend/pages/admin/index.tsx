@@ -6,7 +6,7 @@ import { useAdminContacts } from "@features/admin/hooks/useAdminContacts.tsx";
 import { useConfirm } from "@hooks/useConfirm.tsx";
 import ContactRow from "@features/admin/components/ContactRow.tsx";
 const ContactDetailsSidebar = lazy(
-  () => import("@blocks/ContactDetailsSidebar.tsx"),
+  () => import("@blocks/ContactDetailsSidebar.tsx")
 );
 
 export const Route = createFileRoute("/admin/")({ component: AdminContacts });
@@ -18,8 +18,8 @@ function AdminContacts() {
   const [selected, setSelected] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const selectedContact = (query.data ?? []).find((c) => c.id === selected) ??
-    null;
+  const selectedContact =
+    (query.data ?? []).find((c) => c.id === selected) ?? null;
 
   const data = query.data ?? [];
 

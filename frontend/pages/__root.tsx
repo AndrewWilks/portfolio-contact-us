@@ -55,8 +55,12 @@ const ErrorBoundary = ({ error }: { error: unknown }) => {
       <div className="rounded-lg border border-red-200 bg-red-50 text-red-800 p-6 flex gap-4 items-start">
         <TriangleAlert className="w-6 h-6 mt-1 shrink-0" />
         <div>
-          <h2 className="font-semibold mb-1 text-red-900">Something went wrong</h2>
-          <pre className="whitespace-pre-wrap text-sm opacity-90">{message}</pre>
+          <h2 className="font-semibold mb-1 text-red-900">
+            Something went wrong
+          </h2>
+          <pre className="whitespace-pre-wrap text-sm opacity-90">
+            {message}
+          </pre>
           <div className="mt-4">
             <Link
               to="/"
