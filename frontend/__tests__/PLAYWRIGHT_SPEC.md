@@ -1,6 +1,8 @@
 # Playwright E2E Test Plan (Demo)
 
-This plan outlines a minimal but representative end-to-end test suite for the frontend to demonstrate Playwright proficiency while keeping scope simple. All tests will live under `frontend/__tests__/` as requested.
+This plan outlines a minimal but representative end-to-end test suite for the
+frontend to demonstrate Playwright proficiency while keeping scope simple. All
+tests will live under `frontend/__tests__/` as requested.
 
 ## Goals
 
@@ -16,9 +18,13 @@ This plan outlines a minimal but representative end-to-end test suite for the fr
   - UI: `deno task dev:ui` (Vite dev server)
 - Base URL for tests: `http://localhost:<FRONTEND_PORT>`
   - Default inferred from `.config/frontend.config.ts` via Vite config
-  - For the test runner, we'll allow overriding via `PLAYWRIGHT_BASE_URL` env; fallback to `http://localhost:5174` if unknown
-- Test data: The Admin page should have some contacts to render. If empty, Admin tests will still assert layout scaffolding (heading present), and conditionally skip row-specific assertions.
-- Browsers: Chromium only for the demo (can easily expand to Firefox/WebKit later)
+  - For the test runner, we'll allow overriding via `PLAYWRIGHT_BASE_URL` env;
+    fallback to `http://localhost:5174` if unknown
+- Test data: The Admin page should have some contacts to render. If empty, Admin
+  tests will still assert layout scaffolding (heading present), and
+  conditionally skip row-specific assertions.
+- Browsers: Chromium only for the demo (can easily expand to Firefox/WebKit
+  later)
 
 ## Test matrix (initial)
 
@@ -63,8 +69,10 @@ This plan outlines a minimal but representative end-to-end test suite for the fr
 6. Theme toggle presence (light touch)
 
 - Assert theme toggle dropdown or switch is present in header
-- If implemented as a toggle: click it and assert `document.documentElement` or `body` theme attribute changes
-  - Keep this simple and resilient: we only check attribute presence flips; no snapshot
+- If implemented as a toggle: click it and assert `document.documentElement` or
+  `body` theme attribute changes
+  - Keep this simple and resilient: we only check attribute presence flips; no
+    snapshot
 
 ## File layout
 
@@ -80,11 +88,13 @@ This plan outlines a minimal but representative end-to-end test suite for the fr
 
 - Add `playwright.config.ts` at repo root (or frontend/) configured to:
   - `testDir: './frontend/__tests__'`
-  - `use.baseURL` -> from `process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:5174'`
+  - `use.baseURL` -> from
+    `process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:5174'`
   - `projects: [{ name: 'chromium', use: { browserName: 'chromium' } }]`
   - `use.viewport: { width: 1280, height: 800 }`
   - `timeout: 30_000` (per test)
-- Add npm/Deno tasks to run: `playwright test` (we’ll choose the simplest viable path in this repo)
+- Add npm/Deno tasks to run: `playwright test` (we’ll choose the simplest viable
+  path in this repo)
 
 ## Data and selectors
 
@@ -94,8 +104,10 @@ This plan outlines a minimal but representative end-to-end test suite for the fr
 
 ## Risks & mitigations
 
-- Backend data variability: admin grid might be empty -> handle both states; assert layout and skip row-specific checks when no data
-- Animations and async loaders: use Playwright auto-waits and explicit waits on key text/role; avoid fixed timeouts
+- Backend data variability: admin grid might be empty -> handle both states;
+  assert layout and skip row-specific checks when no data
+- Animations and async loaders: use Playwright auto-waits and explicit waits on
+  key text/role; avoid fixed timeouts
 - CI ports: allow overriding baseURL via env to match CI’s dev server port
 
 ## Minimal run instructions (to be automated later)

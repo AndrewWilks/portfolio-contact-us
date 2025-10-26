@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Contact form", () => {
   test("validates and submits successfully", async ({ page }) => {
@@ -23,7 +23,7 @@ test.describe("Contact form", () => {
     // Expect validation for last name and email
     await expect(page.getByText("Last name is required.")).toBeVisible();
     await expect(
-      page.getByText("Please enter a valid email address.")
+      page.getByText("Please enter a valid email address."),
     ).toBeVisible();
 
     // Fix inputs (form becomes valid)
@@ -32,7 +32,7 @@ test.describe("Contact form", () => {
 
     // Button should now be enabled; we keep this test focused on validation
     await expect(
-      page.getByRole("button", { name: "Send message" })
+      page.getByRole("button", { name: "Send message" }),
     ).toBeEnabled();
   });
 });

@@ -1,11 +1,11 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Admin contacts", () => {
   test("grid renders and sidebar opens/closes", async ({ page }) => {
     await page.goto("/admin");
 
     await expect(
-      page.getByRole("heading", { name: "Admin - Contacts" })
+      page.getByRole("heading", { name: "Admin - Contacts" }),
     ).toBeVisible();
 
     // Try to open a contact if available; otherwise, pass gracefully

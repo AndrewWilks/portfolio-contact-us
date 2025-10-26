@@ -4,8 +4,7 @@ import { loadConfig } from "@config/frontend";
 const _config = loadConfig();
 
 // Base URL can be overridden via env var to match local/CI port
-const baseURL =
-  Deno.env.get("PLAYWRIGHT_BASE_URL") ||
+const baseURL = Deno.env.get("PLAYWRIGHT_BASE_URL") ||
   `http://localhost:${_config.FRONTEND_PORT}`;
 
 const config: PlaywrightTestConfig = {

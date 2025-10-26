@@ -1,11 +1,11 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Home page", () => {
   test("loads core content and navigation", async ({ page }) => {
     await page.goto("/");
 
     await expect(
-      page.getByRole("heading", { name: "Welcome to" })
+      page.getByRole("heading", { name: "Welcome to" }),
     ).toBeVisible();
     await expect(page.getByText("OpenAgent")).toBeVisible();
 
@@ -16,7 +16,7 @@ test.describe("Home page", () => {
 
     // Footer owner
     await expect(
-      page.getByRole("link", { name: "Andrew Wilks" })
+      page.getByRole("link", { name: "Andrew Wilks" }),
     ).toBeVisible();
   });
 });
