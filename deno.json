@@ -16,7 +16,6 @@
     "@features/": "./frontend/features/",
     "@blocks/": "./frontend/shared/blocks/",
     "@hooks/": "./frontend/hooks/",
-    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.16",
     "@ui/": "./frontend/shared/ui/",
 
     // Shared modules
@@ -60,6 +59,7 @@
     "@libsql/client": "npm:@libsql/client@^0.15.15",
     "zod": "npm:zod@^4.1.12",
     "tailwindcss": "npm:tailwindcss@^4.1.16",
+    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.16",
     "autoprefixer": "npm:autoprefixer@^10.4.21",
     "postcss": "npm:postcss@^8.5.6",
     "@types/node": "npm:@types/node@^24.2.0",
@@ -75,6 +75,7 @@
     "build": "deno -A --env-file=./.env npm:vite build --config ./.config/vite.config.ts",
     "test": "deno test --allow-all --env-file=./.env --no-check",
     "lint": "deno lint",
+    "check": "deno check --sloppy-imports ./.config/vite.config.ts ./backend/server.ts ./frontend/main.tsx",
     "format": "deno fmt",
     "spell:check": "deno run -A npm:cspell@^9.2.2 \"backend/**/*.{ts,tsx}\" \"shared/**/*.{ts,tsx}\" \"frontend/**/*.{ts,tsx}\" --config ./.config/.cspell.json"
   },
