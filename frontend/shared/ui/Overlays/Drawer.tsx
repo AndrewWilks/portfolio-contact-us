@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import gsap from "gsap";
 
 type DrawerProps = {
@@ -47,8 +53,16 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
 
   const animateBackToOpen = useCallback(() => {
     if (!overlayRef.current || !panelRef.current) return;
-    gsap.to(panelRef.current, { xPercent: 0, duration: 0.25, ease: "power2.out" });
-    gsap.to(overlayRef.current, { opacity: 1, duration: 0.2, ease: "power2.out" });
+    gsap.to(panelRef.current, {
+      xPercent: 0,
+      duration: 0.25,
+      ease: "power2.out",
+    });
+    gsap.to(overlayRef.current, {
+      opacity: 1,
+      duration: 0.2,
+      ease: "power2.out",
+    });
   }, []);
 
   const attemptClose = useCallback(async () => {
@@ -225,7 +239,9 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
       const dt = Math.max(1, performance.now() - startT); // ms
       const velocity = dx / dt; // px per ms
       const percent = Math.min(100, (dx / width) * 100);
-      const shouldClose = percent >= (swipeThresholdPx / width) * 100 || velocity >= swipeCancelVelocity;
+      const shouldClose =
+        percent >= (swipeThresholdPx / width) * 100 ||
+        velocity >= swipeCancelVelocity;
       if (shouldClose) {
         void attemptClose();
       } else {
@@ -245,7 +261,15 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
       panel.removeEventListener("pointercancel", onPointerUp);
       panel.removeEventListener("pointerleave", onPointerUp);
     };
-  }, [mounted, enableSwipe, swipeThresholdPx, swipeCancelVelocity, state, animateBackToOpen, attemptClose]);
+  }, [
+    mounted,
+    enableSwipe,
+    swipeThresholdPx,
+    swipeCancelVelocity,
+    state,
+    animateBackToOpen,
+    attemptClose,
+  ]);
 
   if (!mounted) return null;
 

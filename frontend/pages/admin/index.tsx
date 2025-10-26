@@ -44,24 +44,16 @@ function AdminContacts() {
       <h2 className="text-2xl font-semibold mb-4">Admin - Contacts</h2>
       <div ref={parentRef} className="overflow-auto h-[calc(100vh-8rem)]">
         <div
-          style={{
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            position: "relative",
-          }}
+          className="relative"
+          style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
         >
           {virtualItems.map((virtualRow: VirtualItem) => {
             const contact = data[virtualRow.index];
             return (
               <div
                 key={contact.id}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  transform: `translateY(${virtualRow.start}px)`,
-                }}
-                className="px-2 pb-2"
+                className="absolute top-0 left-0 w-full px-2 pb-2"
+                style={{ transform: `translateY(${virtualRow.start}px)` }}
               >
                 <ContactRow
                   contact={contact}
