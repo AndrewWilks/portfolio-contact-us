@@ -1,5 +1,4 @@
 import { defineConfig } from "vite";
-import process from "node:process";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import deno from "@deno/vite-plugin";
@@ -10,7 +9,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   server: {
     port: frontend.FRONTEND_PORT,
     proxy: {
@@ -22,8 +21,8 @@ export default defineConfig({
     },
   },
   plugins: [
-    // Allow toggling the Deno plugin to isolate resolver issues
-    ...(process?.env?.ENABLE_DENO_PLUGIN === "false" ? [] : [deno()]),
+    // Disable Deno plugin during production build to avoid resolver crash
+    ...(command === "build" ? [] : [deno()]),
     // Generate typed routes relative to Vite root
     tanstackRouter({
       target: "react",
@@ -47,13 +46,34 @@ export default defineConfig({
   root: "frontend",
   resolve: {
     alias: {
-      "@ui": path.resolve(fileURLToPath(new URL(".", import.meta.url)), "../frontend/shared/ui"),
-      "@blocks": path.resolve(fileURLToPath(new URL(".", import.meta.url)), "../frontend/shared/blocks"),
-      "@features": path.resolve(fileURLToPath(new URL(".", import.meta.url)), "../frontend/features"),
-  "@hooks": path.resolve(fileURLToPath(new URL(".", import.meta.url)), "../frontend/hooks"),
-      "@pages": path.resolve(fileURLToPath(new URL(".", import.meta.url)), "../frontend/pages"),
-      "@contexts": path.resolve(fileURLToPath(new URL(".", import.meta.url)), "../frontend/contexts"),
-      "@shared/schema": path.resolve(fileURLToPath(new URL(".", import.meta.url)), "../shared/schema/index.ts"),
+      "@ui": path.resolve(
+        fileURLToPath(new URL(".", import.meta.url)),
+        "../frontend/shared/ui"
+      ),
+      "@blocks": path.resolve(
+        fileURLToPath(new URL(".", import.meta.url)),
+        "../frontend/shared/blocks"
+      ),
+      "@features": path.resolve(
+        fileURLToPath(new URL(".", import.meta.url)),
+        "../frontend/features"
+      ),
+      "@hooks": path.resolve(
+        fileURLToPath(new URL(".", import.meta.url)),
+        "../frontend/hooks"
+      ),
+      "@pages": path.resolve(
+        fileURLToPath(new URL(".", import.meta.url)),
+        "../frontend/pages"
+      ),
+      "@contexts": path.resolve(
+        fileURLToPath(new URL(".", import.meta.url)),
+        "../frontend/contexts"
+      ),
+      "@shared/schema": path.resolve(
+        fileURLToPath(new URL(".", import.meta.url)),
+        "../shared/schema/index.ts"
+      ),
     },
   },
-});
+}));
