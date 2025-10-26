@@ -251,7 +251,10 @@ export default function ContactDetailsSidebarBlock({
         </>
       ) : (
         <div className="text-sm text-(--muted) self-center flex items-center gap-1">
-          <CheckCheck size={16} className="text-green-500 dark:text-green-300 mr-1" />
+          <CheckCheck
+            size={16}
+            className="text-green-500 dark:text-green-300 mr-1"
+          />
           <span className="font-medium">Verified</span>
           <span className="text-xs">| Read Only</span>
         </div>
@@ -276,7 +279,11 @@ export default function ContactDetailsSidebarBlock({
       }
       footerSlot={footer}
     >
-      <form onSubmit={handleSubmit(submit)} noValidate className="flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit(submit)}
+        noValidate
+        className="flex flex-col gap-4"
+      >
         <TextField
           label="First name"
           {...register("firstName")}
@@ -312,3 +319,4 @@ export default function ContactDetailsSidebarBlock({
       </form>
     </Drawer>
   );
+}
