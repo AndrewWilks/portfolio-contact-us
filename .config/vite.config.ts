@@ -19,16 +19,19 @@ export default defineConfig({
     },
   },
   plugins: [
+    // Resolve Deno import map specifiers first
+    deno(),
+    // Generate typed routes relative to Vite root
     tanstackRouter({
       target: "react",
       autoCodeSplitting: true,
-      routesDirectory: "./frontend/pages",
-      generatedRouteTree: "./routeTree.gen.ts",
+      routesDirectory: "pages",
+      generatedRouteTree: "routeTree.gen.ts",
       routeFileIgnorePrefix: "-",
       quoteStyle: "single",
     }),
+    // React plugin after Deno + router
     react(),
-    deno(),
     tailwindcss(),
   ],
   css: {
