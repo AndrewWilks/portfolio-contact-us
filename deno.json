@@ -84,17 +84,12 @@
     "e2e:install": "deno run -A npm:playwright@^1.56.1 install chromium"
   },
   "test": {
-    "files": {
-      "include": [
-        "./backend/__tests__",
-        "./frontend/__tests__",
-        "./shared/__tests__"
-      ],
-      "exclude": [
-        "./frontend/routeTree.gen.ts",
-        "./frontend/routeTree.imports.d.ts"
-      ]
-    }
+    "include": ["./backend/__tests__"],
+    "exclude": [
+      "./frontend/__tests__/**",
+      "./frontend/routeTree.gen.ts",
+      "./frontend/routeTree.imports.d.ts"
+    ]
   },
   "compilerOptions": {
     "types": ["npm:@types/node"],
