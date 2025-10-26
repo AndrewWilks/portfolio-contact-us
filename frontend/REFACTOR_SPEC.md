@@ -29,6 +29,8 @@ This is a living spec. I will keep the todo list updated as work progresses so w
 - Contact page blocks are lazy-loaded; Admin’s ContactDetailsSidebar uses a new Drawer.
 - Production build currently fails due to a Deno Vite plugin resolver crash (tracked separately).
 
+Status: Phase 0–2 are complete; commencing Phase 4 — Build/resolver fix.
+
 ## Phases
 
 ### Phase 0 — Drawer swipe, confirm, and animation parity (top priority)
@@ -105,7 +107,7 @@ Acceptance:
 
 Use this checklist as the source of truth. I will update it as items start/complete.
 
-- [ ] Phase 0 — Drawer swipe/confirm/animation
+- [x] Phase 0 — Drawer swipe/confirm/animation
   - [x] Add Drawer API: `onBeforeClose`, `enableSwipe`, `swipeThresholdPx`, `swipeCancelVelocity`
   - [x] Implement interactive swipe (drag, overlay progress, vertical-guard)
   - [x] Release evaluation + unified `attemptClose()` pipeline
@@ -120,11 +122,15 @@ Use this checklist as the source of truth. I will update it as items start/compl
   - [x] Normalize ARIA attributes in `shared/ui/Primitives/Button.tsx`
 - [ ] Phase 2 — Structure polish
   - [x] Add barrels for services/hooks in features
-  - [ ] Add barrels in shared/ui subtrees where useful
+  - [x] Add barrels in shared/ui subtrees where useful
 - [ ] Phase 3 — Route fallbacks (optional)
   - [ ] Add Suspense fallback and error boundary at `__root`
 - [ ] Phase 4 — Build/resolver fix (separate)
-  - [ ] Resolve `@deno/vite-plugin` resolver crash and restore production build
+  - [ ] Reproduce production build failure and capture error output
+  - [ ] Align router paths with Vite root (routesDirectory: `"pages"`, generatedRouteTree: `"routeTree.gen.ts"`)
+  - [ ] Adjust plugin order so `deno()` runs before `react()` (and router plugin if needed)
+  - [ ] Retry production build
+  - [ ] If still failing: bump `@deno/vite-plugin`, or temporarily disable `deno()` to isolate; add `resolve.alias` if needed
 
 ## Completed (for context)
 
