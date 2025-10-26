@@ -5,7 +5,7 @@ export {
   deleteContact,
   getContactById,
   listContacts,
-  verifyContact,
   unverifyContact,
   updateContact,
+  verifyContact,
 } from "./contacts.ts";

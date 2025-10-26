@@ -5,9 +5,9 @@ import {
   createContact,
   deleteContact,
   listContacts,
-  verifyContact,
   unverifyContact,
   updateContact,
+  verifyContact,
 } from "@backend/repos";
 import type { ContactCreate } from "@shared/schema";
 
@@ -21,7 +21,7 @@ import {
 
 // Helper to convert camelCase DTO to snake_case DB insert shape
 function dtoToDb(
-  payload: ContactCreate
+  payload: ContactCreate,
 ): Omit<ContactInsertRow, "id" | "createdAt"> {
   return {
     firstName: payload.firstName,
@@ -61,8 +61,9 @@ export async function createContactHandler(c: Context) {
 export async function listContactsHandler(c: Context) {
   const q = c.req.query("q") || undefined;
   const verifiedParam = c.req.query("verified");
-  const verified =
-    typeof verifiedParam === "string" ? verifiedParam === "true" : undefined;
+  const verified = typeof verifiedParam === "string"
+    ? verifiedParam === "true"
+    : undefined;
 
   const rows = await listContacts();
 
@@ -77,7 +78,7 @@ export async function listContactsHandler(c: Context) {
       (r) =>
         (r.firstName || "").toLowerCase().includes(term) ||
         (r.lastName || "").toLowerCase().includes(term) ||
-        (r.email || "").toLowerCase().includes(term)
+        (r.email || "").toLowerCase().includes(term),
     );
   }
 
