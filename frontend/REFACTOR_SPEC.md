@@ -1,102 +1,96 @@
-# Frontend Refactor Spec
+# Frontend Refactor Spec (phase 2)
 
-This document tracks the agreed frontend refactor. Base app directory is `frontend/`.
+Base app directory is `frontend/`. Goal: improve reuse and SOLID boundaries with minimal, incremental changes and preserved behavior.
 
 ## Goals
 
-- Clarify structure (app, features, shared) and keep it simple.
-- Enforce SOLID boundaries: UI vs hooks vs services.
-- Code-splitting (TanStack Router auto splitting is enabled already). Lazy-load heavy blocks where needed.
-- No behavioral changes. Testing will be handled in a later sprint.
+- Keep routing/providers intact; no behavior changes
+- Increase reuse with tiny shared helpers (API client, query keys, submit helper)
+- Move orchestration to hooks; keep UI presentational
+- Extract a reusable Drawer and keep code-splitting effective
 
-## Target structure
+## Target structure (additions)
 
 - frontend/
-  - app/
-    - providers/ (app-level providers, e.g., ThemeProvider)
-    - router/ (router helpers if needed later)
-  - features/
-    - contact/
-      - components/
-      - hooks/
-      - services/
-      - types/
-    - admin/
-      - components/
-      - hooks/
-      - services/
   - shared/
-    - ui/
-      - Primitives/
-      - Fields/
-      - Toast/
-      - Theme/
-      - Affects/
-      - ConfirmDialog.tsx
-    - blocks/ (Header, Footer, OfficeHours, PostalAddress, ContactDetailsSidebar)
-    - hooks/
-    - contexts/ (reserved — currently keeping ThemeProvider under `contexts/` for compatibility)
-    - assets/
     - lib/
-    - types/
-  - pages/ (unchanged for TanStack Router generator)
-  - public/ (unchanged)
+      - api/client.ts
+      - query/keys.ts
+      - toast/submit.ts
+    - ui/
+      - Overlays/
+        - Drawer.tsx
 
 ## Aliases
 
-- Keep using Deno import map and add/update:
-  - `@ui/` -> `./frontend/shared/ui/`
-  - `@features/` -> `./frontend/features/`
-  - `@blocks/` -> `./frontend/shared/blocks/`
-  - Keep `@components/` temporarily for compatibility if any remain.
-  - Keep `@contexts/` as-is for ThemeProvider to minimize changes.
+- Keep existing aliases: `@features/`, `@blocks/`, `@ui/`, `@hooks/`, `@contexts/`, `@shared/schema`
+- Use relative imports for new shared/lib helpers to avoid adding more aliases for now
 
-We will mirror these in `.config/tsconfig.app.json` paths for editor type-checking.
+## Plan (phased)
+
+Phase A — Tiny core helpers (no UX change)
+
+- shared/lib/api/client.ts
+  - Minimal fetch wrapper with base "/api", get/post/put/patch/del
+  - Normalize JSON, handle 204, throw `AppError` { message, code?, status? }
+- shared/lib/query/keys.ts
+  - `contacts`: { `all`, `list`, `detail(id)` } stable arrays
+- shared/lib/toast/submit.ts
+  - `submitWithToasts(action, { onSuccess, onError })` to unify submit UX
+
+Phase B — Feature refactors (same UX)
+
+- features/admin/services/contacts.api.ts
+  - `listContacts`, `verifyContact`, `updateContact`, `deleteContact` using client
+- features/admin/hooks/useAdminContacts.tsx
+  - Use services + query keys; keep toasts and optimistic updates
+- features/contact/services/contact.api.ts
+  - Ensure it uses shared API client
+- features/contact/hooks/useCreateContact.ts
+  - Use `submitWithToasts` for consistent success/error toasts
+
+Phase C — Drawer + small lazy-loads
+
+- shared/ui/Overlays/Drawer.tsx
+  - Props: `open`, `onRequestClose`, `title?`, `footerSlot?`, `initialFocus?`
+  - Behavior: overlay click close, Escape close, focus trap, GSAP slide
+- shared/blocks/ContactDetailsSidebar.tsx
+  - Refactor to use Drawer; preserve visuals and handlers
+- pages/contact/index.tsx
+  - React.lazy CompanyContactDetails, OfficeHours, PostalAddress; `fallback={null}`
+- pages/\_\_root.tsx (optional)
+  - Add small default pending/error fallbacks
 
 ## Work plan and checklist
 
-- [x] Write and check in this spec
-- [x] Scaffolding and aliases
-  - [x] Create folders: `app/`, `features/`, `shared/` with subfolders
-  - [x] Update `deno.json` imports map (`@ui/`, `@features/`, `@blocks/`, `@hooks/`)
-  - [x] Update `.config/tsconfig.app.json` paths to include new aliases
-- [x] Move shared UI/blocks (no behavior change)
-  - [x] Move `components/ui/*` -> `shared/ui/*` (preserve file names)
-  - [x] Move `blocks/*` -> `shared/blocks/*`
-  - [x] Update imports in pages/components that referenced `../blocks/*` to `@blocks/*`
-- [ ] Extract feature code
-  - [x] Move ContactForm (+ UI + handlers) -> `features/contact`
-  - [x] Create `features/contact/services/contact.api.ts` (POST /api/contacts)
-  - [x] Create `features/contact/hooks/useCreateContact.ts` (bridges toast + navigate)
-  - [x] Update `pages/contact/index.tsx` to import from `@features/contact/...`
-  - [x] Move `hooks/useAdminContacts.tsx` -> `features/admin/hooks`
-  - [x] Move `components/Admin/*` -> `features/admin/components` (ContactRow)
-  - [x] Update `pages/admin/index.tsx` to imports from features + `@blocks/`
-- [x] Minor cleanups
-  - [x] Move `hooks/useSwipeClose.ts` -> `shared/hooks/` and update imports (low priority)
-  - [ ] Keep ThemeProvider in `contexts/` for now; revisit later
-  - [ ] Ensure presentational components have minimal props and no side effects
-- [ ] Optional lazy-load heavy components
-  - [x] Lazy import `ContactDetailsSidebar` in admin page if needed
+- [ ] Phase A — Core helpers
+  - [ ] Add API client (shared/lib/api/client.ts)
+  - [ ] Add query keys (shared/lib/query/keys.ts)
+  - [ ] Add submit helper (shared/lib/toast/submit.ts)
+- [ ] Phase B — Admin & Contact
+  - [ ] Admin services (features/admin/services/contacts.api.ts)
+  - [ ] Refactor admin hook to use services + keys
+  - [ ] Ensure contact service uses API client
+  - [ ] Refactor contact create hook to use submit helper
+  - [ ] Build + commit (phase B)
+- [ ] Phase C — Drawer & lazy-loads
+  - [ ] Create Drawer component
+  - [ ] Refactor ContactDetailsSidebar to Drawer
+  - [ ] Lazy-load contact blocks
+  - [ ] Router fallbacks (optional)
+  - [ ] Final build + commit
+- [ ] Optional: investigate Deno vite-plugin resolver error separately
 
 ## Acceptance
 
-- App builds and runs without behavior changes
-- Routing intact (pages/ untouched for generator)
-- Aliases resolve in IDE and Vite
-- Fetch and side-effects live in services/hooks only
-
-## Notes
-
-- If more reshuffling is needed later (e.g., moving ThemeProvider), we will stage it to avoid breaking imports.
+- App builds and behaves as before
+- Admin/Contact use shared client + query keys
+- Drawer replaces inline overlay logic with no visual regressions
+- Code-splitting remains effective; contact page initial JS reduced slightly
 
 ## Conventions
 
-- Features own domain-specific code under `frontend/features/<domain>/` with three layers:
-  - services: network/side-effects only (fetch, mutations, storage)
-  - hooks: orchestrate services, business logic, and UI events
-  - components: presentational, minimal props, no direct side-effects
-- Shared UI lives under `frontend/shared/ui/` and is framework-agnostic (no fetch or router calls).
-- Shared blocks under `frontend/shared/blocks/` compose shared UI and may be used by multiple pages.
-- Hooks intended for reuse across features go to `frontend/shared/hooks/` and are imported via `@shared/hooks`.
-- Route components stay under `frontend/pages/` for TanStack Router file-based routing; heavy blocks can be lazy loaded if needed.
+- Services own I/O (fetch) and return typed data
+- Hooks orchestrate queries/mutations and user feedback (toasts)
+- UI components remain presentational (props-only), no fetch or router calls
+- Shared helpers are small and framework-agnostic where possible
