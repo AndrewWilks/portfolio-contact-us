@@ -17,6 +17,10 @@ export default defineConfig(({ command }) => {
   );
   const routesAbs = path.resolve(rootAbs, "pages");
   const routeTreeAbs = path.resolve(rootAbs, "routeTree.gen.ts");
+  const outputDir = path.resolve(
+    fileURLToPath(new URL(".", import.meta.url)),
+    "../dist/frontend"
+  );
 
   return {
     server: {
@@ -53,6 +57,9 @@ export default defineConfig(({ command }) => {
     },
     publicDir: "../frontend/public",
     root: "frontend",
+    build: {
+      outDir: outputDir,
+    },
     resolve: {
       alias: {
         "@ui": path.resolve(
