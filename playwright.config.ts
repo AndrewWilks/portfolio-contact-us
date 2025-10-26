@@ -1,7 +1,12 @@
 import type { PlaywrightTestConfig } from "@playwright/test";
+import { loadConfig } from "@config/frontend";
+
+const _config = loadConfig();
 
 // Base URL can be overridden via env var to match local/CI port
-const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:5174";
+const baseURL =
+  Deno.env.get("PLAYWRIGHT_BASE_URL") ||
+  `http://localhost:${_config.FRONTEND_PORT}`;
 
 const config: PlaywrightTestConfig = {
   testDir: "./frontend/__tests__",

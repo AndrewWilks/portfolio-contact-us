@@ -79,8 +79,9 @@
     "check": "deno check --sloppy-imports ./.config/vite.config.ts ./backend/server.ts ./frontend/main.tsx",
     "format": "deno fmt",
     "spell:check": "deno run -A npm:cspell@^9.2.2 \"backend/**/*.{ts,tsx}\" \"shared/**/*.{ts,tsx}\" \"frontend/**/*.{ts,tsx}\" --config ./.config/.cspell.json",
-    "e2e": "npx playwright test -c ./.config/playwright.config.ts",
-    "e2e:ui": "npx playwright test -c ./.config/playwright.config.ts --ui"
+    "e2e": "deno run -A npm:playwright@^1.56.1 test -c ./.config/playwright.config.ts",
+    "e2e:ui": "deno run -A npm:playwright@^1.56.1 test -c ./.config/playwright.config.ts --ui",
+    "e2e:install": "deno run -A npm:playwright@^1.56.1 install chromium"
   },
   "test": {
     "files": {

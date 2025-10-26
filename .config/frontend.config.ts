@@ -4,7 +4,7 @@ const configSchema = z.object({
   NODE_ENV: z
     .enum(
       ["development", "production"],
-      "Invalid NODE_ENV value in environment variables",
+      "Invalid NODE_ENV value in environment variables"
     )
     .default("development"),
   FRONTEND_PORT: z.coerce
@@ -16,7 +16,7 @@ type Config = z.infer<typeof configSchema>;
 
 let cachedConfig: Config | null = null;
 
-function loadConfig(): Config {
+export function loadConfig(): Config {
   if (cachedConfig) {
     return cachedConfig;
   }
