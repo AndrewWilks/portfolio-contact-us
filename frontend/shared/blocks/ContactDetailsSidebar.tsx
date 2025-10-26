@@ -86,13 +86,14 @@ export default function ContactDetailsSidebarBlock({
     [contact, onSave]
   );
 
-  const performSaveAndClose = useCallback(
-    async (data: ContactCreate) => {
-      await onSave(contact!.id, data);
-      onRequestClose();
-    },
-    [contact, onSave, onRequestClose]
-  );
+  // kept for reference earlier; not used in the new unified close flow
+  // const _performSaveAndClose = useCallback(
+  //   async (data: ContactCreate) => {
+  //     await onSave(contact!.id, data);
+  //     onRequestClose();
+  //   },
+  //   [contact, onSave, onRequestClose]
+  // );
 
   const submit = async (data: ContactCreate) => {
     const ok = confirmCtx
@@ -144,11 +145,10 @@ export default function ContactDetailsSidebarBlock({
     );
   };
 
-  // Three-way close attempt
-  const handleCloseAttempt = useCallback(async () => {
+  // Prepare confirm workflow that returns a boolean and performs actions (save/discard)
+  const confirmClose = useCallback(async (): Promise<boolean> => {
     if (!isDirty) {
-      onRequestClose();
-      return;
+      return true;
     }
 
     if (confirmCtx?.confirmThreeWay) {
@@ -157,10 +157,10 @@ export default function ContactDetailsSidebarBlock({
       );
       if (res === "save") {
         const valid = await trigger();
-        if (!valid) return;
+        if (!valid) return false;
         const values = getValues();
-        await performSaveAndClose(values as ContactCreate);
-        return;
+        await performSaveOnly(values as ContactCreate);
+        return true;
       }
       if (res === "discard") {
         reset(
@@ -174,21 +174,20 @@ export default function ContactDetailsSidebarBlock({
               }
             : undefined
         );
-        onRequestClose();
-        return;
+        return true;
       }
       // cancel -> do nothing
-      return;
+      return false;
     }
 
     // Fallback local three-way modal using global confirm + save flow
     const saveFirst = globalThis.confirm("Save changes before closing?");
     if (saveFirst) {
       const valid = await trigger();
-      if (!valid) return;
+      if (!valid) return false;
       const values = getValues();
-      await performSaveAndClose(values as ContactCreate);
-      return;
+      await performSaveOnly(values as ContactCreate);
+      return true;
     }
     const discard = globalThis.confirm("Discard changes?");
     if (discard) {
@@ -203,18 +202,24 @@ export default function ContactDetailsSidebarBlock({
             }
           : undefined
       );
-      onRequestClose();
+      return true;
     }
+    return false;
   }, [
     contact,
     isDirty,
     confirmCtx,
     getValues,
-    onRequestClose,
-    performSaveAndClose,
+    performSaveOnly,
     reset,
     trigger,
   ]);
+
+  // Three-way close attempt for header button etc.
+  const handleCloseAttempt = useCallback(async () => {
+    const ok = await confirmClose();
+    if (ok) onRequestClose();
+  }, [confirmClose, onRequestClose]);
 
   // Attach swipe handler via the hook
   useSwipeClose(panelRef, {
@@ -267,6 +272,7 @@ export default function ContactDetailsSidebarBlock({
       ref={panelRef}
       open={open}
       onRequestClose={() => void handleCloseAttempt()}
+      onBeforeClose={confirmClose}
       title={<span id="contact-details-title">Contact details</span>}
       headerRightSlot={
         <Button

@@ -1,13 +1,17 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import gsap from "gsap";
 
 type DrawerProps = {
   open: boolean;
   onRequestClose: () => void;
+  onBeforeClose?: () => boolean | Promise<boolean>;
   title?: React.ReactNode;
   headerRightSlot?: React.ReactNode;
   footerSlot?: React.ReactNode;
   initialFocusSelector?: string;
+  enableSwipe?: boolean;
+  swipeThresholdPx?: number; // default 80
+  swipeCancelVelocity?: number; // px per ms, default 0.2
   children: React.ReactNode;
 };
 
@@ -17,10 +21,14 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
   {
     open,
     onRequestClose,
+    onBeforeClose,
     title,
     headerRightSlot,
     footerSlot,
     initialFocusSelector,
+    enableSwipe = true,
+    swipeThresholdPx = 80,
+    swipeCancelVelocity = 0.2,
     children,
   },
   forwardedRef
@@ -33,8 +41,26 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
   const panelRef = useRef<HTMLElement | null>(null);
   const prevOverflow = useRef<string>("");
   const previouslyFocused = useRef<HTMLElement | null>(null);
+  const isAttemptingClose = useRef(false);
 
   useImperativeHandle(forwardedRef, () => panelRef.current as HTMLElement, []);
+
+  const animateBackToOpen = useCallback(() => {
+    if (!overlayRef.current || !panelRef.current) return;
+    gsap.to(panelRef.current, { xPercent: 0, duration: 0.25, ease: "power2.out" });
+    gsap.to(overlayRef.current, { opacity: 1, duration: 0.2, ease: "power2.out" });
+  }, []);
+
+  const attemptClose = useCallback(async () => {
+    if (isAttemptingClose.current) return;
+    const ok = (await onBeforeClose?.()) ?? true;
+    if (!ok) {
+      animateBackToOpen();
+      return;
+    }
+    isAttemptingClose.current = true;
+    onRequestClose();
+  }, [onBeforeClose, onRequestClose, animateBackToOpen]);
 
   // Mount/unmount + animations
   useEffect(() => {
@@ -97,6 +123,7 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
           void err;
         }
         document.body.style.overflow = prevOverflow.current;
+        isAttemptingClose.current = false;
       });
       return () => out.kill();
     }
@@ -108,7 +135,7 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
-        onRequestClose();
+        void attemptClose();
         return;
       }
       if (e.key !== "Tab") return;
@@ -146,7 +173,79 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
       document.addEventListener("keydown", handleKey);
       return () => document.removeEventListener("keydown", handleKey);
     }
-  }, [mounted, state, onRequestClose]);
+  }, [mounted, state, attemptClose]);
+
+  // Pointer-based swipe to close
+  useEffect(() => {
+    if (!mounted || !enableSwipe) return;
+    const panel = panelRef.current;
+    const overlay = overlayRef.current;
+    if (!panel || !overlay) return;
+
+    let dragging = false;
+    let startX = 0;
+    let startY = 0;
+    let startT = 0;
+    let width = 1;
+    let blockedByVertical = false;
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (state !== "open") return;
+      dragging = true;
+      blockedByVertical = false;
+      const rect = panel.getBoundingClientRect();
+      width = rect.width || 1;
+      startX = e.clientX;
+      startY = e.clientY;
+      startT = performance.now();
+      (e.target as Element).setPointerCapture?.(e.pointerId);
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (!blockedByVertical && Math.abs(dy) > Math.max(10, Math.abs(dx))) {
+        // Vertical scroll dominates → abort swipe behavior and snap back
+        blockedByVertical = true;
+        animateBackToOpen();
+        return;
+      }
+      if (blockedByVertical) return;
+      const clampedDx = Math.max(0, dx);
+      const percent = Math.min(100, (clampedDx / width) * 100);
+      gsap.set(panel, { xPercent: percent });
+      gsap.set(overlay, { opacity: 1 - percent / 100 });
+    };
+
+    const onPointerUp = (e: PointerEvent) => {
+      if (!dragging) return;
+      dragging = false;
+      const dx = Math.max(0, e.clientX - startX);
+      const dt = Math.max(1, performance.now() - startT); // ms
+      const velocity = dx / dt; // px per ms
+      const percent = Math.min(100, (dx / width) * 100);
+      const shouldClose = percent >= (swipeThresholdPx / width) * 100 || velocity >= swipeCancelVelocity;
+      if (shouldClose) {
+        void attemptClose();
+      } else {
+        animateBackToOpen();
+      }
+    };
+
+    panel.addEventListener("pointerdown", onPointerDown);
+    panel.addEventListener("pointermove", onPointerMove);
+    panel.addEventListener("pointerup", onPointerUp);
+    panel.addEventListener("pointercancel", onPointerUp);
+    panel.addEventListener("pointerleave", onPointerUp);
+    return () => {
+      panel.removeEventListener("pointerdown", onPointerDown);
+      panel.removeEventListener("pointermove", onPointerMove);
+      panel.removeEventListener("pointerup", onPointerUp);
+      panel.removeEventListener("pointercancel", onPointerUp);
+      panel.removeEventListener("pointerleave", onPointerUp);
+    };
+  }, [mounted, enableSwipe, swipeThresholdPx, swipeCancelVelocity, state, animateBackToOpen, attemptClose]);
 
   if (!mounted) return null;
 
@@ -155,7 +254,7 @@ const Drawer = React.forwardRef<HTMLElement, DrawerProps>(function Drawer(
       <div
         ref={overlayRef}
         className="fixed inset-0 bg-black/40 opacity-0 pointer-events-none z-40"
-        onClick={onRequestClose}
+        onClick={() => void attemptClose()}
         aria-hidden
       />
       <aside

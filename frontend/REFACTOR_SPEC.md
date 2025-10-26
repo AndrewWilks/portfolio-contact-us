@@ -112,11 +112,11 @@ Acceptance:
 Use this checklist as the source of truth. I will update it as items start/complete.
 
 - [ ] Phase 0 — Drawer swipe/confirm/animation
-  - [ ] Add Drawer API: `onBeforeClose`, `enableSwipe`, `swipeThresholdPx`, `swipeCancelVelocity`
-  - [ ] Implement interactive swipe (drag, overlay progress, vertical-guard)
-  - [ ] Release evaluation + unified `attemptClose()` pipeline
-  - [ ] Ensure animation parity and delayed unmount on close
-  - [ ] Wire `onBeforeClose` in `ContactDetailsSidebar` and remove local swipe logic
+  - [x] Add Drawer API: `onBeforeClose`, `enableSwipe`, `swipeThresholdPx`, `swipeCancelVelocity`
+  - [x] Implement interactive swipe (drag, overlay progress, vertical-guard)
+  - [x] Release evaluation + unified `attemptClose()` pipeline
+  - [x] Ensure animation parity and delayed unmount on close
+  - [x] Wire `onBeforeClose` in `ContactDetailsSidebar` and remove local swipe logic
 - [ ] Phase 1 — Quick wins
   - [ ] Remove duplicate `useSwipeClose` file/imports
   - [ ] Replace inline styles in `pages/admin/index.tsx`
