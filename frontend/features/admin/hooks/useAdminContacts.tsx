@@ -1,45 +1,31 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useToast from "@hooks/useToast.tsx";
-import type { ContactCreate } from "@shared/schema";
+import type { Contact, ContactCreate } from "@shared/schema";
+import { qk } from "../../../shared/lib/query/keys.ts";
+import {
+  listContacts,
+  verifyContact,
+  unverifyContact,
+  updateContact,
+  deleteContact,
+} from "../services/contacts.api.ts";
 
-type ContactRow = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string | null;
-  message?: string | null;
-  verified?: boolean;
-  createdAt?: number;
-};
+type ContactRow = Contact;
 
 export function useAdminContacts() {
   const queryClient = useQueryClient();
 
-  const fetchContacts = async (): Promise<ContactRow[]> => {
-    const res = await fetch("/api/contacts");
-    if (!res.ok) throw new Error("Failed to load contacts");
-    const body = await res.json();
-    return body.data as ContactRow[];
-  };
-
-  const query = useQuery({ queryKey: ["contacts"], queryFn: fetchContacts });
+  const query = useQuery({ queryKey: qk.contacts.list, queryFn: listContacts });
   const toast = useToast();
 
   const verifyMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/contacts/${id}/verify`, {
-        method: "PATCH",
-      });
-      if (!res.ok) throw new Error("Failed to verify");
-      const body = await res.json();
-      return body.data as ContactRow;
+      return await verifyContact(id);
     },
     onMutate: async (id: string) => {
-      await queryClient.cancelQueries({ queryKey: ["contacts"] });
-      const previous =
-        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
-      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
+      await queryClient.cancelQueries({ queryKey: qk.contacts.list });
+      const previous = queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
+      queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
         old.map((c) => (c.id === id ? { ...c, verified: true } : c))
       );
       // show a processing toast and keep id in context
@@ -59,7 +45,7 @@ export function useAdminContacts() {
       context?: { previous: ContactRow[]; toastId?: string }
     ) => {
       if (context?.previous) {
-        queryClient.setQueryData(["contacts"], context.previous);
+        queryClient.setQueryData(qk.contacts.list, context.previous);
       }
       if (context?.toastId) {
         toast.dismiss(context.toastId);
@@ -85,20 +71,18 @@ export function useAdminContacts() {
         onAction: () => unverifyMutation.mutate(String(id)),
       });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["contacts"] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/contacts/${id}`, { method: "DELETE" });
-      if (!res.ok && res.status !== 204) throw new Error("Failed to delete");
+      await deleteContact(id);
       return id;
     },
     onMutate: async (id: string) => {
-      await queryClient.cancelQueries({ queryKey: ["contacts"] });
-      const previous =
-        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
-      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
+      await queryClient.cancelQueries({ queryKey: qk.contacts.list });
+      const previous = queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
+      queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
         old.filter((c) => c.id !== id)
       );
       const toastId = toast.open({
@@ -117,7 +101,7 @@ export function useAdminContacts() {
       context?: { previous: ContactRow[]; toastId?: string }
     ) => {
       if (context?.previous) {
-        queryClient.setQueryData(["contacts"], context.previous);
+        queryClient.setQueryData(qk.contacts.list, context.previous);
       }
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({
@@ -134,35 +118,29 @@ export function useAdminContacts() {
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({ title: "Contact deleted", variant: "success" });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["contacts"] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
   });
 
   // mutation to undo verify
   const unverifyMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/contacts/${id}/unverify`, {
-        method: "PATCH",
-      });
-      if (!res.ok) throw new Error("Failed to unverify");
-      const body = await res.json();
-      return body.data as ContactRow;
+      return await unverifyContact(id);
     },
     onMutate: async (id: string) => {
-      await queryClient.cancelQueries({ queryKey: ["contacts"] });
-      const previous =
-        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
-      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
+      await queryClient.cancelQueries({ queryKey: qk.contacts.list });
+      const previous = queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
+      queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
         old.map((c) => (c.id === id ? { ...c, verified: false } : c))
       );
       return { previous } as { previous: ContactRow[] };
     },
     onError: (_err, _id, context?: { previous: ContactRow[] }) => {
       if (context?.previous) {
-        queryClient.setQueryData(["contacts"], context.previous);
+        queryClient.setQueryData(qk.contacts.list, context.previous);
       }
       toast.open({ title: "Undo failed", variant: "error" });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["contacts"] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
   });
 
   const updateMutation = useMutation({
@@ -173,20 +151,12 @@ export function useAdminContacts() {
       id: string;
       payload: ContactCreate;
     }) => {
-      const res = await fetch(`/api/contacts/${id}`, {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error("Failed to update");
-      const body = await res.json();
-      return body.data as ContactRow;
+      return await updateContact(id, payload);
     },
     onMutate: async ({ id, payload }) => {
-      await queryClient.cancelQueries({ queryKey: ["contacts"] });
-      const previous =
-        queryClient.getQueryData<ContactRow[]>(["contacts"]) || [];
-      queryClient.setQueryData<ContactRow[]>(["contacts"], (old = []) =>
+      await queryClient.cancelQueries({ queryKey: qk.contacts.list });
+      const previous = queryClient.getQueryData<ContactRow[]>(qk.contacts.list) || [];
+      queryClient.setQueryData<ContactRow[]>(qk.contacts.list, (old = []) =>
         old.map((c) => (c.id === id ? { ...c, ...payload } : c))
       );
       const toastId = toast.open({
@@ -205,7 +175,7 @@ export function useAdminContacts() {
       context?: { previous: ContactRow[]; toastId?: string }
     ) => {
       if (context?.previous) {
-        queryClient.setQueryData(["contacts"], context.previous);
+        queryClient.setQueryData(qk.contacts.list, context.previous);
       }
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({ title: "Update failed", variant: "error" });
@@ -218,7 +188,7 @@ export function useAdminContacts() {
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.open({ title: "Contact updated", variant: "success" });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["contacts"] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: qk.contacts.list }),
   });
 
   return { query, verifyMutation, deleteMutation, updateMutation };

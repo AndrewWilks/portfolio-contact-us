@@ -5,7 +5,7 @@ export type SubmitToastOptions<T = unknown> = {
 
 export async function submitWithToasts<T>(
   action: () => Promise<T>,
-  opts: SubmitToastOptions<T> = {},
+  opts: SubmitToastOptions<T> = {}
 ): Promise<T> {
   try {
     const result = await action();
