@@ -26,8 +26,10 @@ function AdminContacts() {
   const rowVirtualizer = useVirtualizer({
     count: data.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 120,
+    // A slightly generous default; real size will be measured below
+    estimateSize: () => 140,
     overscan: 5,
+    measureElement: (el) => el.getBoundingClientRect().height,
   });
 
   if (query.isLoading) return <div className="p-4">Loading contacts...</div>;
@@ -51,7 +53,8 @@ function AdminContacts() {
             const contact = data[virtualRow.index];
             return (
               <div
-                key={contact.id}
+                ref={rowVirtualizer.measureElement}
+                key={virtualRow.key}
                 className="absolute top-0 left-0 w-full px-2 pb-2"
                 style={{ transform: `translateY(${virtualRow.start}px)` }}
               >
