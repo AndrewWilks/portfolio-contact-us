@@ -27,8 +27,8 @@ function AdminContacts() {
     count: data.length,
     getScrollElement: () => parentRef.current,
     // A slightly generous default; real size will be measured below
-    estimateSize: () => 140,
-    overscan: 5,
+    estimateSize: () => 168,
+    overscan: 4,
     measureElement: (el) => el.getBoundingClientRect().height,
   });
 
@@ -44,7 +44,7 @@ function AdminContacts() {
   return (
     <>
       <h2 className="text-2xl font-semibold mb-4">Admin - Contacts</h2>
-      <div ref={parentRef} className="overflow-auto h-[calc(100vh-8rem)]">
+      <div ref={parentRef} className="overflow-auto h-[calc(100vh-16rem)]">
         <div
           className="relative"
           style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
