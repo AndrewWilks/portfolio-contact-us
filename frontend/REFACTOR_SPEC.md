@@ -1,96 +1,157 @@
-# Frontend Refactor Spec (phase 2)
+# Frontend Refactor Plan — Drawer swipe, SOLID, and code‑splitting
 
-Base app directory is `frontend/`. Goal: improve reuse and SOLID boundaries with minimal, incremental changes and preserved behavior.
+This is a living spec. I will keep the todo list updated as work progresses so we always know what’s next and what’s done.
 
 ## Goals
 
-- Keep routing/providers intact; no behavior changes
-- Increase reuse with tiny shared helpers (API client, query keys, submit helper)
-- Move orchestration to hooks; keep UI presentational
-- Extract a reusable Drawer and keep code-splitting effective
+- Restore and improve Drawer interactions:
+  - Follow-the-finger swipe to close with confirm-on-threshold
+  - Unify all close paths (button, overlay, Escape, swipe) through the same confirm workflow
+  - Ensure open and close animations are consistent and never “instant-close”
+- Keep the app simple and SOLID:
+  - Services own I/O, hooks orchestrate UX, components are presentational
+  - Reduce inline styles and a11y issues in primitives
+- Increase code-splitting effectiveness:
+  - Lazy-load heavier visual/effect components (GSAP-based)
+  - Keep initial JS small without changing UX
+- Maintain behavior and keep changes incremental and low risk
 
-## Target structure (additions)
+## Non-goals (for now)
 
-- frontend/
-  - shared/
-    - lib/
-      - api/client.ts
-      - query/keys.ts
-      - toast/submit.ts
-    - ui/
-      - Overlays/
-        - Drawer.tsx
+- Visual redesigns or large UI rewrites
+- Changing API contracts or database schemas
+- Replacing the router or global providers
 
-## Aliases
+## Current state (context)
 
-- Keep existing aliases: `@features/`, `@blocks/`, `@ui/`, `@hooks/`, `@contexts/`, `@shared/schema`
-- Use relative imports for new shared/lib helpers to avoid adding more aliases for now
+- Structure: features/ for logic, shared/ui for primitives/overlays, blocks for composition.
+- New shared libs in place: API client, query keys, toast submit helper.
+- Contact page blocks are lazy-loaded; Admin’s ContactDetailsSidebar uses a new Drawer.
+- Production build currently fails due to a Deno Vite plugin resolver crash (tracked separately).
 
-## Plan (phased)
+## Phases
 
-Phase A — Tiny core helpers (no UX change)
+### Phase 0 — Drawer swipe, confirm, and animation parity (top priority)
 
-- shared/lib/api/client.ts
-  - Minimal fetch wrapper with base "/api", get/post/put/patch/del
-  - Normalize JSON, handle 204, throw `AppError` { message, code?, status? }
-- shared/lib/query/keys.ts
-  - `contacts`: { `all`, `list`, `detail(id)` } stable arrays
-- shared/lib/toast/submit.ts
-  - `submitWithToasts(action, { onSuccess, onError })` to unify submit UX
+API additions to `shared/ui/Overlays/Drawer.tsx`:
 
-Phase B — Feature refactors (same UX)
+- `onBeforeClose?: () => boolean | Promise<boolean>` — called on any close attempt; return true to proceed, false to cancel.
+- `enableSwipe?: boolean` (default: true)
+- `swipeThresholdPx?: number` (default: 80)
+- `swipeCancelVelocity?: number` (default: 0.2 px/ms)
 
-- features/admin/services/contacts.api.ts
-  - `listContacts`, `verifyContact`, `updateContact`, `deleteContact` using client
-- features/admin/hooks/useAdminContacts.tsx
-  - Use services + query keys; keep toasts and optimistic updates
-- features/contact/services/contact.api.ts
-  - Ensure it uses shared API client
-- features/contact/hooks/useCreateContact.ts
-  - Use `submitWithToasts` for consistent success/error toasts
+Behavior:
 
-Phase C — Drawer + small lazy-loads
+- Follow-the-finger drag:
+  - Track horizontal pointer/touch drags on the panel.
+  - While dragging, translate the panel (x) and fade the overlay proportionally.
+  - Ignore vertical drags (if |dy| >> |dx|).
+- Release evaluation:
+  - If `deltaX >= threshold` OR fling velocity to the right ≥ `swipeCancelVelocity`:
+    - Run `attemptClose()` → awaits `onBeforeClose`; if true, animate out and unmount at the end; if false, animate back to open.
+  - Else animate back to open (x → 0, overlay → 1).
+- Unify close affordances (header button, overlay click, Escape, swipe):
+  - All go through the same `attemptClose()` pipeline.
+- Animation parity:
+  - `animateOpen()`: overlay fade in + panel slide in
+  - `animateClose()`: panel slide out + overlay fade out
+  - Never unmount until close animation completes.
+- Cleanup:
+  - Remove any stray text in the file (e.g., accidental “Draw” line).
 
-- shared/ui/Overlays/Drawer.tsx
-  - Props: `open`, `onRequestClose`, `title?`, `footerSlot?`, `initialFocus?`
-  - Behavior: overlay click close, Escape close, focus trap, GSAP slide
-- shared/blocks/ContactDetailsSidebar.tsx
-  - Refactor to use Drawer; preserve visuals and handlers
-- pages/contact/index.tsx
-  - React.lazy CompanyContactDetails, OfficeHours, PostalAddress; `fallback={null}`
-- pages/\_\_root.tsx (optional)
-  - Add small default pending/error fallbacks
+Consumer update (ContactDetailsSidebar):
 
-## Work plan and checklist
+- Provide `onBeforeClose` implementing the existing dirty-check confirm workflow:
+  - If dirty: show confirm (cancel/save/discard). cancel → false, save → await submit then true if success, discard → reset then true.
+  - If not dirty: return true.
+- Remove consumer-level swipe logic; rely on Drawer’s built-in swipe.
 
-- [x] Phase A — Core helpers
-  - [x] Add API client (shared/lib/api/client.ts)
-  - [x] Add query keys (shared/lib/query/keys.ts)
-  - [x] Add submit helper (shared/lib/toast/submit.ts)
-- [x] Phase B — Admin & Contact
-  - [x] Admin services (features/admin/services/contacts.api.ts)
-  - [x] Refactor admin hook to use services + keys
-  - [x] Ensure contact service uses API client
-  - [x] Refactor contact create hook to use submit helper
-  - [x] Build + commit (phase B)
-- [ ] Phase C — Drawer & lazy-loads
-  - [x] Create Drawer component
-  - [x] Refactor ContactDetailsSidebar to Drawer
-  - [x] Lazy-load contact blocks
-  - [ ] Router fallbacks (optional)
-  - [x] Final build + commit
-- [ ] Optional: investigate Deno vite-plugin resolver error separately
+Acceptance:
 
-## Acceptance
+- Swipe tracks finger; threshold triggers confirm; cancel snaps back; save/discard proceed to close.
+- Open/close animations are smooth and consistent for all close paths.
+- Focus trap and Escape continue to work; overlay click respects confirm.
 
-- App builds and behaves as before
-- Admin/Contact use shared client + query keys
-- Drawer replaces inline overlay logic with no visual regressions
-- Code-splitting remains effective; contact page initial JS reduced slightly
+### Phase 1 — Quick wins (low risk)
 
-## Conventions
+- Remove duplicate swipe hook:
+  - Keep `shared/hooks/useSwipeClose.ts` canonical; delete `frontend/hooks/useSwipeClose.ts` if still present; update imports.
+- Replace inline styles with classes:
+  - `pages/admin/index.tsx` (virtual list container)
+  - `shared/ui/Affects/HeroText.tsx`, `ShinyCard.tsx` (where straightforward)
+- Normalize ARIA attributes in `shared/ui/Primitives/Button.tsx`:
+  - Ensure `aria-busy`, `aria-hidden`, etc., use valid boolean/string values.
 
-- Services own I/O (fetch) and return typed data
-- Hooks orchestrate queries/mutations and user feedback (toasts)
-- UI components remain presentational (props-only), no fetch or router calls
-- Shared helpers are small and framework-agnostic where possible
+### Phase 2 — Lazy-load heavier visuals
+
+- GSAP components:
+  - `shared/ui/Affects/HeroText.tsx`, `ShinyCard.tsx`: dynamic-import GSAP within effects or lazy-load the effect wrapper component.
+  - Keep above-the-fold usage only where needed; otherwise lazy-load at use sites.
+
+### Phase 3 — Structure polish (SOLID-friendly)
+
+- Add barrel files:
+  - `features/*/services/index.ts`, `features/*/hooks/index.ts`, and in `shared/ui/*` subfolders where helpful.
+- Keep services framework-free (no React); hooks orchestrate query/mutation + toasts; components stay presentational.
+
+### Phase 4 — Route fallbacks (optional)
+
+- Add small Suspense fallback and error boundary at `pages/__root.tsx` to standardize loading/error UX.
+
+### Phase 5 — Build/resolver fix (separate track)
+
+- Investigate the `@deno/vite-plugin` resolver crash:
+  - Bump plugin to latest compatible version.
+  - Try plugin order: `tanstackRouter`, `deno`, then `react` (or test `deno` before `react`).
+  - Align `routesDirectory` with Vite `root` (with `root: "frontend"`, try `routesDirectory: "pages"` and adjust `generatedRouteTree`).
+  - Temporarily disable `deno()` in frontend build to isolate the resolver.
+  - Add explicit `resolve.alias` for `@.../` if import-map and plugin disagree.
+
+## Living Todo List
+
+Use this checklist as the source of truth. I will update it as items start/complete.
+
+- [ ] Phase 0 — Drawer swipe/confirm/animation
+  - [ ] Add Drawer API: `onBeforeClose`, `enableSwipe`, `swipeThresholdPx`, `swipeCancelVelocity`
+  - [ ] Implement interactive swipe (drag, overlay progress, vertical-guard)
+  - [ ] Release evaluation + unified `attemptClose()` pipeline
+  - [ ] Ensure animation parity and delayed unmount on close
+  - [ ] Wire `onBeforeClose` in `ContactDetailsSidebar` and remove local swipe logic
+- [ ] Phase 1 — Quick wins
+  - [ ] Remove duplicate `useSwipeClose` file/imports
+  - [ ] Replace inline styles in `pages/admin/index.tsx`
+  - [ ] Reduce inline styles in `HeroText.tsx` and `ShinyCard.tsx` where trivial
+  - [ ] Normalize ARIA attributes in `shared/ui/Primitives/Button.tsx`
+- [ ] Phase 2 — Lazy-load heavier visuals
+  - [ ] Dynamic-import GSAP within effects or lazy-load wrappers
+  - [ ] Lazy-load `ShinyCard` where not above-the-fold
+- [ ] Phase 3 — Structure polish
+  - [ ] Add barrels for services/hooks in features
+  - [ ] Add barrels in shared/ui subtrees where useful
+- [ ] Phase 4 — Route fallbacks (optional)
+  - [ ] Add Suspense fallback and error boundary at `__root`
+- [ ] Phase 5 — Build/resolver fix (separate)
+  - [ ] Resolve `@deno/vite-plugin` resolver crash and restore production build
+
+## Completed (for context)
+
+- [x] Shared helpers: API client, query keys, submit helper
+- [x] Admin services + hook refactor (services use client; hook uses keys and preserves optimistic/toasts)
+- [x] Contact service + create hook refactor (submit helper)
+- [x] Drawer component introduced and adopted by ContactDetailsSidebar
+- [x] Contact page blocks lazy-loaded (CompanyContactDetails, OfficeHours, PostalAddress)
+- [x] Commit Phase B and Phase C changes
+
+## Verification
+
+- Drawer interactions:
+  - Swipe follows finger and confirms on threshold; cancel restores; save/discard proceed.
+  - Header close, overlay click, Escape all route through the same confirm + close animation.
+- Lint/Typecheck: PASS
+- Build: PASS (after resolver fix); chunks reflect route and component splits.
+- No behavioral regressions in Admin and Contact flows.
+
+## Rollback plan
+
+- Keep Drawer changes isolated behind props; can disable swipe if a regression is detected.
+- Retain old imports in commit history so we can revert specific files quickly if needed.
