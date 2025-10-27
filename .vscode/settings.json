@@ -1,0 +1,22 @@
+{
+  "deno.enablePaths": ["./"],
+  "editor.inlayHints.enabled": "off",
+  "conventionalCommits.scopes": ["shared"],
+  "cSpell.enabled": true,
+  "cSpell.language": "en-AU",
+  "cSpell.diagnosticLevel": "Hint",
+  "deno.enable": true,
+  "deno.envFile": ".env",
+  "deno.testing.args": ["--allow-all", "--no-check", "--env-file=./.env"],
+  "deno.codeLens.test": true,
+  "deno.codeLens.testArgs": ["--allow-all", "--no-check", "--env-file=./.env"],
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "files.watcherExclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "search.exclude": {
+    "**/routeTree.gen.ts": true
+  }
+}
