@@ -3,7 +3,7 @@
 Base URLs:
 
 - Direct API: <http://localhost:8000>
-- Via Vite proxy: <http://localhost:3000/api> (proxy rewrites "/api" away)
+- Via Vite dev proxy: <http://localhost:5173/api> (proxy rewrites "/api" away)
 
 Health and hello:
 
@@ -15,7 +15,7 @@ curl http://localhost:8000/health
 curl http://localhost:8000/hello
 
 # Via Vite proxy (health)
-curl http://localhost:3000/api/health
+curl http://localhost:5173/api/health
 ```
 
 Create a contact:
@@ -32,7 +32,7 @@ curl -X POST "http://localhost:8000/contacts" `
   }'
 
 # Or via proxy
-curl -X POST "http://localhost:3000/api/contacts" `
+curl -X POST "http://localhost:5173/api/contacts" `
   -H "Content-Type: application/json" `
   -d '{
     "firstName":"John",

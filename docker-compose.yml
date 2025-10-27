@@ -1,0 +1,33 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: dockerfile.backend
+    working_dir: /app
+    environment:
+      NODE_ENV: production
+      DB_FILE_NAME: file:./backend/db/_db.sqlite
+      BACKEND_PORT: 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - db-data:/app/backend/db
+    command: ["deno", "task", "start:api"]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: dockerfile.frontend
+    working_dir: /app
+    environment:
+      NODE_ENV: production
+      FRONTEND_PORT: 5173
+      BACKEND_PORT: 8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    command: ["deno", "task", "dev:ui"]
+
+volumes:
+  db-data:

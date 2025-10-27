@@ -4,11 +4,11 @@
 
 # Node/Deno caches
 node_modules
-npm-cache
-.pnpm-store
-.deno
-.deno_dir
-.deno
+# npm-cache
+# .pnpm-store
+# .deno
+# .deno_dir
+# .deno
 
 # Build outputs
 /dist

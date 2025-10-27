@@ -9,19 +9,21 @@ Deno + Hono API with a React (Vite) frontend. Minimal contact form + admin view,
 
 ## Quick start
 
-Use Docker Compose (recommended):
+Run with Docker Compose (recommended):
 
 ```powershell
-docker compose -f ./.docker/docker-compose.yml up
+# From repo root
+docker compose up -d --build
 ```
 
 - API: <http://localhost:8000>
-- Web: <http://localhost:3000>
+- Web (Vite dev server with proxy): <http://localhost:5173>
 
-Stop with Ctrl+C, then:
+View logs and stop:
 
 ```powershell
-docker compose -f ./.docker/docker-compose.yml down
+docker compose logs -f
+docker compose down
 ```
 
 Or run locally with Deno v2:

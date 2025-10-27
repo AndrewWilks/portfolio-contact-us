@@ -34,9 +34,24 @@ Notes:
  deno task e2e
 ```
 
-Set the frontend port via env if needed (default 3000):
+Set the frontend port via env if needed (default 5173):
 
 ```powershell
-$env:FRONTEND_PORT=3001
+ $env:FRONTEND_PORT=3001
  deno task e2e
+```
+
+## Run with Docker Compose
+
+```powershell
+# From repo root
+docker compose up -d --build
+# API: http://localhost:8000
+# Web: http://localhost:5173
+
+# Tail logs
+docker compose logs -f
+
+# Stop
+docker compose down
 ```

@@ -13,23 +13,24 @@ Prerequisites: Docker Desktop (or Docker Engine) installed.
 
 ```powershell
 # From repo root
-docker compose -f ./.docker/docker-compose.yml up
+docker compose up -d --build
 # API: http://localhost:8000
-# Web: http://localhost:3000
+# Web: http://localhost:5173
 ```
 
 The compose file starts:
 
-- api: Deno server at 8000
-- web: Vite dev server at 3000 (proxying to api)
+- backend: Deno API at 8000
+- frontend: Vite dev server at 5173 (proxying "/api" to the backend)
 
 On startup, the API service automatically runs `deno task db:push` so the SQLite
 database file exists before serving requests.
 
-Stop with Ctrl+C, then:
+To view logs and stop:
 
 ```powershell
-docker compose -f ./.docker/docker-compose.yml down
+docker compose logs -f
+docker compose down
 ```
 
 ## Deno locally
