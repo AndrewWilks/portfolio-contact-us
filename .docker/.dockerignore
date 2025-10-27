@@ -1,0 +1,26 @@
+# Ignore Git and VCS
+.git
+.gitignore
+
+# Node/Deno caches
+node_modules
+npm-cache
+.pnpm-store
+.deno
+.deno_dir
+.deno
+
+# Build outputs
+/dist
+frontend/.vite
+frontend/routeTree.gen.ts
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+/tmp
+/tmp/**
+coverage

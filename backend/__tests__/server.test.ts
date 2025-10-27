@@ -1,5 +1,6 @@
 // Placeholder test for backend server
-// TODO: Implement tests for API routes in Phase 0
+// Placeholder kept intentionally minimal; API routes are covered by integration tests in
+// backend/__tests__/integration/contacts.endpoints.test.ts
 
 import { assertEquals } from "@std/assert";
 
