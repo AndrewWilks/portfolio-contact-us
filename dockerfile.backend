@@ -1,0 +1,28 @@
+FROM denoland/deno:latest
+
+WORKDIR /app
+
+# Copy dependency files first for better caching
+COPY deno.json .
+COPY .config/ ./.config/
+
+# Cache dependencies
+RUN deno install
+
+# Copy backend source and shared code
+COPY backend/ ./backend/
+COPY shared/ ./shared/
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV DB_FILE_NAME=file:./backend/db/_db.sqlite
+ENV BACKEND_PORT=8000
+
+# Run database migrations
+RUN deno task db:push
+
+# Expose backend port
+EXPOSE 8000
+
+# Start the backend
+CMD ["deno", "task", "start:api"]

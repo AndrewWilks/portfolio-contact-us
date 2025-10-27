@@ -22,12 +22,15 @@ export default defineConfig(({ command }) => {
     "../dist/frontend",
   );
 
+  const apiTarget = `http://${backend.BACKEND_HOST}:${backend.BACKEND_PORT}/`;
+
   return {
     server: {
       port: frontend.FRONTEND_PORT,
+      host: true,
       proxy: {
         "/api": {
-          target: `http://localhost:${backend.BACKEND_PORT}/`,
+          target: apiTarget,
           rewrite: (path) => path.replace(/^\/api/, ""),
           changeOrigin: true,
         },

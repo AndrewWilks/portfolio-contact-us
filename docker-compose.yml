@@ -1,0 +1,47 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: dockerfile.backend
+    working_dir: /app
+    environment:
+      NODE_ENV: production
+      DB_FILE_NAME: file:./backend/db/_db.sqlite
+      BACKEND_PORT: 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - db-data:/app/backend/db
+    command: ["deno", "task", "start:api"]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "deno",
+          "eval",
+          "const r = await fetch('http://localhost:8000/health').catch(()=>({ok:false})); Deno.exit(r.ok?0:1)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 5s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: dockerfile.frontend
+    working_dir: /app
+    environment:
+      NODE_ENV: development
+      FRONTEND_PORT: 5173
+      BACKEND_PORT: 8000
+      BACKEND_HOST: backend
+    ports:
+      - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
+    command: ["deno", "task", "dev:ui"]
+
+volumes:
+  db-data:
