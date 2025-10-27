@@ -43,7 +43,7 @@ const hexToRgb = (hex: string): [number, number, number] => {
 const getAnchorAndDir = (
   origin: RaysOrigin,
   w: number,
-  h: number,
+  h: number
 ): { anchor: [number, number]; dir: [number, number] } => {
   const outside = 0.2;
   switch (origin) {
@@ -220,10 +220,13 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
 
   useEffect(() => {
     if (!containerRef.current) return;
-    observerRef.current = new IntersectionObserver((entries) => {
-      const entry = entries[0];
-      setIsVisible(entry.isIntersecting);
-    }, { threshold: 0.1 });
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
     observerRef.current.observe(containerRef.current);
     return () => {
       observerRef.current?.disconnect();
@@ -247,7 +250,7 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
       const renderer = new Renderer({
         dpr: Math.min(
           (globalThis as Window & typeof globalThis).devicePixelRatio || 1,
-          2,
+          2
         ),
         alpha: true,
       });
@@ -287,14 +290,17 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
         fragment: frag,
         uniforms,
       });
-      const mesh = new Mesh(gl as unknown as OGLRenderingContext, { geometry, program });
+      const mesh = new Mesh(gl as unknown as OGLRenderingContext, {
+        geometry,
+        program,
+      });
       meshRef.current = mesh;
 
       const updatePlacement = () => {
         if (!containerRef.current || !renderer) return;
         renderer.dpr = Math.min(
           (globalThis as Window & typeof globalThis).devicePixelRatio || 1,
-          2,
+          2
         );
         const { clientWidth: wCSS, clientHeight: hCSS } = containerRef.current;
         renderer.setSize(wCSS, hCSS);
@@ -307,8 +313,10 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
         uniforms.rayDir.value = dir;
       };
 
-      const motionReduce = (globalThis as Window & typeof globalThis)
-        .matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+      const motionReduce =
+        (globalThis as Window & typeof globalThis).matchMedia?.(
+          "(prefers-reduced-motion: reduce)"
+        ).matches ?? false;
 
       const loop = (t: number) => {
         if (!rendererRef.current || !uniformsRef.current || !meshRef.current) {
@@ -317,9 +325,11 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
         uniforms.iTime.value = t * 0.001;
         if (followMouse && mouseInfluence > 0.0) {
           const smoothing = 0.92;
-          smoothMouseRef.current.x = smoothMouseRef.current.x * smoothing +
+          smoothMouseRef.current.x =
+            smoothMouseRef.current.x * smoothing +
             mouseRef.current.x * (1 - smoothing);
-          smoothMouseRef.current.y = smoothMouseRef.current.y * smoothing +
+          smoothMouseRef.current.y =
+            smoothMouseRef.current.y * smoothing +
             mouseRef.current.y * (1 - smoothing);
           uniforms.mousePos.value = [
             smoothMouseRef.current.x,
@@ -357,7 +367,7 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
             const glctx = renderer.gl as unknown as OGLRenderingContext;
             const canvas = glctx.canvas as HTMLCanvasElement;
             const loseContextExt = glctx.getExtension(
-              "WEBGL_lose_context",
+              "WEBGL_lose_context"
             ) as WebGLLoseContext | null;
             if (loseContextExt) loseContextExt.loseContext();
             if (canvas && canvas.parentNode) {
@@ -442,16 +452,24 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
       mouseRef.current = { x, y };
     };
     if (followMouse) {
-      globalThis.addEventListener("mousemove", handleMouseMove as EventListener);
+      globalThis.addEventListener(
+        "mousemove",
+        handleMouseMove as EventListener
+      );
       return () =>
-        globalThis.removeEventListener("mousemove", handleMouseMove as EventListener);
+        globalThis.removeEventListener(
+          "mousemove",
+          handleMouseMove as EventListener
+        );
     }
   }, [followMouse]);
 
   return (
     <div
       ref={containerRef}
-  className={`w-full h-full pointer-events-none z-3 overflow-hidden relative ${className || ""}`.trim()}
+      className={`w-full h-full pointer-events-none overflow-hidden ${
+        className || ""
+      }`.trim()}
       aria-hidden="true"
     />
   );
