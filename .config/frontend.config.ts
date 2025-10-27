@@ -4,12 +4,12 @@ const configSchema = z.object({
   NODE_ENV: z
     .enum(
       ["development", "production"],
-      "Invalid NODE_ENV value in environment variables",
+      "Invalid NODE_ENV value in environment variables"
     )
     .default("development"),
   FRONTEND_PORT: z.coerce
     .number("Invalid FRONTEND_PORT value in environment variables")
-    .default(3000),
+    .default(5173),
 });
 
 type Config = z.infer<typeof configSchema>;
