@@ -71,7 +71,7 @@
   "tasks": {
     "db:push": "deno run -A npm:drizzle-kit push --config ./.config/drizzle.config.ts",
     "dev": "deno task dev:api & deno task dev:ui",
-  "dev:api": "deno --allow-ffi --allow-env --allow-sys --env-file=./.env --allow-net ./backend/server.ts",
+    "dev:api": "deno --allow-ffi --allow-env --allow-sys --env-file=./.env --allow-net ./backend/server.ts",
     "dev:ui": "deno -A --env-file=./.env npm:vite --config ./.config/vite.config.ts",
     "build": "deno -A --env-file=./.env npm:vite build --config ./.config/vite.config.ts",
     "test": "deno test --allow-all --env-file=./.env --no-check",

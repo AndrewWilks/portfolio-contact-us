@@ -133,4 +133,4 @@ We’ll add a convenience task once the config lands.
 - [x] Add e2e.admin.spec.ts (grid + sidebar open/close)
 - [ ] Add e2e.theme.spec.ts (presence + simple toggle)
 - [x] Document run steps in this spec
-- [ ] Optional: add CI workflow job to run Playwright (chromium only)
+- [x] Optional: add CI workflow job to run Playwright (chromium only)
