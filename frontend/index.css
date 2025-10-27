@@ -48,3 +48,28 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto;
 }
+
+/* Local animations used by ProfileCard and effects */
+@keyframes floatY {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseSoft {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
