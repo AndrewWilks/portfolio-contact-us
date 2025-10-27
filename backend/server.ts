@@ -59,17 +59,23 @@ backend.get("/hello", routes.api_hello);
 // Contacts API
 // Use zod-validator wrapper middleware to validate the JSON body for create
 backend.post(
-  "/api/contacts",
+  "contacts",
   zodValidatorWrapper("json", schema.ContactCreateSchema),
   routes.createContactHandler,
 );
 backend.get(
-  "/api/contacts",
+  "contacts",
   zodValidatorWrapper("query", schema.ContactsQuerySchema),
   routes.listContactsHandler,
 );
-backend.patch("/api/contacts/:id/verify", routes.verifyContactHandler);
-backend.delete("/api/contacts/:id", routes.deleteContactHandler);
+backend.patch("contacts/:id/verify", routes.verifyContactHandler);
+backend.delete("contacts/:id", routes.deleteContactHandler);
+backend.patch("contacts/:id/unverify", routes.unverifyContactHandler);
+backend.patch(
+  "contacts/:id",
+  zodValidatorWrapper("json", schema.ContactCreateSchema.partial()),
+  routes.updateContactHandler,
+);
 
 if (import.meta.main) {
   const server = Deno.serve(backend.fetch);

@@ -11,6 +11,13 @@
     "@backend/routes": "./backend/routes/index.ts",
 
     // Frontend modules
+    "@contexts/": "./frontend/contexts/",
+    "@pages/": "./frontend/pages/",
+    "@features/": "./frontend/features/",
+    "@blocks/": "./frontend/shared/blocks/",
+    "@hooks/": "./frontend/hooks/",
+    "@playwright/test": "npm:@playwright/test@^1.56.1",
+    "@ui/": "./frontend/shared/ui/",
 
     // Shared modules
     "@shared/schema": "./shared/schema/index.ts",
@@ -24,6 +31,10 @@
     "@std/http": "jsr:@std/http@^1.0.21",
     "@std/assert": "jsr:@std/assert@^1.0.11",
     "@stdext/crypto": "jsr:@stdext/crypto@^0.1.0",
+    "@tanstack/react-router": "npm:@tanstack/react-router@^1.133.25",
+    "@tanstack/react-router-devtools": "npm:@tanstack/react-router-devtools@^1.133.25",
+    "@gsap/react": "npm:@gsap/react@^2.1.2",
+    "@tanstack/router-plugin": "npm:@tanstack/router-plugin@^1.133.25",
     "cspell": "npm:cspell@^9.2.2",
     "@cspell/dict-en-au": "npm:@cspell/dict-en-au@^1.1.9",
     "drizzle-kit": "npm:drizzle-kit@^0.31.5",
@@ -32,15 +43,24 @@
     "eslint-plugin-react-hooks": "npm:eslint-plugin-react-hooks@^7.0.0",
     "eslint-plugin-react-refresh": "npm:eslint-plugin-react-refresh@^0.4.24",
     "globals": "npm:globals@^16.4.0",
+    "gsap": "npm:gsap@^3.13.0",
     "hono": "npm:hono@^4.10.2",
     "@hono/zod-validator": "npm:@hono/zod-validator@^0.7.4",
+    "lucide-react": "npm:lucide-react@^0.546.0",
     "react": "npm:react@^19.2.0",
     "react-dom": "npm:react-dom@19.2.0",
+    "react-hook-form": "npm:react-hook-form@^7.65.0",
+    "@hookform/resolvers": "npm:@hookform/resolvers@^5.2.2",
+    "@radix-ui/react-dialog": "npm:@radix-ui/react-dialog@^1.1.15",
+    "@radix-ui/react-toast": "npm:@radix-ui/react-toast@^1.1.15",
+    "@tanstack/react-query": "npm:@tanstack/react-query@^5.90.5",
+    "@tanstack/react-virtual": "npm:@tanstack/react-virtual@^3.0.0",
     "typescript-eslint": "npm:typescript-eslint@^8.46.2",
     "vite": "npm:vite@^7.1.12",
     "@libsql/client": "npm:@libsql/client@^0.15.15",
     "zod": "npm:zod@^4.1.12",
-    "tailwindcss": "npm:tailwindcss@^4.1.15",
+    "tailwindcss": "npm:tailwindcss@^4.1.16",
+    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.16",
     "autoprefixer": "npm:autoprefixer@^10.4.21",
     "postcss": "npm:postcss@^8.5.6",
     "@types/node": "npm:@types/node@^24.2.0",
@@ -50,19 +70,46 @@
   "nodeModulesDir": "auto",
   "tasks": {
     "db:push": "deno run -A npm:drizzle-kit push --config ./.config/drizzle.config.ts",
-    "dev": "deno task dev:api & deno task dev:vite",
-    "dev:api": "deno --allow-env --env-file=./.env --allow-net ./backend/server.ts",
-    "dev:vite": "deno -A --env-file=./.env npm:vite --config ./.config/vite.config.ts",
+    "dev": "deno task dev:api & deno task dev:ui",
+    "dev:api": "deno --allow-ffi --allow-env --allow-sys --env-file=./.env --allow-net ./backend/server.ts",
+    "dev:ui": "deno -A --env-file=./.env npm:vite --config ./.config/vite.config.ts",
     "build": "deno -A --env-file=./.env npm:vite build --config ./.config/vite.config.ts",
-    "test": "deno test --allow-all --env-file=./.env --no-check backend/__tests__ shared/__tests__ frontend/__tests__",
+    "test": "deno test --allow-all --env-file=./.env --no-check",
     "lint": "deno lint",
+    "check": "deno check --sloppy-imports ./.config/vite.config.ts ./backend/server.ts ./frontend/main.tsx",
     "format": "deno fmt",
-    "spell:check": "deno run -A npm:cspell@^9.2.2 \"backend/**/*.{ts,tsx}\" \"shared/**/*.{ts,tsx}\" \"frontend/**/*.{ts,tsx}\" --config ./.config/.cspell.json"
+    "spell:check": "deno run -A npm:cspell@^9.2.2 \"backend/**/*.{ts,tsx}\" \"shared/**/*.{ts,tsx}\" \"frontend/**/*.{ts,tsx}\" --config ./.config/.cspell.json",
+    "e2e": "deno run -A npm:playwright@^1.56.1 test -c ./.config/playwright.config.ts",
+    "e2e:ui": "deno run -A npm:playwright@^1.56.1 test -c ./.config/playwright.config.ts --ui",
+    "e2e:install": "deno run -A npm:playwright@^1.56.1 install chromium"
+  },
+  "test": {
+    "include": ["./backend/__tests__"],
+    "exclude": [
+      "./frontend/__tests__/**",
+      "./frontend/routeTree.gen.ts",
+      "./frontend/routeTree.imports.d.ts"
+    ]
   },
   "compilerOptions": {
-    "types": [],
+    "types": ["npm:@types/node"],
     "lib": ["dom", "dom.iterable", "deno.ns"],
     "jsx": "react-jsx",
     "jsxImportSource": "react"
+  },
+  "lint": {
+    "exclude": [
+      "./frontend/routeTree.gen.ts",
+      "./.config/playwright.config.ts",
+      "./frontend/__tests__/**"
+    ]
+  },
+  "check": {
+    "exclude": [
+      "./frontend/routeTree.gen.ts",
+      "./frontend/routeTree.imports.d.ts",
+      "./.config/playwright.config.ts",
+      "./frontend/__tests__/**"
+    ]
   }
 }

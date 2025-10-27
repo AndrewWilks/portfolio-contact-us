@@ -22,31 +22,31 @@ export type ContactRow = ContactSelect;
 export async function createContact({
   payload,
 }: {
-  payload: Omit<ContactInsertRow, "id" | "created_at">;
+  payload: Omit<ContactInsertRow, "id" | "createdAt">;
 }): Promise<ContactRow> {
   const id = crypto.randomUUID();
-  const created_at = Date.now();
+  const createdAt = Date.now();
 
   await db.insert(contacts).values({
     id,
-    first_name: payload.first_name,
-    last_name: payload.last_name,
+    firstName: payload.firstName,
+    lastName: payload.lastName,
     email: payload.email,
     phone: payload.phone ?? null,
     message: payload.message ?? null,
     verified: !!payload.verified,
-    created_at,
+    createdAt,
   });
 
   return {
     id,
-    first_name: payload.first_name,
-    last_name: payload.last_name,
+    firstName: payload.firstName,
+    lastName: payload.lastName,
     email: payload.email,
     phone: payload.phone ?? null,
     message: payload.message ?? null,
     verified: !!payload.verified,
-    created_at,
+    createdAt: createdAt,
   } as const;
 }
 
@@ -59,7 +59,7 @@ export async function listContacts(): Promise<ContactRow[]> {
   const rows = await db
     .select()
     .from(contacts)
-    .orderBy(desc(contacts.created_at));
+    .orderBy(desc(contacts.createdAt));
   return rows as ContactRow[];
 }
 
@@ -79,7 +79,7 @@ export async function getContactById({
     .select()
     .from(contacts)
     .where(eq(contacts.id, id))
-    .orderBy(desc(contacts.created_at))
+    .orderBy(desc(contacts.createdAt))
     .limit(1)
     .get();
   return row;
@@ -106,6 +106,26 @@ export async function verifyContact({
 }
 
 /**
+ * Marks a contact as unverified in the database.
+ *
+ * @param {Object} params - The parameters for unverifying a contact.
+ * @param {string} params.id - The unique identifier of the contact to unverify.
+ * @returns {Promise<ContactRow|undefined>} The updated contact record after unverification.
+ */
+export async function unverifyContact({
+  id,
+}: {
+  id: string;
+}): Promise<ContactRow | undefined> {
+  const result = await db
+    .update(contacts)
+    .set({ verified: false })
+    .where(eq(contacts.id, id))
+    .returning();
+  return result[0];
+}
+
+/**
  * Deletes a contact from the database by its unique identifier.
  *
  * @param id - The unique identifier of the contact to delete.
@@ -118,6 +138,45 @@ export async function deleteContact({
 }): Promise<ContactRow | undefined> {
   const result = await db
     .delete(contacts)
+    .where(eq(contacts.id, id))
+    .returning();
+  return result[0];
+}
+
+/**
+ * Update a contact's editable fields.
+ *
+ * Only the provided fields will be updated. Returns the updated row or undefined
+ * when the contact does not exist.
+ */
+export async function updateContact({
+  id,
+  payload,
+}: {
+  id: string;
+  payload: Partial<
+    Pick<
+      ContactInsert,
+      "firstName" | "lastName" | "email" | "phone" | "message"
+    >
+  >;
+}): Promise<ContactRow | undefined> {
+  const toSet: Partial<ContactInsert> = {};
+  if (typeof payload.firstName !== "undefined") {
+    toSet.firstName = payload.firstName;
+  }
+  if (typeof payload.lastName !== "undefined") {
+    toSet.lastName = payload.lastName;
+  }
+  if (typeof payload.email !== "undefined") toSet.email = payload.email;
+  if (typeof payload.phone !== "undefined") toSet.phone = payload.phone ?? null;
+  if (typeof payload.message !== "undefined") {
+    toSet.message = payload.message ?? null;
+  }
+
+  const result = await db
+    .update(contacts)
+    .set(toSet)
     .where(eq(contacts.id, id))
     .returning();
   return result[0];
