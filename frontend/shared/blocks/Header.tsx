@@ -33,6 +33,9 @@ export default function Header({ ref }: HeaderProps) {
         <Link to="/admin" className="[&.active]:font-bold">
           Admin
         </Link>
+        <Link to="/me" className="[&.active]:font-bold">
+          Me
+        </Link>
       </div>
       <div className="flex items-center gap-3">
         {/* Invisible but accessible click target to bootstrap egg before /me badge exists */}
