@@ -34,7 +34,7 @@ backend.use(
 );
 
 // Rate Limiting Middleware
-// TODO: add rate limiting middleware here
+// Note: rate limiting middleware can be added in a future iteration if needed.
 
 // Error handling moved to middleware file
 backend.onError(onErrorHandler);

@@ -4,6 +4,7 @@ const configSchema = z.object({
   DB_FILE_NAME: z.string(),
   NODE_ENV: z.enum(["development", "production"]).default("development"),
   BACKEND_PORT: z.coerce.number().default(8000),
+  BACKEND_HOST: z.string().default("localhost"),
 });
 
 type Config = z.infer<typeof configSchema>;
@@ -20,6 +21,7 @@ function loadConfig(): Config {
       "file:./backend/db/_db.sqlite",
     NODE_ENV: Deno.env.get("NODE_ENV") || "development",
     BACKEND_PORT: Deno.env.get("BACKEND_PORT") || 8000,
+    BACKEND_HOST: Deno.env.get("BACKEND_HOST") || "localhost",
   };
 
   try {
