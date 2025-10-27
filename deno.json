@@ -91,6 +91,19 @@
       "./frontend/routeTree.imports.d.ts"
     ]
   },
+  "test": {
+    "files": {
+      "include": [
+        "./backend/__tests__",
+        "./frontend/__tests__",
+        "./shared/__tests__"
+      ],
+      "exclude": [
+        "./frontend/routeTree.gen.ts",
+        "./frontend/routeTree.imports.d.ts"
+      ]
+    }
+  },
   "compilerOptions": {
     "types": ["npm:@types/node"],
     "lib": ["dom", "dom.iterable", "deno.ns"],

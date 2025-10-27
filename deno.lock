@@ -3400,7 +3400,7 @@
         "tinyglobby"
       ],
       "optionalDependencies": [
-        "fsevents@2.3.3"
+        "fsevents"
       ],
       "optionalPeers": [
         "@types/node@24.2.0"
