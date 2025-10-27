@@ -36,7 +36,7 @@ function MePage() {
             name="Andrew Wilks"
             title="Software Developer"
             avatarUrl="/me/avatar.jpg"
-            miniAvatarUrl="/me/avatar.jpg"
+            miniAvatarUrl="/profile.jpg"
             handle="AndrewWilksy"
             status="Online"
             contactText="Contact Me"
@@ -48,54 +48,56 @@ function MePage() {
           />
         </div>
       </section>
-      {/* Contacts below the card */}
-      <div className="relative z-10 w-full px-4 mt-6 max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <ShinyCard className="backdrop-blur supports-backdrop-filter:bg-white/5 dark:supports-backdrop-filter:bg-black/20">
-          <a
-            href="https://andrewwilks.au/"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="flex items-center justify-between gap-4 p-2"
-            aria-label="Visit website andrewwilks.au"
-          >
-            <div>
-              <div className="text-sm opacity-70">Website</div>
-              <div className="font-medium">andrewwilks.au</div>
-            </div>
-            <span className="text-xs opacity-70">Open</span>
-          </a>
-        </ShinyCard>
-        <ShinyCard className="backdrop-blur supports-backdrop-filter:bg-white/5 dark:supports-backdrop-filter:bg-black/20">
-          <a
-            href="https://www.linkedin.com/in/andrew-wilksy/"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="flex items-center justify-between gap-4 p-2"
-            aria-label="Open LinkedIn profile"
-          >
-            <div>
-              <div className="text-sm opacity-70">LinkedIn</div>
-              <div className="font-medium">andrew-wilksy</div>
-            </div>
-            <span className="text-xs opacity-70">Open</span>
-          </a>
-        </ShinyCard>
-        <ShinyCard className="backdrop-blur supports-backdrop-filter:bg-white/5 dark:supports-backdrop-filter:bg-black/20">
-          <a
-            href="https://github.com/AndrewWilks"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="flex items-center justify-between gap-4 p-2"
-            aria-label="Open GitHub profile"
-          >
-            <div>
-              <div className="text-sm opacity-70">GitHub</div>
-              <div className="font-medium">AndrewWilks</div>
-            </div>
-            <span className="text-xs opacity-70">Open</span>
-          </a>
-        </ShinyCard>
-      </div>
+      <section className="py-10">
+        {/* Contacts below the card */}
+        <div className="relative z-10 w-full px-4 mt-6 max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <ShinyCard className="backdrop-blur supports-backdrop-filter:bg-white/5 dark:supports-backdrop-filter:bg-black/20">
+            <a
+              href="https://andrewwilks.au/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-center justify-between gap-4 p-2"
+              aria-label="Visit website andrewwilks.au"
+            >
+              <div>
+                <div className="text-sm opacity-70">Website</div>
+                <div className="font-medium">andrewwilks.au</div>
+              </div>
+              <span className="text-xs opacity-70">Open</span>
+            </a>
+          </ShinyCard>
+          <ShinyCard className="backdrop-blur supports-backdrop-filter:bg-white/5 dark:supports-backdrop-filter:bg-black/20">
+            <a
+              href="https://www.linkedin.com/in/andrew-wilksy/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-center justify-between gap-4 p-2"
+              aria-label="Open LinkedIn profile"
+            >
+              <div>
+                <div className="text-sm opacity-70">LinkedIn</div>
+                <div className="font-medium">andrew-wilksy</div>
+              </div>
+              <span className="text-xs opacity-70">Open</span>
+            </a>
+          </ShinyCard>
+          <ShinyCard className="backdrop-blur supports-backdrop-filter:bg-white/5 dark:supports-backdrop-filter:bg-black/20">
+            <a
+              href="https://github.com/AndrewWilks"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-center justify-between gap-4 p-2"
+              aria-label="Open GitHub profile"
+            >
+              <div>
+                <div className="text-sm opacity-70">GitHub</div>
+                <div className="font-medium">AndrewWilks</div>
+              </div>
+              <span className="text-xs opacity-70">Open</span>
+            </a>
+          </ShinyCard>
+        </div>
+      </section>
     </>
   );
 }
