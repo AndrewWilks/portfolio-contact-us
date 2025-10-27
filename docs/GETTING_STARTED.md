@@ -1,6 +1,7 @@
 # Getting Started
 
-This project is a Deno + React (Vite) app with a simple API (Hono) and a frontend.
+This project is a Deno + React (Vite) app with a simple API (Hono) and a
+frontend.
 
 You can run it two ways:
 

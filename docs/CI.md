@@ -37,8 +37,8 @@ Notes:
 Set the frontend port via env if needed (default 5173):
 
 ```powershell
- $env:FRONTEND_PORT=3001
- deno task e2e
+$env:FRONTEND_PORT=3001
+deno task e2e
 ```
 
 ## Run with Docker Compose

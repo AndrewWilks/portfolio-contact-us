@@ -1,6 +1,7 @@
 # Portfolio Contact Us
 
-Deno + Hono API with a React (Vite) frontend. Minimal contact form + admin view, shared Zod schemas, Drizzle ORM (libSQL), and an E2E test suite.
+Deno + Hono API with a React (Vite) frontend. Minimal contact form + admin view,
+shared Zod schemas, Drizzle ORM (libSQL), and an E2E test suite.
 
 [![CI](https://github.com/AndrewWilks/portfolio-contact-us/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/AndrewWilks/portfolio-contact-us/actions/workflows/ci.yml)
 [![Deno](https://img.shields.io/badge/Deno-2.x-000000?logo=deno&logoColor=white)](https://deno.com)
@@ -46,16 +47,20 @@ deno task dev
 - Validation: Zod (shared)
 - Tests: Deno (unit), Playwright (E2E)
 
-Note: The Docker Compose setup automatically runs a database push (`deno task db:push`)
-before starting the API so the SQLite file is present.
+Note: The Docker Compose setup automatically runs a database push
+(`deno task db:push`) before starting the API so the SQLite file is present.
 
 ## About the developer
 
-Built by Andrew Wilks - Brisbane-based full‑stack developer transitioning from the Microsoft Power Platform into full‑stack engineering.
+Built by Andrew Wilks - Brisbane-based full‑stack developer transitioning from
+the Microsoft Power Platform into full‑stack engineering.
 
-- Focus: React/Next.js, TypeScript, Node.js, PostgreSQL; clean UX, reliable APIs, and CI/CD
-- Currently shipping: Portfolio Tracker, Dev Standards presets, and a SaaS Starter
-- Core skills: React, Next.js, TanStack Query, Node.js (REST), Drizzle ORM, PostgreSQL, Docker, GitHub Actions, Vitest, Playwright
+- Focus: React/Next.js, TypeScript, Node.js, PostgreSQL; clean UX, reliable
+  APIs, and CI/CD
+- Currently shipping: Portfolio Tracker, Dev Standards presets, and a SaaS
+  Starter
+- Core skills: React, Next.js, TanStack Query, Node.js (REST), Drizzle ORM,
+  PostgreSQL, Docker, GitHub Actions, Vitest, Playwright
 
 Links:
 

@@ -17,8 +17,8 @@ function loadConfig(): Config {
   }
 
   const config = {
-    DB_FILE_NAME:
-      Deno.env.get("DB_FILE_NAME") || "file:./backend/db/_db.sqlite",
+    DB_FILE_NAME: Deno.env.get("DB_FILE_NAME") ||
+      "file:./backend/db/_db.sqlite",
     NODE_ENV: Deno.env.get("NODE_ENV") || "development",
     BACKEND_PORT: Deno.env.get("BACKEND_PORT") || 8000,
     BACKEND_HOST: Deno.env.get("BACKEND_HOST") || "localhost",

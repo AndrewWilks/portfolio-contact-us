@@ -13,13 +13,13 @@ export default defineConfig(({ command }) => {
   // Compute absolute paths for the route generator to avoid cwd/root timing issues
   const rootAbs = path.resolve(
     fileURLToPath(new URL(".", import.meta.url)),
-    "../frontend"
+    "../frontend",
   );
   const routesAbs = path.resolve(rootAbs, "pages");
   const routeTreeAbs = path.resolve(rootAbs, "routeTree.gen.ts");
   const outputDir = path.resolve(
     fileURLToPath(new URL(".", import.meta.url)),
-    "../dist/frontend"
+    "../dist/frontend",
   );
 
   const apiTarget = `http://${backend.BACKEND_HOST}:${backend.BACKEND_PORT}/`;
@@ -67,31 +67,31 @@ export default defineConfig(({ command }) => {
       alias: {
         "@ui": path.resolve(
           fileURLToPath(new URL(".", import.meta.url)),
-          "../frontend/shared/ui"
+          "../frontend/shared/ui",
         ),
         "@blocks": path.resolve(
           fileURLToPath(new URL(".", import.meta.url)),
-          "../frontend/shared/blocks"
+          "../frontend/shared/blocks",
         ),
         "@features": path.resolve(
           fileURLToPath(new URL(".", import.meta.url)),
-          "../frontend/features"
+          "../frontend/features",
         ),
         "@hooks": path.resolve(
           fileURLToPath(new URL(".", import.meta.url)),
-          "../frontend/hooks"
+          "../frontend/hooks",
         ),
         "@pages": path.resolve(
           fileURLToPath(new URL(".", import.meta.url)),
-          "../frontend/pages"
+          "../frontend/pages",
         ),
         "@contexts": path.resolve(
           fileURLToPath(new URL(".", import.meta.url)),
-          "../frontend/contexts"
+          "../frontend/contexts",
         ),
         "@shared/schema": path.resolve(
           fileURLToPath(new URL(".", import.meta.url)),
-          "../shared/schema/index.ts"
+          "../shared/schema/index.ts",
         ),
       },
     },
