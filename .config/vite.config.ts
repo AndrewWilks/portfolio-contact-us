@@ -36,6 +36,11 @@ export default defineConfig(({ command }) => {
         },
       },
     },
+    define: {
+      "import.meta.env.VITE_EASTER_EGG_ENABLED": JSON.stringify(
+        frontend.EASTER_EGG_ENABLED,
+      ),
+    },
     plugins: [
       // Generate typed routes using absolute paths for consistency
       tanstackRouter({
