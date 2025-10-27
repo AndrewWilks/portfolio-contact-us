@@ -35,14 +35,6 @@ export default function Header({ ref }: HeaderProps) {
         </Link>
       </div>
       <div className="flex items-center gap-3">
-        {/* Subtle, non-intrusive hint visible inline; kept short */}
-        <span
-          className="hidden sm:inline text-xs opacity-60 hover:opacity-100 transition"
-          title="Some say seven is lucky."
-        >
-          {/* Intentionally short hint */}
-          7 is lucky
-        </span>
         {/* Invisible but accessible click target to bootstrap egg before /me badge exists */}
         <button
           type="button"
@@ -51,6 +43,13 @@ export default function Header({ ref }: HeaderProps) {
           onKeyDown={(e) => onKeyDown(e as unknown as KeyboardEvent)}
           className="h-6 w-6 rounded-full opacity-0 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
         />
+        {/* Subtle, non-intrusive hint visible inline; kept short */}
+        <span
+          className="hidden sm:inline text-xs opacity-60 hover:opacity-100 transition"
+          title="Some say seven is lucky."
+        >
+          {/* Intentionally short hint */}7 is lucky
+        </span>
         <ThemeToggle />
       </div>
       <EggPanel

@@ -12,7 +12,8 @@ export default function EggPanel({ open, onClose }: EggPanelProps) {
       if (e.key === "Escape") onClose();
     };
     globalThis.addEventListener("keydown", onKey as EventListener);
-    return () => globalThis.removeEventListener("keydown", onKey as EventListener);
+    return () =>
+      globalThis.removeEventListener("keydown", onKey as EventListener);
   }, [open, onClose]);
 
   if (!open) return null;
@@ -31,11 +32,16 @@ export default function EggPanel({ open, onClose }: EggPanelProps) {
       <div className="relative mx-4 max-w-md rounded-xl border border-white/10 bg-neutral-900/85 p-6 shadow-xl text-neutral-50">
         <h2 className="text-xl font-semibold">You found it ✨</h2>
         <p className="mt-2 text-sm text-neutral-200">
-          A subtle flourish reveals a message. Thanks for exploring!
+          Congratulations on discovering this Easter egg! I'm Andrew Wilks, a
+          full-stack developer passionate about building web applications.
+          <br />
+          <br />
+          This hidden panel is a little surprise for those curious enough to
+          find it. If you're interested in learning more about me or my work,
+          feel free to check out my portfolio.
         </p>
         <p className="mt-4 text-sm">
-          Visit my portfolio:
-          {" "}
+          Visit my portfolio:{" "}
           <a
             href="https://andrewwilks.au/"
             target="_blank"

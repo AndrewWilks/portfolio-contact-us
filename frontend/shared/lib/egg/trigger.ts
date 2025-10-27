@@ -18,12 +18,11 @@ function getEnv(): Record<string, unknown> | undefined {
 const env = getEnv();
 const isDev = env?.DEV === true;
 const envEnabled = env?.VITE_EASTER_EGG_ENABLED;
-const defaultEnabled: boolean =
-  typeof envEnabled === "boolean"
-    ? envEnabled
-    : typeof envEnabled === "string"
-    ? envEnabled.toLowerCase() !== "false"
-    : true;
+const defaultEnabled: boolean = typeof envEnabled === "boolean"
+  ? envEnabled
+  : typeof envEnabled === "string"
+  ? envEnabled.toLowerCase() !== "false"
+  : true;
 
 export function useEggTrigger(options: UseEggTriggerOptions = {}) {
   const {
@@ -73,7 +72,8 @@ export function useEggTrigger(options: UseEggTriggerOptions = {}) {
     if (!enabled || revealed) return;
     const handler = (e: KeyboardEvent) => onKeyDown(e);
     globalThis.addEventListener("keydown", handler as EventListener);
-    return () => globalThis.removeEventListener("keydown", handler as EventListener);
+    return () =>
+      globalThis.removeEventListener("keydown", handler as EventListener);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, revealed, seq]);
 

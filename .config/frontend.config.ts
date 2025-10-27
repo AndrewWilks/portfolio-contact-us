@@ -11,7 +11,9 @@ const configSchema = z.object({
     .number("Invalid FRONTEND_PORT value in environment variables")
     .default(5173),
   EASTER_EGG_ENABLED: z.coerce
-    .boolean({ message: "Invalid EASTER_EGG_ENABLED value in environment variables" })
+    .boolean({
+      message: "Invalid EASTER_EGG_ENABLED value in environment variables",
+    })
     .default(true),
 });
 
