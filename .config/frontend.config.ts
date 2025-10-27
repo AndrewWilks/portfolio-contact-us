@@ -10,6 +10,9 @@ const configSchema = z.object({
   FRONTEND_PORT: z.coerce
     .number("Invalid FRONTEND_PORT value in environment variables")
     .default(5173),
+  EASTER_EGG_ENABLED: z.coerce
+    .boolean({ message: "Invalid EASTER_EGG_ENABLED value in environment variables" })
+    .default(true),
 });
 
 type Config = z.infer<typeof configSchema>;
@@ -24,6 +27,7 @@ export function loadConfig(): Config {
   const config = {
     NODE_ENV: Deno.env.get("NODE_ENV") || "development",
     FRONTEND_PORT: Deno.env.get("FRONTEND_PORT") || 5173,
+    EASTER_EGG_ENABLED: Deno.env.get("EASTER_EGG_ENABLED") ?? true,
   };
 
   try {
