@@ -1,3 +1,8 @@
+<!-- TODO: Simplify this including badges and the hosting setup for the app with docker compose and built -->
+<!-- TODO: write documentation for the API endpoints in a docs folder -->
+<!-- TODO: Write the documentation for the frontend components in the Docs folder -->
+<!-- TODO: ensure the entire codebase has jsdoc comments -->
+
 # Portfolio Contact Flow, Deno, Hono, Vite, React
 
 ## Contacts API (endpoints)

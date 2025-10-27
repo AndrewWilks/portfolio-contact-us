@@ -26,10 +26,22 @@ jobs:
         run: deno lint
 
       - name: Type check
-        run: deno check
+        run: deno task check
 
-      - name: Run tests
-        run: deno run db:push && deno run test
+      - name: Run unit tests
+        run: deno task db:push && deno task test
+
+      - name: Install Playwright browsers
+        run: deno task e2e:install
+
+      - name: Install Playwright Ubuntu dependencies
+        run: deno run -A npm:playwright@^1.56.1 install-deps chromium
+
+      - name: Run E2E tests (Playwright)
+        env:
+          NODE_ENV: development
+          FRONTEND_PORT: 3000
+        run: deno task e2e
 
       - name: cSpell
-        run: deno run spell:check
+        run: deno task spell:check

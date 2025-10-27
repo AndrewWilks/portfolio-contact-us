@@ -16,7 +16,7 @@ type Config = z.infer<typeof configSchema>;
 
 let cachedConfig: Config | null = null;
 
-function loadConfig(): Config {
+export function loadConfig(): Config {
   if (cachedConfig) {
     return cachedConfig;
   }
