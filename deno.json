@@ -65,8 +65,10 @@
     "postcss": "npm:postcss@^8.5.6",
     "@types/node": "npm:@types/node@^24.2.0",
     "@types/react": "npm:@types/react@^19.2.2",
-    "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^5.0.4"
+    "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^5.0.4",
+    "ogl": "npm:ogl@^1.0.3"
   },
+  "scopes": {},
   "nodeModulesDir": "auto",
   "tasks": {
     "db:push": "deno run -A npm:drizzle-kit push --config ./.config/drizzle.config.ts",

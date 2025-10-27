@@ -51,6 +51,7 @@
     "npm:gsap@^3.13.0": "3.13.0",
     "npm:hono@^4.10.2": "4.10.2",
     "npm:lucide-react@0.546": "0.546.0_react@19.2.0",
+    "npm:ogl@^1.0.3": "1.0.11",
     "npm:playwright@^1.56.1": "1.56.1",
     "npm:postcss@^8.5.6": "8.5.6",
     "npm:react-dom@19.2.0": "19.2.0_react@19.2.0",
@@ -2961,6 +2962,9 @@
     "normalize-range@0.1.2": {
       "integrity": "sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA=="
     },
+    "ogl@1.0.11": {
+      "integrity": "sha512-kUpC154AFfxi16pmZUK4jk3J+8zxwTWGPo03EoYA8QPbzikHoaC82n6pNTbd+oEaJonaE8aPWBlX7ad9zrqLsA=="
+    },
     "optionator@0.9.4": {
       "integrity": "sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==",
       "dependencies": [
@@ -3400,7 +3404,7 @@
         "tinyglobby"
       ],
       "optionalDependencies": [
-        "fsevents"
+        "fsevents@2.3.3"
       ],
       "optionalPeers": [
         "@types/node@24.2.0"
@@ -3497,6 +3501,7 @@
       "npm:gsap@^3.13.0",
       "npm:hono@^4.10.2",
       "npm:lucide-react@0.546",
+      "npm:ogl@^1.0.3",
       "npm:postcss@^8.5.6",
       "npm:react-dom@19.2.0",
       "npm:react-hook-form@^7.65.0",
