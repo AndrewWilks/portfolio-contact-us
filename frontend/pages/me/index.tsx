@@ -12,18 +12,18 @@ function MePage() {
   const navigate = useNavigate();
   return (
     <>
-      <section className="relative min-h-[60vh] md:min-h-[70vh] grid place-items-center rounded-xl overflow-hidden bg-neutral-900/40">
+      <section className="relative min-h-[60vh] md:min-h-[70vh] grid place-items-center rounded-xl overflow-hidden bg-black">
         {/* Animated background */}
         <LightRaysBackground
           className="absolute inset-0 z-0"
           raysOrigin="top-center"
-          raysColor="#9be6ff"
+          raysColor="#DCF6FF"
           raysSpeed={1}
           lightSpread={1.0}
-          rayLength={2.0}
+          rayLength={3.0}
           pulsating
           fadeDistance={1.0}
-          saturation={1.0}
+          saturation={4.0}
           followMouse
           mouseInfluence={0.15}
           noiseAmount={0.05}
@@ -35,8 +35,10 @@ function MePage() {
           <ProfileCard
             name="Andrew Wilks"
             title="Software Developer"
-            avatarUrl="/me/avatar.jpg"
+            avatarUrl="/avatar.png"
+            iconUrl="/iconPattern.png"
             miniAvatarUrl="/profile.jpg"
+            grainUrl="/grain.webp"
             handle="AndrewWilksy"
             status="Online"
             contactText="Contact Me"
@@ -44,6 +46,8 @@ function MePage() {
               globalThis.location.href = "mailto:me@andrewwilks.au";
             }}
             enableTilt
+            enableMobileTilt
+            showBehindGradient={false}
             className="mx-auto"
           />
         </div>

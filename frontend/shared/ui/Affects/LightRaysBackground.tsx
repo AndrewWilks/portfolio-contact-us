@@ -33,17 +33,17 @@ const hexToRgb = (hex: string): [number, number, number] => {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return m
     ? [
-        parseInt(m[1], 16) / 255,
-        parseInt(m[2], 16) / 255,
-        parseInt(m[3], 16) / 255,
-      ]
+      parseInt(m[1], 16) / 255,
+      parseInt(m[2], 16) / 255,
+      parseInt(m[3], 16) / 255,
+    ]
     : [1, 1, 1];
 };
 
 const getAnchorAndDir = (
   origin: RaysOrigin,
   w: number,
-  h: number
+  h: number,
 ): { anchor: [number, number]; dir: [number, number] } => {
   const outside = 0.2;
   switch (origin) {
@@ -225,7 +225,7 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
         const entry = entries[0];
         setIsVisible(entry.isIntersecting);
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
     observerRef.current.observe(containerRef.current);
     return () => {
@@ -250,7 +250,7 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
       const renderer = new Renderer({
         dpr: Math.min(
           (globalThis as Window & typeof globalThis).devicePixelRatio || 1,
-          2
+          2,
         ),
         alpha: true,
       });
@@ -300,7 +300,7 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
         if (!containerRef.current || !renderer) return;
         renderer.dpr = Math.min(
           (globalThis as Window & typeof globalThis).devicePixelRatio || 1,
-          2
+          2,
         );
         const { clientWidth: wCSS, clientHeight: hCSS } = containerRef.current;
         renderer.setSize(wCSS, hCSS);
@@ -315,7 +315,7 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
 
       const motionReduce =
         (globalThis as Window & typeof globalThis).matchMedia?.(
-          "(prefers-reduced-motion: reduce)"
+          "(prefers-reduced-motion: reduce)",
         ).matches ?? false;
 
       const loop = (t: number) => {
@@ -325,11 +325,9 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
         uniforms.iTime.value = t * 0.001;
         if (followMouse && mouseInfluence > 0.0) {
           const smoothing = 0.92;
-          smoothMouseRef.current.x =
-            smoothMouseRef.current.x * smoothing +
+          smoothMouseRef.current.x = smoothMouseRef.current.x * smoothing +
             mouseRef.current.x * (1 - smoothing);
-          smoothMouseRef.current.y =
-            smoothMouseRef.current.y * smoothing +
+          smoothMouseRef.current.y = smoothMouseRef.current.y * smoothing +
             mouseRef.current.y * (1 - smoothing);
           uniforms.mousePos.value = [
             smoothMouseRef.current.x,
@@ -367,7 +365,7 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
             const glctx = renderer.gl as unknown as OGLRenderingContext;
             const canvas = glctx.canvas as HTMLCanvasElement;
             const loseContextExt = glctx.getExtension(
-              "WEBGL_lose_context"
+              "WEBGL_lose_context",
             ) as WebGLLoseContext | null;
             if (loseContextExt) loseContextExt.loseContext();
             if (canvas && canvas.parentNode) {
@@ -454,12 +452,12 @@ const LightRaysBackground: React.FC<LightRaysProps> = ({
     if (followMouse) {
       globalThis.addEventListener(
         "mousemove",
-        handleMouseMove as EventListener
+        handleMouseMove as EventListener,
       );
       return () =>
         globalThis.removeEventListener(
           "mousemove",
-          handleMouseMove as EventListener
+          handleMouseMove as EventListener,
         );
     }
   }, [followMouse]);
