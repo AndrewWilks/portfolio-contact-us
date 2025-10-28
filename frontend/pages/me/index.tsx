@@ -9,7 +9,6 @@ export const Route = createFileRoute("/me/")({
 });
 
 function MePage() {
-  const navigate = useNavigate();
   return (
     <>
       <section className="relative min-h-[60vh] md:min-h-[70vh] grid place-items-center rounded-xl overflow-hidden bg-black">

@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import "./ProfileCard.css";
 
@@ -247,14 +248,14 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
     const handleClick = () => {
       if (!enableMobileTilt || location.protocol !== "https:") return;
       if (
-        typeof (window.DeviceMotionEvent as any).requestPermission ===
+        typeof (globalThis.DeviceMotionEvent as any).requestPermission ===
           "function"
       ) {
-        (window.DeviceMotionEvent as any)
+        (globalThis.DeviceMotionEvent as any)
           .requestPermission()
           .then((state: string) => {
             if (state === "granted") {
-              window.addEventListener(
+              globalThis.addEventListener(
                 "deviceorientation",
                 deviceOrientationHandler,
               );
@@ -262,7 +263,10 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
           })
           .catch((err: any) => console.error(err));
       } else {
-        window.addEventListener("deviceorientation", deviceOrientationHandler);
+        globalThis.addEventListener(
+          "deviceorientation",
+          deviceOrientationHandler,
+        );
       }
     };
 
@@ -288,7 +292,10 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
       card.removeEventListener("pointermove", pointerMoveHandler);
       card.removeEventListener("pointerleave", pointerLeaveHandler);
       card.removeEventListener("click", handleClick);
-      window.removeEventListener("deviceorientation", deviceOrientationHandler);
+      globalThis.removeEventListener(
+        "deviceorientation",
+        deviceOrientationHandler,
+      );
       animationHandlers.cancelAnimation();
     };
   }, [
