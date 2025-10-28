@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LightRaysBackground } from "@ui/Affects/index.ts";
 import ShinyCard from "@ui/Affects/ShinyCard.tsx";
 import ProfileCard from "@ui/Cards/ProfileCard.tsx";
-import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/me/")({
   component: MePage,
